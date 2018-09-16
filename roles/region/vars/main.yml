@@ -1,6 +1,6 @@
 region_name_mapping:
-  "East US": useast
-  "East US 2": useast2
+  "East US": eastus
+  "East US 2": eastus2
 region_code_mapping:
   "East US": use1
   "East US 2": use2
