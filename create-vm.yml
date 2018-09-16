@@ -55,7 +55,7 @@
       admin_username: azureuser
       admin_password: "{{ admin_password }}"
       ssh_password_enabled: true
-      network_interfaces: "{{ base_name }}-nic01"
+      network_interfaces: "{{ base_name }}-vm-nic01"
       image:
         offer: CentOS
         publisher: OpenLogic
