@@ -1,0 +1,4 @@
+region_mapping:
+  "US East": use1
+  "US East 2": use2
+region_code: "{{ region_mapping[region_name] }}"

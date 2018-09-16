@@ -1,0 +1,4 @@
+- name: Print region code
+  debug:
+    var: region_code
+
