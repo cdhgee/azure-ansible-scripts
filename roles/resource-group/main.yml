@@ -1,0 +1,6 @@
+tasks:
+- name: Create resource group
+  azure_rm_resourcegroup:
+    name: "{{ base_name }}-rg"
+    location: eastus
+
