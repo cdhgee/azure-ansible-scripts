@@ -2,5 +2,5 @@
   hosts: localhost
   connection: local
   roles:
-  - naming
-  - debugging
+  - region
+  - create-resource-group
