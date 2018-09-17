@@ -1,4 +1,8 @@
-- name: Generate naming and tagging variables
+- name: Generate region naming and tagging variables
   include_vars:
-  - region
-  - environment
+    file: region
+
+- name: Generate environment naming and tagging variables
+  include_vars:
+    file: environment
+
