@@ -1,0 +1,10 @@
+division_mapping:
+  "BIS": bis
+  "Flex-Tek": flextek
+  "Group": group
+  "John Crane": johncrane
+  "Smiths Detection": detection
+  "Smiths Interconnect": interconnect
+  "Smiths Medical": medical
+division_code: "{{ division_mapping[division] }}"
+division_name: "{{ division }}"

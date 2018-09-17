@@ -6,3 +6,7 @@
   include_vars:
     file: environment.yml
 
+- name: Generate division naming and tagging variables
+  include_vars:
+    file: division.yml
+
