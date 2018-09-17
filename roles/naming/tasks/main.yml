@@ -1,8 +1,8 @@
 - name: Generate region naming and tagging variables
   include_vars:
-    file: region
+    file: region.yml
 
 - name: Generate environment naming and tagging variables
   include_vars:
-    file: environment
+    file: environment.yml
 
