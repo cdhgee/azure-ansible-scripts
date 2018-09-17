@@ -1,4 +1,4 @@
-division_mapping:
+smiths_division_mapping:
   "BIS": bis
   "Flex-Tek": flextek
   "Group": group
@@ -6,5 +6,5 @@ division_mapping:
   "Smiths Detection": detection
   "Smiths Interconnect": interconnect
   "Smiths Medical": medical
-division_code: "{{ division_mapping[division] }}"
-division_name: "{{ division }}"
+smiths_division_code: "{{ smiths_division_mapping[smiths_division] }}"
+smiths_division_name: "{{ smiths_division }}"

@@ -10,3 +10,6 @@
   include_vars:
     file: division.yml
 
+- name: Generate service naming and tagging variables
+  include_vars:
+    file: service.yml

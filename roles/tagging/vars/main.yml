@@ -1,3 +1,3 @@
-azure_tags:
-  "Environment": "{{ environment_name }}"
-  "Division": "{{ division_name }}"
+smiths_azure_tags:
+  "Environment": "{{ smiths_environment_name }}"
+  "Division": "{{ smiths_division_name }}"
