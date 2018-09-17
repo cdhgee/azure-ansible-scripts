@@ -1,0 +1,3 @@
+azure_tags:
+  "Environment": "{{ environment_name }}"
+  "Division": "{{ division_name }}"

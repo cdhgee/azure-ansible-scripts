@@ -2,4 +2,4 @@
   azure_rm_resourcegroup:
     name: "{{ service }}-dev-rg"
     location: "{{ region_name }}"
-
+    tags: "{{ azure_tags }}"
