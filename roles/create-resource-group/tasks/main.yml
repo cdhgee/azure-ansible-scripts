@@ -1,5 +1,5 @@
 - name: Create resource group
   azure_rm_resourcegroup:
-    name: "{{ service }}-dev-rg"
+    name: "{{ service }}-{{ environment_code }}-rg"
     location: "{{ region_name }}"
     tags: "{{ azure_tags }}"
