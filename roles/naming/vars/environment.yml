@@ -1,0 +1,9 @@
+# Used for naming and tagging
+environment_mapping:
+  "Production": prod
+  "Development": dev
+  "Quality Assurance": qa
+  "Test": test
+  "Staging": staging
+environment_code: "{{ environment_mapping[environment] }}"
+environment_name: "{{ environment }}"
