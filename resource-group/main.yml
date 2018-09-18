@@ -1,9 +1,0 @@
----
-- name: Create Azure VM
-  hosts: localhost
-  connection: local
-  tasks:
-  - name: Create a resource group
-    azure_rm_resourcegroup:
-      name: "{{ resource_group_name }}"
-      location: "{{ region_name }}"
