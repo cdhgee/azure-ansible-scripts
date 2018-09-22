@@ -1,7 +1,15 @@
 - name: Test playbook
   hosts: localhost
   connection: local
-  roles:
-  - naming
-  - tagging
-  - create-resource-group
+  tasks:
+  - include_role:
+      name: naming
+  - include_role:
+      name: tagging
+  - include_role:
+      name: create-resource-group
+
+#  roles:
+#  - naming
+#  - tagging
+#  - create-resource-group
