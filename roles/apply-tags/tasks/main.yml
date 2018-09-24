@@ -1,14 +1,15 @@
 - name: Get facts
   azure_rm_resource_facts:
-    resource_group: "{{ smiths_resource_group_name }}"
+    api_version: "2018-08-01"
+    resource_group: "bis-awx-dev-rg"
     resource_type: resources
-  register: resp
+  register: smiths_resources
+
 - name: Apply tags
   azure_rm_resource:
-    url: "https://management.azure.com{{ item.id }}"
-    api_version: "2017-10-01"
+    url: "{{ item.id }}"
+    api_version: "{{ smiths_azure_resource_provider_api_versions[item.type] }}"
+    method: PATCH
     body:
-      location: "{{ item.location }}"
-      tags:
-        test: "DAVID"
-  with_items: "{{ resp.response[0].value }}"
+      tags: "{{ smiths_azure_tags }}"
+  loop: "{{ smiths_resources.response[0].value }}"

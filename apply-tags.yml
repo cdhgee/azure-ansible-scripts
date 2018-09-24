@@ -4,4 +4,4 @@
   roles:
   - naming
   - tagging
-  - { role: apply-tags, resource_name: "{{ smiths_resource_name }}" }
+  - role: apply-tags
