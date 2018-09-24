@@ -1,3 +1,7 @@
+- name: Include Azure resource manager API versions
+  include_vars:
+    file: resource-provider-apis.yml
+
 - name: Generate region naming and tagging variables
   include_vars:
     file: region.yml
