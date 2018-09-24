@@ -5,5 +5,5 @@ smiths_environment_mapping:
   "Quality Assurance": qa
   "Test": test
   "Staging": staging
-smiths_environment_code: "{{ smiths_environment_mapping[smiths_environment] }}"
-smiths_environment_name: "{{ smiths_environment }}"
+smiths_environment_code: "{{ smiths_environment_mapping[smiths_environment] | default('Unknown') }}"
+smiths_environment_name: "{{ smiths_environment | default('Unknown') }}"

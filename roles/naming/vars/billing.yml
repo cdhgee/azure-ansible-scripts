@@ -1,0 +1,3 @@
+smiths_department_name: "{{ smiths_department | default('Unknown') }}"
+smiths_costcenter_value: "{{ smiths_costcenter | default('Unknown') }}"
+smiths_projectcode_value: "{{ smiths_projectcode | default('') }}"
