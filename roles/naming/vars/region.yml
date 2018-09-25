@@ -2,8 +2,10 @@
 smiths_region_name_mapping:
   "East US": eastus
   "East US 2": eastus2
+  "North Central US": northcentralus
 smiths_region_code_mapping:
   "East US": use1
   "East US 2": use2
+  "North Central US": usnc
 smiths_region_code: "{{ smiths_region_code_mapping[smiths_region] }}"
 smiths_region_name: "{{ smiths_region_name_mapping[smiths_region] }}"
