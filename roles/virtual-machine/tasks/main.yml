@@ -21,7 +21,7 @@
 
 - name: Create public IP
   azure_rm_publicipaddress:
-    name: "{{ smiths_base_name }}-publicip"
+    name: "{{ smiths_vm_name }}-publicip"
     resource_group: "{{ smiths_resource_group_name }}"
     sku: Basic
     tags: "{{ smiths_azure_tags }}"
@@ -31,9 +31,9 @@
   azure_rm_networkinterface:
     ip_configurations:
     - name: ipconfig1
-      public_ip_address_name: "{{ smiths_base_name }}-publicip"
+      public_ip_address_name: "{{ smiths_vm_name }}-publicip"
       primary: yes
-    name: "{{ smiths_base_name }}-nic01"
+    name: "{{ smiths_vm_name }}-nic01"
     resource_group: "{{ smiths_resource_group_name }}"
     os_type: Windows
     virtual_network: "{{ smiths_vnet_name }}"
@@ -41,19 +41,19 @@
 
 - name: Create virtual machine
   azure_rm_virtualmachine:
-    name: "{{ smiths_base_name }}"
+    name: "{{ smiths_vm_name }}"
     resource_group: "{{ smiths_resource_group_name }}"
     location: "{{ smiths_region_name }}"
     managed_disk_type: Premium_LRS
     tags: "{{ smiths_azure_tags }}"
     network_interface_names:
-    - "{{ smiths_base_name }}-nic01"
+    - "{{ smiths_vm_name }}-nic01"
     image:
       publisher: MicrosoftWindowsServer
       offer: WindowsServer
       sku: "2016-Datacenter"
       version: "latest"
-    admin_username: david
-    admin_password: "M0n1cayM0n1cay"
+    admin_username: "{{ smiths_admin_username }}"
+    admin_password: "{{ smiths_admin_password }}"
     os_type: Windows
     vm_size: Standard_B2ms
