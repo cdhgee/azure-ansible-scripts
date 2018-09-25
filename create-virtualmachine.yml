@@ -1,0 +1,7 @@
+- name: Test playbook
+  hosts: localhost
+  connection: local
+  roles:
+  - naming
+  - tagging
+  - role: virtual-machine
