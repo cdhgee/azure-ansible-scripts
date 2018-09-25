@@ -1,5 +1,0 @@
-- name: Create resource group
-  azure_rm_resourcegroup:
-    name: "{{ smiths_service_name }}-{{ smiths_environment_code }}-rg"
-    location: "{{ smiths_region_name }}"
-    tags: "{{ smiths_azure_tags }}"
