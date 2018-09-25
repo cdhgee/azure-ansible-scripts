@@ -4,4 +4,4 @@
   roles:
   - naming
   - tagging
-  - role: apply-tags
+  - role: resource-group-apply-tags
