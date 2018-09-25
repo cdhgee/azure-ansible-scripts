@@ -1,1 +1,1 @@
-smiths_resource_group_name: "{{ smiths_division_code}}-{{ smiths_environment_name }}-{{ smiths_service_name }}-rg"
+smiths_resource_group_name: "{{ smiths_division_code }}-{{ smiths_environment_code }}-{{ smiths_service_name }}-rg"
