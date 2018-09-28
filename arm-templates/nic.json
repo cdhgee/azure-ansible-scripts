@@ -56,6 +56,13 @@
         "mode": "Incremental",
         "templateLink": {
           "uri": "[uri(deployment().properties.templateLink.uri, 'vnet.json')]"
+        },
+        "parameters": {
+          "location": "[parameters('location')]",
+          "vnetName": "[parameters('vnetName')]",
+          "subnetName": "[parameters('subnetName')]",
+          "vnetCIDR": "[parameters('vnetCIDR')]",
+          "subnetCIDR": "[parameters('subnetCIDR')]"
         }
       }
     }
