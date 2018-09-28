@@ -58,11 +58,21 @@
           "uri": "[uri(deployment().properties.templateLink.uri, 'vnet.json')]"
         },
         "parameters": {
-          "location": "[parameters('location')]",
-          "vnetName": "[parameters('vnetName')]",
-          "subnetName": "[parameters('subnetName')]",
-          "vnetCIDR": "[parameters('vnetCIDR')]",
-          "subnetCIDR": "[parameters('subnetCIDR')]"
+          "location": {
+            "value": "[parameters('location')]"
+          },
+          "vnetName": {
+            "value": "[parameters('vnetName')]"
+          },
+          "subnetName": {
+            "value": "[parameters('subnetName')]"
+          },
+          "vnetCIDR": {
+            "value": "[parameters('vnetCIDR')]"
+          },
+          "subnetCIDR": {
+            "value": "[parameters('subnetCIDR')]"
+          }
         }
       }
     }
