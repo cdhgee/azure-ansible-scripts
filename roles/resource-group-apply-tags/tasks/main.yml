@@ -1,0 +1,30 @@
+- name: Get resource group facts
+  azure_rm_resourcegroup_facts:
+#   api_version: "2018-08-01"
+    name: "{{ smiths_resource_group_name }}"
+  register: smiths_resourcegroups
+
+- name: Dump rgs
+  debug:
+    var: smiths_resourcegroups
+
+- name: Apply tags to resource groups
+  azure_rm_resourcegroup:
+    name: "{{ smiths_resourcegroups.ansible_facts.azure_resourcegroups[0].name }}"
+    tags: "{{ smiths_azure_tags }}"
+
+- name: Get resource facts
+  azure_rm_resource_facts:
+    api_version: "2018-08-01"
+    resource_group: "{{ smiths_resource_group_name }}"
+    resource_type: resources
+  register: smiths_resources
+
+- name: Apply tags to resources
+  azure_rm_resource:
+    url: "{{ item.id }}"
+    api_version: "{{ smiths_azure_resource_provider_api_versions[item.type] }}"
+    method: PATCH
+    body:
+      tags: "{{ smiths_azure_tags }}"
+  loop: "{{ smiths_resources.response[0].value }}"

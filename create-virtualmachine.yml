@@ -4,4 +4,4 @@
   roles:
   - naming
   - tagging
-  - role: resource-group-apply-tags
+  - role: virtual-machine
