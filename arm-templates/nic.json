@@ -95,7 +95,7 @@
           "location": {
             "value": "[parameters('location')]"
           },
-          "name": {
+          "nsgName": {
             "value": "[concat(parameters('nicName'), '-nsg')]"
           },
           "nsgRules": {
@@ -131,7 +131,7 @@
           "location": {
             "value": "[parameters('location')]"
           },
-          "name": {
+          "publicIpAddressName": {
             "value": "[concat(parameters('nicName'), '-publicip')]"
           },
           "dnsName": {
