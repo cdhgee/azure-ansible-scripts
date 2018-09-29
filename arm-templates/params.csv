@@ -1,0 +1,7 @@
+"Name","Key","Value"
+"vnetName","vnetName","bis-dev-vnet-demo"
+"nicName","nicName","bis-dev-nic-demo"
+"vnetCIDR","vnetCIDR","10.0.0.0/18"
+"subnetCIDR","subnetCIDR","10.0.0.0/24"
+"subnetName","subnetName","default-subnet"
+"location","location","northcentralus"

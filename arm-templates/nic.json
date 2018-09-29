@@ -96,7 +96,7 @@
             "value": "[parameters('publicIpAddressName')]"
           },
           "dnsName": {
-            "value": "[parameters('dnsName')]"
+            "value": "[parameters('nicName')]"
           }
         }
       }
