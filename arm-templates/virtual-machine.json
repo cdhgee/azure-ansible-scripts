@@ -74,7 +74,7 @@
           }
         },
         "availabilitySet": {
-          "id": "[reference('availabilitySet').outputs.availabilitySetId]"
+          "id": "[reference('availabilitySet').outputs.availabilitySetId.value]"
         }
       },
       "identity": {
