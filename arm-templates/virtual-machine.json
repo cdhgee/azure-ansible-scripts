@@ -18,16 +18,16 @@
       "type": "string"
     },
     "vnetName": {
-      "value": "[parameters('vnetName')]"
+      "type": "string"
     },
     "subnetName": {
-      "value": "[parameters('subnetName')]"
+      "type": "string"
     },
     "vnetCIDR": {
-      "value": "[parameters('vnetCIDR')]"
+      "type": "string"
     },
     "subnetCIDR": {
-      "value": "[parameters('subnetCIDR')]"
+      "type": "string"
     }
   },
   "variables": {
