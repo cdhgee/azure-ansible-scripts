@@ -5,7 +5,7 @@
     "location": {
       "type": "string"
     },
-    "nicName": {
+    "name": {
       "type": "string"
     },
     "vnetName": {
@@ -27,7 +27,7 @@
   },
   "resources": [
     {
-      "name": "[parameters('nicName')]",
+      "name": "[parameters('name')]",
       "type": "Microsoft.Network/networkInterfaces",
       "apiVersion": "2018-04-01",
       "location": "[parameters('location')]",
@@ -96,7 +96,7 @@
             "value": "[parameters('location')]"
           },
           "name": {
-            "value": "[concat(parameters('nicName'), '-nsg')]"
+            "value": "[concat(parameters('name'), '-nsg')]"
           },
           "nsgRules": {
             "value": [
@@ -132,15 +132,21 @@
             "value": "[parameters('location')]"
           },
           "name": {
-            "value": "[concat(parameters('nicName'), '-publicip')]"
+            "value": "[concat(parameters('name'), '-publicip')]"
           },
           "dnsName": {
-            "value": "[parameters('nicName')]"
+            "value": "[parameters('name')]"
           }
         }
       }
     }
-  ]
+  ],
+  "outputs": {
+    "nicId": {
+      "type": "string",
+      "value": "[resourceId('Microsoft.Network/networkInterfaces', parameters('name'))]"
+    }
+  }
 }
 
 

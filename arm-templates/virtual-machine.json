@@ -1,0 +1,151 @@
+{
+  "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "location": {
+      "type": "string"
+    },
+    "name": {
+      "type": "string"
+    },
+    "adminUsername": {
+      "type": "string"
+    },
+    "adminPassword": {
+      "type": "string"
+    },
+    "size": {
+      "type": "string"
+    },
+    "vnetName": {
+      "value": "[parameters('vnetName')]"
+    },
+    "subnetName": {
+      "value": "[parameters('subnetName')]"
+    },
+    "vnetCIDR": {
+      "value": "[parameters('vnetCIDR')]"
+    },
+    "subnetCIDR": {
+      "value": "[parameters('subnetCIDR')]"
+    }
+  },
+  "variables": {
+  },
+  "resources": [
+    {
+      "name": "[parameters('name')]",
+      "type": "Microsoft.Compute/virtualMachines",
+      "apiVersion": "2018-04-01",
+      "location": "[parameters('location')]",
+      "properties": {
+        "hardwareProfile": {
+          "vmSize": "[parameters('size')]"
+        },
+        "storageProfile": {
+          "osDisk": {
+            "createOption": "fromImage",
+            "managedDisk": {
+              "storageAccountType": "Premium_LRS"
+            },
+            "name": "[concat(parameters('name'), '-disk01')]"
+          },
+          "imageReference": {
+            "publisher": "MicrosoftWindowsServer",
+            "offer": "WindowsServer",
+            "sku": "2016-Datacenter",
+            "version": "latest"
+          }
+        },
+        "networkProfile": {
+          "networkInterfaces": [
+            {
+              "id": "[reference('nic').outputs.nicId]"
+            }
+          ]
+        },,
+        "osProfile": {
+          "computerName": "[parameters('name')]",
+          "adminUsername": "[parameters('adminUsername')]",
+          "adminPassword": "[parameters('adminPassword')]",
+          "windowsConfiguration": {
+            "enableAutomaticUpdates": true,
+            "provisionVmAgent": true
+          }
+        },
+        "availabilitySet": {
+          "id": "[reference('availabilitySet').outputs.availabilitySetId]"
+        }
+      },
+      "identity": {
+        "type": "systemAssigned"
+      },
+      "tags": {}
+    },
+    {
+      "name": "availabilitySet",
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2018-08-01",
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[uri(deployment().properties.templateLink.uri, 'availability-set.json')]"
+          "ravnetName": {
+            "value": "[parameters('vnetName')]"
+          },
+          "subnetName": {
+            "value": "[parameters('subnetName')]"
+          },
+          "vnetCIDR": {
+            "value": "[parameters('vnetCIDR')]"
+          },
+          "subnetCIDR": {
+            "value": "[parameters('subnetCIDR')]"
+          }
+        },
+        "parameters": {
+          "location": {
+            "value": "[parameters('location')]"
+          },
+          "name": {
+            "value": "[concat(resourceGroup().name, '-as')]"
+          }
+        }
+      }
+    }
+    {
+      "name": "nic",
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2018-08-01",
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[uri(deployment().properties.templateLink.uri, 'nic.json')]"
+        },
+        "parameters": {
+          "location": {
+            "value": "[parameters('location')]"
+          },
+          "name": {
+            "value": "[concat(parameters('name'), '-nic01')]"
+          },
+          "vnetName": {
+            "value": "[parameters('vnetName')]"
+          },
+          "subnetName": {
+            "value": "[parameters('subnetName')]"
+          },
+          "vnetCIDR": {
+            "value": "[parameters('vnetCIDR')]"
+          },
+          "subnetCIDR": {
+            "value": "[parameters('subnetCIDR')]"
+          }
+        }
+      }
+    }
+  ]
+}
+
+
+
