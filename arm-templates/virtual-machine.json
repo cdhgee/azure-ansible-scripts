@@ -63,7 +63,7 @@
               "id": "[reference('nic').outputs.nicId]"
             }
           ]
-        },,
+        },
         "osProfile": {
           "computerName": "[parameters('name')]",
           "adminUsername": "[parameters('adminUsername')]",
