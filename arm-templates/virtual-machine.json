@@ -90,18 +90,6 @@
         "mode": "Incremental",
         "templateLink": {
           "uri": "[uri(deployment().properties.templateLink.uri, 'availability-set.json')]",
-          "ravnetName": {
-            "value": "[parameters('vnetName')]"
-          },
-          "subnetName": {
-            "value": "[parameters('subnetName')]"
-          },
-          "vnetCIDR": {
-            "value": "[parameters('vnetCIDR')]"
-          },
-          "subnetCIDR": {
-            "value": "[parameters('subnetCIDR')]"
-          }
         },
         "parameters": {
           "location": {
