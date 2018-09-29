@@ -34,9 +34,6 @@
           "domainNameLabel": "[parameters('dnsName')]"
         }
       },
-      "sku": {
-        "name": "[parameters('publicIpAddressSku')]"
-      },
       "tags": {}
     }
   ],
