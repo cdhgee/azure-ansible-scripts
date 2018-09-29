@@ -39,7 +39,7 @@
             "name": "ipconfig1",
             "properties": {
               "subnet": {
-                "id": "[reference('vnet').outputs.subnetName]"
+                "id": "[reference('vnet').outputs.subnetName.value]"
               },
               "privateIPAllocationMethod": "Dynamic"
             }
