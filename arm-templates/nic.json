@@ -93,7 +93,7 @@
             "value": "[parameters('location')]"
           },
           "publicIpAddressName": {
-            "value": "[parameters('publicIpAddressName')]"
+            "value": "[concat(parameters('nicName'), '-publicip')]"
           },
           "dnsName": {
             "value": "[parameters('nicName')]"
