@@ -41,7 +41,10 @@
               "subnet": {
                 "id": "[reference('vnet').outputs.subnetId.value]"
               },
-              "privateIPAllocationMethod": "Dynamic"
+              "privateIPAllocationMethod": "Dynamic",
+              "publicIpAddress": {
+                "id": "[reference('publicip').outputs.publicIpAddressId.value]"
+              }
             }
           }
         ]
@@ -72,6 +75,28 @@
           },
           "subnetCIDR": {
             "value": "[parameters('subnetCIDR')]"
+          }
+        }
+      }
+    },
+    {
+      "name": "publicip",
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2018-08-01",
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[uri(deployment().properties.templateLink.uri, 'publicip.json')]"
+        },
+        "parameters": {
+          "location": {
+            "value": "[parameters('location')]"
+          },
+          "publicIpAddressName": {
+            "value": "[parameters('publicIpAddressName')]"
+          },
+          "dnsName": {
+            "value": "[parameters('dnsName')]"
           }
         }
       }
