@@ -100,7 +100,7 @@
           }
         }
       }
-    }
+    },
     {
       "name": "nic",
       "type": "Microsoft.Resources/deployments",
