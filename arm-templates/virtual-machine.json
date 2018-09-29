@@ -89,7 +89,7 @@
       "properties": {
         "mode": "Incremental",
         "templateLink": {
-          "uri": "[uri(deployment().properties.templateLink.uri, 'availability-set.json')]"
+          "uri": "[uri(deployment().properties.templateLink.uri, 'availability-set.json')]",
           "ravnetName": {
             "value": "[parameters('vnetName')]"
           },
