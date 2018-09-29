@@ -8,16 +8,8 @@
     "name": {
       "type": "string"
     },
-    "dnsName": {
-      "type": "string"
-    },
-    "type": {
-      "type": "string",
-      "defaultValue": "Dynamic"
-    },
-    "sku": {
-      "type": "string",
-      "defaultValue": "Basic"
+    "nsgRules": {
+      "type": "array"
     }
   },
   "variables": {
@@ -25,22 +17,20 @@
   "resources": [
     {
       "name": "[parameters('name')]",
-      "type": "Microsoft.Network/publicIpAddresses",
+      "type": "Microsoft.Network/networkSecurityGroups",
       "apiVersion": "2018-08-01",
       "location": "[parameters('location')]",
       "properties": {
-        "publicIpAllocationMethod": "[parameters('type')]",
-        "dnsSettings": {
-          "domainNameLabel": "[parameters('dnsName')]"
-        }
+        "securityRules": "[parameters('nsgRules')]"
       },
       "tags": {}
     }
   ],
   "outputs": {
-    "publicIpAddressId": {
+    "nsgId": {
       "type": "string",
-      "value": "[resourceId('Microsoft.Network/publicIpAddresses', parameters('name'))]"
+      "value": "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('name'))]"
     }
   }
 }
+
