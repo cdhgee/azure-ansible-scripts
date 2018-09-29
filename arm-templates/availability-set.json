@@ -13,12 +13,11 @@
       "defaultValue": "2"
     },
     "updateDomains": {
-      "type": string",
+      "type": "string",
       "defaultValue": "5"
     }
   },
   "variables": {
-    "diagnosticsExtensionName": "IaaSDiagnostics"
   },
   "resources": [
     {
