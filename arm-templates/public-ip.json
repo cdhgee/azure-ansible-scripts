@@ -31,7 +31,7 @@
       "properties": {
         "publicIpAllocationMethod": "[parameters('publicIpAddressType')]",
         "dnsSettings": {
-          "domainNameLabel": "[parameters('dnsName')]",
+          "domainNameLabel": "[parameters('dnsName')]"
         }
       },
       "sku": {
