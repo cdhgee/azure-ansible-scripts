@@ -86,7 +86,7 @@
       "properties": {
         "mode": "Incremental",
         "templateLink": {
-          "uri": "[uri(deployment().properties.templateLink.uri, 'publicip.json')]"
+          "uri": "[uri(deployment().properties.templateLink.uri, 'public-ip.json')]"
         },
         "parameters": {
           "location": {
