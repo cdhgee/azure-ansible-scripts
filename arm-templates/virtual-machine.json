@@ -5,7 +5,7 @@
     "location": {
       "type": "string"
     },
-    "name": {
+    "virtualMachineName": {
       "type": "string"
     },
     "adminUsername": {
@@ -34,7 +34,7 @@
   },
   "resources": [
     {
-      "name": "[parameters('name')]",
+      "name": "[parameters('virtualMachineName')]",
       "type": "Microsoft.Compute/virtualMachines",
       "apiVersion": "2018-04-01",
       "location": "[parameters('location')]",
@@ -48,7 +48,7 @@
             "managedDisk": {
               "storageAccountType": "Premium_LRS"
             },
-            "name": "[concat(parameters('name'), '-disk01')]"
+            "name": "[concat(parameters('virtualMachineName'), '-disk01')]"
           },
           "imageReference": {
             "publisher": "MicrosoftWindowsServer",
@@ -65,7 +65,7 @@
           ]
         },
         "osProfile": {
-          "computerName": "[parameters('name')]",
+          "computerName": "[parameters('virtualMachineName')]",
           "adminUsername": "[parameters('adminUsername')]",
           "adminPassword": "[parameters('adminPassword')]",
           "windowsConfiguration": {
@@ -95,7 +95,7 @@
           "location": {
             "value": "[parameters('location')]"
           },
-          "name": {
+          "availabilitySetName": {
             "value": "[concat(resourceGroup().name, '-as')]"
           }
         }
@@ -114,8 +114,8 @@
           "location": {
             "value": "[parameters('location')]"
           },
-          "name": {
-            "value": "[concat(parameters('name'), '-nic01')]"
+          "nicName": {
+            "value": "[concat(parameters('virtualMachineName'), '-nic01')]"
           },
           "vnetName": {
             "value": "[parameters('vnetName')]"

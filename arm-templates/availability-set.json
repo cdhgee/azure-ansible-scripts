@@ -5,7 +5,7 @@
     "location": {
       "type": "string"
     },
-    "name": {
+    "availabilitySetName": {
       "type": "string"
     },
     "faultDomains": {
@@ -21,7 +21,7 @@
   },
   "resources": [
     {
-      "name": "[parameters('name')]",
+      "name": "[parameters('availabilitySetName')]",
       "type": "Microsoft.Compute/availabilitySets",
       "apiVersion": "2016-04-30-preview",
       "location": "[parameters('location')]",
@@ -38,7 +38,7 @@
   "outputs": {
     "availabilitySetId": {
       "type": "string",
-      "value": "[resourceId('Microsoft.Compute/availabilitySets', parameters('name'))]"
+      "value": "[resourceId('Microsoft.Compute/availabilitySets', parameters('availabilitySetName'))]"
     }
   }
 }

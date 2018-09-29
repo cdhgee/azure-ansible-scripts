@@ -5,7 +5,7 @@
     "location": {
       "type": "string"
     },
-    "name": {
+    "nicName": {
       "type": "string"
     },
     "vnetName": {
@@ -27,7 +27,7 @@
   },
   "resources": [
     {
-      "name": "[parameters('name')]",
+      "name": "[parameters('nicName')]",
       "type": "Microsoft.Network/networkInterfaces",
       "apiVersion": "2018-04-01",
       "location": "[parameters('location')]",
@@ -96,7 +96,7 @@
             "value": "[parameters('location')]"
           },
           "name": {
-            "value": "[concat(parameters('name'), '-nsg')]"
+            "value": "[concat(parameters('nicName'), '-nsg')]"
           },
           "nsgRules": {
             "value": [
@@ -109,7 +109,7 @@
                   "direction": "Inbound",
                   "sourceAddressPrefix": "*",
                   "sourcePortRange": "*",
-                  "destinationAddressPrefix": "*",
+                  "destinationAddressPrefix": "*",virtualMachineName
                   "destinationPortRange": "3389"
                 }
               }
@@ -132,10 +132,10 @@
             "value": "[parameters('location')]"
           },
           "name": {
-            "value": "[concat(parameters('name'), '-publicip')]"
+            "value": "[concat(parameters('nicName'), '-publicip')]"
           },
           "dnsName": {
-            "value": "[parameters('name')]"
+            "value": "[parameters('nicName')]"
           }
         }
       }
@@ -144,7 +144,7 @@
   "outputs": {
     "nicId": {
       "type": "string",
-      "value": "[resourceId('Microsoft.Network/networkInterfaces', parameters('name'))]"
+      "value": "[resourceId('Microsoft.Network/networkInterfaces', parameters('nicName'))]"
     }
   }
 }
