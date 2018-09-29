@@ -30,12 +30,12 @@
       "location": "[parameters('location')]",
       "properties": {
         "publicIpAllocationMethod": "[parameters('publicIpAddressType')]"
+        "dnsSettings": {
+          "domainNameLabel": "[parameters('dnsName')]",
+        }
       },
       "sku": {
         "name": "[parameters('publicIpAddressSku')]"
-      },
-      "dnsSettings": {
-        "domainNameLabel": "[parameters('dnsName')]",
       },
       "tags": {}
     }
