@@ -148,7 +148,7 @@
     },
     "nicDetails": {
       "type": "object",
-      "value": "[reference(parameters('nicName'))]"
+      "value": "[reference(parameters('nicName'), '2018-04-01', 'Full')]"
     }
   }
 }
