@@ -1,34 +1,38 @@
 ﻿{
-  "adminPassword": {
-    "reference": {
-      "keyVault": {
-        "id": "/subscriptions/8c3d59f9-1481-4dda-9b6f-263e5f412c7d/resourceGroups/bis-dev-usnc-keyvault-rg/providers/Microsoft.KeyVault/vaults/bis-dev-usnc-keyvault"
-      },
-      "secretName": "localadminpassword"
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "adminPassword": {
+      "reference": {
+        "keyVault": {
+          "id": "/subscriptions/8c3d59f9-1481-4dda-9b6f-263e5f412c7d/resourceGroups/bis-dev-usnc-keyvault-rg/providers/Microsoft.KeyVault/vaults/bis-dev-usnc-keyvault"
+        },
+        "secretName": "localadminpassword"
+      }
+    },
+    "size": {
+      "value": "Standard_B2ms"
+    },
+    "subnetName": {
+      "value": "default-subnet"
+    },
+    "subnetCIDR": {
+      "value": "10.0.0.0/24"
+    },
+    "location": {
+      "value": "northcentralus"
+    },
+    "adminUsername": {
+      "value": "david"
+    },
+    "vnetCIDR": {
+      "value": "10.0.0.0/18"
+    },
+    "vnetName": {
+      "value": "bis-dev-vnet-demo"
+    },
+    "virtualMachineName": {
+      "value": "usnc-w-ap010"
     }
-  },
-  "size": {
-    "value": "Standard_B2ms"
-  },
-  "subnetName": {
-    "value": "default-subnet"
-  },
-  "subnetCIDR": {
-    "value": "10.0.0.0/24"
-  },
-  "location": {
-    "value": "northcentralus"
-  },
-  "adminUsername": {
-    "value": "david"
-  },
-  "vnetCIDR": {
-    "value": "10.0.0.0/18"
-  },
-  "vnetName": {
-    "value": "bis-dev-vnet-demo"
-  },
-  "virtualMachineName": {
-    "value": "usnc-w-ap010"
   }
 }
