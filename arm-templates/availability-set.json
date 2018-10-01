@@ -38,7 +38,7 @@
   "outputs": {
     "availabilitySetId": {
       "type": "string",
-      "value": "[reference(parameters('availabilitySetName'), '2016-04-30-preview', 'Full').resourceId]"
+      "value": "[resourceId('Microsoft.Compute/availabilitySets', parameters('availabilitySetName'))]"
     }
   }
 }

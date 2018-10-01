@@ -60,7 +60,7 @@
         "networkProfile": {
           "networkInterfaces": [
             {
-              "id": "[reference('nic').outputs.nicId]"
+              "id": "[reference('nic').outputs.nicId.value]"
             }
           ]
         },
