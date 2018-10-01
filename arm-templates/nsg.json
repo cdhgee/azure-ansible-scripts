@@ -32,7 +32,7 @@
       "value": "[reference(parameters('nsgName'), '2018-08-01', 'Full').resourceId]"
     },
     "nsgFull": {
-      "type": "string",
+      "type": "object",
       "value": "[reference(parameters('nsgName'), '2018-08-01', 'Full')]"
     }
   }
