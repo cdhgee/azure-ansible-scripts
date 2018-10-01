@@ -11,10 +11,6 @@
     "adminUsername": {
       "type": "string"
     },
-    "adminPassword": {
-      "type": "securestring",
-
-    },
     "size": {
       "type": "string"
     },
