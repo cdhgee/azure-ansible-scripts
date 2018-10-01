@@ -145,6 +145,10 @@
     "nicId": {
       "type": "string",
       "value": "[resourceId('Microsoft.Network/networkInterfaces', parameters('nicName'))]"
+    },
+    "nicDetails": {
+      "type": "object",
+      "value": "[reference(parameters('nicName'))]"
     }
   }
 }
