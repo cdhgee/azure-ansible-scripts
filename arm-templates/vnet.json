@@ -46,7 +46,7 @@
   "outputs": {
     "vnetId": {
       "type": "string",
-      "value": "[reference(parameters('vnetName'), '2018-08-01', 'Full).resourceId]"
+      "value": "[reference(parameters('vnetName'), '2018-08-01', 'Full').resourceId]"
     },
     "subnetId": {
       "type": "string",
