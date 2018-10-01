@@ -46,11 +46,11 @@
   "outputs": {
     "vnetId": {
       "type": "string",
-      "value": "[resourceId('Microsoft.Network/virtualNetworks', parameters('vnetName'))]"
+      "value": "[reference(parameters('vnetName'), '2018-08-01', 'Full).resourceId]"
     },
     "subnetId": {
       "type": "string",
-      "value": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('vnetName'), parameters('subnetName'))]"
+      "value": "[concat(reference(parameters('vnetName'), '2018-08-01', 'Full').resourceId, '/subnets/', parameters('subnetName'))]"
     }
   }
 
