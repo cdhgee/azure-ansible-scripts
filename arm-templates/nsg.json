@@ -30,6 +30,10 @@
     "nsgId": {
       "type": "string",
       "value": "[reference(parameters('nsgName'), '2018-08-01', 'Full').resourceId]"
+    },
+    "nsgFull": {
+      "type": "string",
+      "value": "[reference(parameters('nsgName'), '2018-08-01', 'Full')]"
     }
   }
 }
