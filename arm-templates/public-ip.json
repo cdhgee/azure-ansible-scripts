@@ -40,7 +40,7 @@
   "outputs": {
     "publicIpAddressId": {
       "type": "string",
-      "value": "[resourceId('Microsoft.Network/publicIpAddresses', parameters('publicIpAddressName'))]"
+      "value": "[reference('publicIpAddressName', '2018-08-01', 'Full').resourceId]"
     }
   }
 }

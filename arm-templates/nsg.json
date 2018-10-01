@@ -29,7 +29,7 @@
   "outputs": {
     "nsgId": {
       "type": "string",
-      "value": "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('nsgName'))]"
+      "value": "[reference(parameters('nsgName'), '2018-08-01', 'Full').resourceId]"
     }
   }
 }
