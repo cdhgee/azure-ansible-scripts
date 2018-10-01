@@ -40,7 +40,7 @@
   "outputs": {
     "publicIpAddressId": {
       "type": "string",
-      "value": "[reference('publicIpAddressName', '2018-08-01', 'Full').resourceId]"
+      "value": "[reference(parameters('publicIpAddressName'), '2018-08-01', 'Full').resourceId]"
     }
   }
 }
