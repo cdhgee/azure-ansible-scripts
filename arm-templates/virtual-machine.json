@@ -11,6 +11,9 @@
     "adminUsername": {
       "type": "string"
     },
+    "adminPassword": {
+      "type": "securestring",
+    },
     "size": {
       "type": "string"
     },
@@ -28,14 +31,6 @@
     }
   },
   "variables": {
-    "adminPassword": {
-      "reference": {
-        "keyVault": {
-          "id": "/subscriptions/8c3d59f9-1481-4dda-9b6f-263e5f412c7d/resourceGroups/bis-dev-usnc-keyvault-rg/providers/Microsoft.KeyVault/vaults/bis-dev-usnc-keyvault"
-        },
-        "secretName": "localadminpassword"
-      }
-    }
   },
   "resources": [
     {
