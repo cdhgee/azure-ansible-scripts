@@ -76,7 +76,6 @@
         "osProfile": {
           "computerName": "[parameters('virtualMachineName')]",
           "adminUsername": "[parameters('adminUsername')]",
-          "adminPassword": "[parameters('adminPassword')]",
           "adminPassword": "[variables('adminPassword')]",
           "windowsConfiguration": {
             "enableAutomaticUpdates": true,
