@@ -1,3 +1,8 @@
 smiths_azure_tags:
   "Environment": "{{ smiths_environment_name }}"
   "Division": "{{ smiths_division_name }}"
+  "Department": "{{ smiths_department_name }}"
+  "Cost Center": "{{ smiths_costcenter_value }}"
+  "Project Code": "{{ smiths_projectcode_value }}"
+  "Service": "{{ smiths_service_name }}"
+  "Application": "{{ smiths_application_name }}"
