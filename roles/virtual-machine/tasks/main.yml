@@ -59,7 +59,7 @@
 #     vm_size: Standard_B2ms
 - name: Create virtual machine
   azure_rm_deployment:
-    deployment_name: "Deploy VM {{ smiths_vm_name }}"
+    deployment_name: "vm_deployment_{{ smiths_vm_name }}"
     resource_group_name: "{{ smiths_resource_group_name }}"
     location: "{{ smiths_region_name }}"
     template_link: "https://raw.githubusercontent.com/cdhgee/azure-ansible-scripts/master/arm-templates/virtual-machine.json"
