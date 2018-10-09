@@ -1,1 +1,18 @@
+smiths_os_mapping:
+  "Windows Server": "s"
+  "Linux Server": "x"
+  "Windows Client": "w"
+
+smiths_os_type_code: "{{ smiths_os_mapping[smiths_os_type] }}"
+
+smiths_vm_purpose_mapping:
+  "Application Server": "ap"
+  "Domain Controller": "dc"
+  "File Server": "fs"
+  "Web Server": "web"
+  "Database Server": "db"
+
+smiths_vm_purpose_code: "{{ smiths_vm_purpose_mapping[smiths_vm_purpose] }}"
+
 smiths_resource_group_name: "{{ smiths_division_code }}-{{ smiths_environment_code }}-{{ smiths_service_name }}-rg"
+smiths_vm_name: "{{ smiths_region_code }}{{ smiths_os_type_code }}{{ smiths_environment_char }}{{ smiths_vm_purpose_code }}{{ smiths_vm_id }}"
