@@ -64,17 +64,25 @@
     location: "{{ smiths_region_name }}"
     template_link: "https://raw.githubusercontent.com/cdhgee/azure-ansible-scripts/master/arm-templates/virtual-machine.json"
     parameters:
-      virtualMachineName: "{{ smiths_vm_name }}"
-      adminUsername: "bisadmin"
+      virtualMachineName:
+        value: "{{ smiths_vm_name }}"
+      adminUsername:
+        value: "bisadmin"
       adminPassword:
         reference:
           keyVault:
             id: "/subscriptions/8c3d59f9-1481-4dda-9b6f-263e5f412c7d/resourceGroups/bis-dev-usnc-keyvault-rg/providers/Microsoft.KeyVault/vaults/bis-dev-usnc-keyvault"
           secretName: "localadminpassword"
-      size: "Standard_B2ms"
-      subnetName: "default-subnet"
-      subnetCIDR: "10.0.0.0/24"
-      location: "{{ smiths_region_name }}"
-      vnetName: "bis-dev-vnet-demo"
-      vnetCIDR: "10.0.0.0/16"
+      size:
+        value: "Standard_B2ms"
+      subnetName:
+        value: "default-subnet"
+      subnetCIDR:
+        value: "10.0.0.0/24"
+      location:
+        value: "{{ smiths_region_name }}"
+      vnetName:
+        value: "bis-dev-vnet-demo"
+      vnetCIDR:
+        value: "10.0.0.0/16"
 
