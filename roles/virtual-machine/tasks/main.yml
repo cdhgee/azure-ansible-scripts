@@ -63,6 +63,7 @@
     resource_group_name: "{{ smiths_resource_group_name }}"
     location: "{{ smiths_region_name }}"
     template_link: "https://raw.githubusercontent.com/cdhgee/azure-ansible-scripts/master/arm-templates/virtual-machine.json"
+    tags: "{{ smiths_azure_tags }}"
     parameters:
       virtualMachineName:
         value: "{{ smiths_vm_name }}"
