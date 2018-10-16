@@ -10,6 +10,8 @@
         value: "{{ smiths_region_name }}"
       name:
         value: "{{ smiths_vm_name }}-nic01-ipv4-publicip"
+      dnsName:
+        value: "smiths-{{ smiths_vm_name }}-nic01"
       tags:
         value: "{{ smiths_azure_tags }}"
   register: smiths_public_ip_resource
