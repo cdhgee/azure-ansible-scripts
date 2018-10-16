@@ -28,7 +28,7 @@
       "id": "[parameters('publicIpAddressId')]"
     },
     "nsgId": {
-      "id": "[parameters('publicIpAddressId')]"
+      "id": "[parameters('nsgId')]"
     }
   },
   "resources": [
