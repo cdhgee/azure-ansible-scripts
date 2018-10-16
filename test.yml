@@ -1,13 +1,12 @@
-- name: Create Azure VM
+- name: Create a virtual machine
   hosts: localhost
   connection: local
-  vars:
-    template: "{{ lookup('file', 'test2.json') | from_json }}"
-  tasks:
-  - shell: ls -al
-    register: ls
-  - debug:
-      var: ls.stdout
-  - debug:
-      var: template.parameters
-
+  roles:
+  - naming
+  - tagging
+  - iaas-naming
+  - public-ip
+  - role: nic
+    vars:
+      smiths_public_ip_address_id: "{{ smiths_public_ip_resource.resourceId }}"
+  # - virtual-machine
