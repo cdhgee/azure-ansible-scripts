@@ -8,5 +8,5 @@
   - public-ip
   - role: nic
     vars:
-      smiths_public_ip_address_id: "{{ smiths_public_ip_resource.resourceId }}"
+      smiths_public_ip_address_id: "{{ smiths_public_ip_address_job.deployments.outputs.resourceId }}"
   # - virtual-machine

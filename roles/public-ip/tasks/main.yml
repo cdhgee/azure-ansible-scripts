@@ -1,6 +1,6 @@
 - name: Create Public IP
   azure_rm_deployment:
-    deployment_name: "vm_deployment_{{ smiths_vm_name }}"
+    deployment_name: "public_ip_{{ smiths_vm_name }}-nic01"
     resource_group_name: "{{ smiths_resource_group_name }}"
     location: "{{ smiths_region_name }}"
     template: "{{ lookup('file', '../../../arm-templates/public-ip.json') | from_json }}"
@@ -14,8 +14,8 @@
         value: "smiths-{{ smiths_vm_name }}-nic01"
       tags:
         value: "{{ smiths_azure_tags }}"
-  register: smiths_public_ip_resource
+  register: smiths_public_ip_address_job
 
 - name: Dump resource info
   debug:
-    var: smiths_public_ip_resource
+    var: smiths_public_ip_address_job
