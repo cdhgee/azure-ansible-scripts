@@ -1,0 +1,2 @@
+smiths_public_ip_address_name: "{{ smiths_vm_name }}-nic01-ipv4-publicip"
+

@@ -1,0 +1,1 @@
+smiths_nic_name: "{{ smiths_vm_name }}-nic01"
