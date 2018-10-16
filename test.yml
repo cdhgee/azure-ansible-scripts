@@ -9,6 +9,3 @@
   - role: nic
     vars:
       smiths_public_ip_address_id: "{{ smiths_public_ip_address_job.deployment.outputs.resourceId.value }}"
-    "template": {
-      "type": "object"
-    },
