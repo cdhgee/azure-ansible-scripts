@@ -9,8 +9,7 @@
       "type": "string"
     },
     "dnsName": {
-      "type": "string",
-      "defaultValue": ""
+      "type": "string"
     },
     "type": {
       "type": "string",
