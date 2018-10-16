@@ -15,3 +15,7 @@
       tags:
         value: "{{ smiths_azure_tags }}"
   register: smiths_public_ip_resource
+
+- name: Dump resource info
+  debug:
+    var: smiths_public_ip_resource
