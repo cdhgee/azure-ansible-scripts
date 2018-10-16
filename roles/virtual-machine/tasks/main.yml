@@ -1,68 +1,10 @@
-# - name: Resource group
-#   azure_rm_resourcegroup:
-#     name: "{{ smiths_resource_group_name }}"
-#     location: "{{ smiths_region_name }}"
-#     tags: "{{ smiths_azure_tags }}"
-
-# - name: Virtual network
-#   azure_rm_virtualnetwork:
-#     address_prefixes:
-#     - "10.0.0.0/16"
-#     name: "{{ smiths_vnet_name }}"
-#     resource_group: "{{ smiths_resource_group_name }}"
-#     tags: "{{ smiths_azure_tags }}"
-
-# - name: Subnet
-#   azure_rm_subnet:
-#     virtual_network_name: "{{ smiths_vnet_name }}"
-#     name: "{{ smiths_subnet_name }}"
-#     resource_group: "{{ smiths_resource_group_name }}"
-#     address_prefix_cidr: "10.0.0.0/24"
-
-# - name: Create public IP
-#   azure_rm_publicipaddress:
-#     name: "{{ smiths_vm_name }}-publicip"
-#     resource_group: "{{ smiths_resource_group_name }}"
-#     sku: Basic
-#     tags: "{{ smiths_azure_tags }}"
-#     location: "{{ smiths_region_name }}"
-
-# - name: Create NIC
-#   azure_rm_networkinterface:
-#     ip_configurations:
-#     - name: ipconfig1
-#       public_ip_address_name: "{{ smiths_vm_name }}-publicip"
-#       primary: yes
-#     name: "{{ smiths_vm_name }}-nic01"
-#     resource_group: "{{ smiths_resource_group_name }}"
-#     os_type: Windows
-#     virtual_network: "{{ smiths_vnet_name }}"
-#     subnet_name: "{{ smiths_subnet_name }}"
-
-# - name: Create virtual machine
-#   azure_rm_virtualmachine:
-#     name: "{{ smiths_vm_name }}"
-#     resource_group: "{{ smiths_resource_group_name }}"
-#     location: "{{ smiths_region_name }}"
-#     managed_disk_type: Premium_LRS
-#     tags: "{{ smiths_azure_tags }}"
-#     network_interface_names:
-#     - "{{ smiths_vm_name }}-nic01"
-#     image:
-#       publisher: MicrosoftWindowsServer
-#       offer: WindowsServer
-#       sku: "2016-Datacenter"
-#       version: "latest"
-#     admin_username: "{{ smiths_admin_username }}"
-#     admin_password: "{{ smiths_admin_password }}"
-#     os_type: Windows
-#     vm_size: Standard_B2ms
 - name: Create virtual machine
   azure_rm_deployment:
     deployment_name: "vm_deployment_{{ smiths_vm_name }}"
     resource_group_name: "{{ smiths_resource_group_name }}"
     location: "{{ smiths_region_name }}"
-    template_link: "https://raw.githubusercontent.com/cdhgee/azure-ansible-scripts/master/arm-templates/virtual-machine.json"
+    template: "{{ smiths_vm_template }}"
+    # template_link: "https://raw.githubusercontent.com/cdhgee/azure-ansible-scripts/master/arm-templates/virtual-machine.json"
     tags: "{{ smiths_azure_tags }}"
     parameters:
       virtualMachineName:

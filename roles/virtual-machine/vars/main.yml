@@ -1,3 +1,6 @@
+smiths_vm_template: "{{ lookup('file', '../../../arm-templates/virtual-machine.json') | from_json }}"
+
+
 smiths_os_type_mapping:
   "Windows Server 2016": "s"
   "Ubuntu Server 18.04 LTS": "x"
