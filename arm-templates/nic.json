@@ -13,11 +13,10 @@
     },
     "publicIpAddressId": {
       "type": "string",
-      "defaultValue": null
+      "defaultValue": "unspecified"
     },
     "nsgId": {
       "type": "string",
-      "defaultValue": null
     },
     "vnetName": {
       "type": "string"
@@ -27,6 +26,12 @@
     }
   },
   "variables": {
+    "publicIpAddressId": {
+      "id": "[parameters('publicIpAddressId')]"
+    },
+    "nsgId": {
+      "id": "[parameters('publicIpAddressId')]"
+    }
   },
   "resources": [
     {
@@ -45,15 +50,11 @@
                 "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('vnetName'), parameters('subnetName'))]"
               },
               "privateIPAllocationMethod": "Dynamic",
-              "publicIpAddress": {
-                "id": "[parameters('publicIpAddressId')]"
-              }
+              "publicIpAddress": "[if(equals(parameters('publicIpAddressId'), 'unspecified'), json('null'), variables('publicIpAddressId')]"
             }
           }
         ],
-        "networkSecurityGroup": {
-          "id": "[parameters('nsgId')]"
-        }
+        "networkSecurityGroup": "[if(equals(parameters('nsgId'), 'unspecified'), json('null'), variables('nsgId')]"
       }
     }
   ],
