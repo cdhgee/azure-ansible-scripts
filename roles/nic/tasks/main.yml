@@ -5,15 +5,15 @@
     location: "{{ smiths_region_name }}"
     template: "{{ lookup('file', '../../../arm-templates/nic.json') | from_json }}"
     tags: "{{ smiths_azure_tags }}"
-    parameters:
+    parameters: "{{ smiths_nic_parameters }}"
       location:
         value: "{{ smiths_region_name }}"
       name:
         value: "{{ smiths_nic_name }}"
       publicIpAddressId:
-        value: "{{ smiths_public_ip_address_id | default(omit) }}"
+        value: "{{ smiths_public_ip_address_id | default() }}"
       nsgId:
-        value: "{{ smiths_nsg_id | default(omit) }}"
+        value: "{{ smiths_nsg_id | default() }}"
       vnetName:
         value: "{{ smiths_vnet_name }}"
       subnetName:
