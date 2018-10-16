@@ -21,7 +21,7 @@
       "defaultValue": "Basic"
     },
     "tags": {
-      "type": "object",
+      "type": "object"
     }
   },
   "resources": [
