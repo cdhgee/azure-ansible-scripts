@@ -1,8 +1,13 @@
 - name: Create Azure VM
   hosts: localhost
   connection: local
+  vars:
+    template: "{{ lookup('file', 'arm-templates/virtual-machine.json') }}"
   tasks:
   - shell: ls -al
     register: ls
   - debug:
       var: ls.stdout
+  - debug:
+      var: template
+
