@@ -12,7 +12,7 @@
       "type": "string"
     },
     "adminPassword": {
-      "type": "securestring",
+      "type": "securestring"
     },
     "size": {
       "type": "string"

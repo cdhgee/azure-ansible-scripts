@@ -2,12 +2,12 @@
   hosts: localhost
   connection: local
   vars:
-    template: "{{ lookup('file', 'arm-templates/virtual-machine.json') }}"
+    template: "{{ lookup('file', 'test2.json') | from_json }}"
   tasks:
   - shell: ls -al
     register: ls
   - debug:
       var: ls.stdout
   - debug:
-      var: template
+      var: template.parameters
 
