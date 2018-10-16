@@ -11,9 +11,9 @@
       name:
         value: "{{ smiths_nic_name }}"
       publicIpAddressId:
-        value: "{{ smiths_public_ip_address_id | default() }}"
+        value: "{{ smiths_public_ip_address_id | default('unspecified') }}"
       nsgId:
-        value: "{{ smiths_nsg_id | default() }}"
+        value: "{{ smiths_nsg_id | default('unspecified') }}"
       vnetName:
         value: "{{ smiths_vnet_name }}"
       subnetName:
