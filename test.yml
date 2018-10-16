@@ -3,3 +3,6 @@
   connection: local
   tasks:
   - shell: ls -al
+    register: ls
+  - debug:
+      var: ls.stdout
