@@ -2,19 +2,24 @@
   "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
   "contentVersion": "1.0.0.0",
   "parameters": {
+    "template": {
+      "type": "object"
+    },
     "location": {
       "type": "string"
     },
-    "nicName": {
+    "name": {
       "type": "string"
+    },
+    "publicIpAddressId": {
+      "type": "string",
+      "defaultValue": null
+    },
+    "nsgId": {
+      "type": "string",
+      "defaultValue": null
     },
     "vnetName": {
-      "type": "string"
-    },
-    "vnetCIDR": {
-      "type": "string"
-    },
-    "subnetCIDR": {
       "type": "string"
     },
     "subnetName": {
@@ -22,11 +27,10 @@
     }
   },
   "variables": {
-    "diagnosticsExtensionName": "IaaSDiagnostics"
   },
   "resources": [
     {
-      "name": "[parameters('nicName')]",
+      "name": "[parameters('name')]",
       "type": "Microsoft.Network/networkInterfaces",
       "apiVersion": "2018-04-01",
       "location": "[parameters('location')]",
@@ -38,110 +42,23 @@
             "name": "ipconfig1",
             "properties": {
               "subnet": {
-                "id": "[reference('vnet').outputs.subnetId.value]"
+                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('vnetName'), parameters('subnetName'))]"
               },
               "privateIPAllocationMethod": "Dynamic",
               "publicIpAddress": {
-                "id": "[reference('publicip').outputs.publicIpAddressId.value]"
+                "id": "[parameters('publicIpAddressId')]"
               }
             }
           }
         ],
         "networkSecurityGroup": {
-          "id": "[reference('nsg').outputs.nsgId.value]"
-        }
-      },
-      "tags": {}
-    },
-    {
-      "name": "vnet",
-      "type": "Microsoft.Resources/deployments",
-      "apiVersion": "2018-08-01",
-      "properties": {
-        "mode": "Incremental",
-        "templateLink": {
-          "uri": "[uri(deployment().properties.templateLink.uri, 'vnet.json')]"
-        },
-        "parameters": {
-          "location": {
-            "value": "[parameters('location')]"
-          },
-          "vnetName": {
-            "value": "[parameters('vnetName')]"
-          },
-          "subnetName": {
-            "value": "[parameters('subnetName')]"
-          },
-          "vnetCIDR": {
-            "value": "[parameters('vnetCIDR')]"
-          },
-          "subnetCIDR": {
-            "value": "[parameters('subnetCIDR')]"
-          }
-        }
-      }
-    },
-    {
-      "name": "nsg",
-      "type": "Microsoft.Resources/deployments",
-      "apiVersion": "2018-08-01",
-      "properties": {
-        "mode": "Incremental",
-        "templateLink": {
-          "uri": "[uri(deployment().properties.templateLink.uri, 'nsg.json')]"
-        },
-        "parameters": {
-          "location": {
-            "value": "[parameters('location')]"
-          },
-          "nsgName": {
-            "value": "[concat(parameters('nicName'), '-nsg')]"
-          },
-          "nsgRules": {
-            "value": [
-              {
-                "name": "RDP",
-                "properties": {
-                  "priority": 300,
-                  "protocol": "TCP",
-                  "access": "Allow",
-                  "direction": "Inbound",
-                  "sourceAddressPrefix": "*",
-                  "sourcePortRange": "*",
-                  "destinationAddressPrefix": "*",
-                  "destinationPortRange": "3389"
-                }
-              }
-            ]
-          }
-        }
-      }
-    },
-    {
-      "name": "publicip",
-      "type": "Microsoft.Resources/deployments",
-      "apiVersion": "2018-08-01",
-      "properties": {
-        "mode": "Incremental",
-        "templateLink": {
-          "uri": "[uri(deployment().properties.templateLink.uri, 'public-ip.json')]"
-        },
-        "parameters": {
-          "location": {
-            "value": "[parameters('location')]"
-          },
-          "publicIpAddressName": {
-            "value": "[concat(parameters('nicName'), '-publicip')]"
-          },
-          "dnsName": {
-            "value": "[parameters('nicName')]"
-          }
+          "id": "[parameters('nsgId')]"
         }
       }
     }
   ],
   "outputs": {
-    "nicId": {
+    "resourceId": {
       "type": "string",
       "value": "[resourceId('Microsoft.Network/networkInterfaces', parameters('nicName'))]"
     }

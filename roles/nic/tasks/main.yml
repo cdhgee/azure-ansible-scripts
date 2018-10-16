@@ -1,0 +1,21 @@
+- name: Create network interface
+  azure_rm_deployment:
+    deployment_name: "vm_deployment_{{ smiths_vm_name }}"
+    resource_group_name: "{{ smiths_resource_group_name }}"
+    location: "{{ smiths_region_name }}"
+    template: "{{ lookup('file', '../../../nic.json') | from_json }}"
+    tags: "{{ smiths_azure_tags }}"
+    parameters:
+      location:
+        value: "{{ smiths_region_name }}"
+      name:
+        value: "{{ smiths_vm_name }}-nic01"
+      publicIpAddressId:
+        value: "{{ smiths_public_ip_address_id || default(omit) }}"
+      nsgId:
+        value: "{{ smiths_nsg_id || default(omit) }}"
+      vnetName:
+        value: "{{ smiths_vnet_name }}"
+      subnetName:
+        value: "{{ smiths_subnet_name }}"
+  register: smiths_nic_resource
