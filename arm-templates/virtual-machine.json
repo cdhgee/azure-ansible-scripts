@@ -17,23 +17,12 @@
     "size": {
       "type": "string"
     },
-    "vnetName": {
-      "type": "string"
-    },
-    "subnetName": {
-      "type": "string"
-    },
-    "vnetCIDR": {
-      "type": "string"
-    },
-    "subnetCIDR": {
+    "subnetId": {
       "type": "string"
     },
     "vmImage": {
       "type": "object"
     }
-  },
-  "variables": {
   },
   "resources": [
     {
@@ -78,7 +67,6 @@
       "identity": {
         "type": "systemAssigned"
       },
-      "tags": {}
     },
     {
       "name": "availabilitySet",
@@ -87,7 +75,7 @@
       "properties": {
         "mode": "Incremental",
         "templateLink": {
-          "uri": "[uri(deployment().properties.templateLink.uri, 'availability-set.json')]"
+          "uri": "[uri(deployment().properties.templateLink.uri, 'availability-set.json')]",
         },
         "parameters": {
           "location": {
@@ -113,19 +101,10 @@
             "value": "[parameters('location')]"
           },
           "nicName": {
-            "value": "[concat(parameters('virtualMachineName'), '-nic01')]"
+            "value": "[concat(parameters('virtualMachineName'), '-nic0')]"
           },
-          "vnetName": {
-            "value": "[parameters('vnetName')]"
-          },
-          "subnetName": {
-            "value": "[parameters('subnetName')]"
-          },
-          "vnetCIDR": {
-            "value": "[parameters('vnetCIDR')]"
-          },
-          "subnetCIDR": {
-            "value": "[parameters('subnetCIDR')]"
+          "subnetId": {
+            "value": "[parameters('subnetId')]"
           }
         }
       }

@@ -5,35 +5,19 @@
     "location": {
       "type": "string"
     },
-    "name": {
+    "nicName": {
       "type": "string"
     },
-    "publicIpAddressId": {
-      "type": "string",
-      "defaultValue": "unspecified"
-    },
-    "nsgId": {
-      "type": "string",
-      "defaultValue": "unspecified"
-    },
-    "vnetName": {
-      "type": "string"
-    },
-    "subnetName": {
+    "subnetId": {
       "type": "string"
     }
   },
   "variables": {
-    "publicIpAddressId": {
-      "id": "[parameters('publicIpAddressId')]"
-    },
-    "nsgId": {
-      "id": "[parameters('nsgId')]"
-    }
+    "diagnosticsExtensionName": "IaaSDiagnostics"
   },
   "resources": [
     {
-      "name": "[parameters('name')]",
+      "name": "[parameters('nicName')]",
       "type": "Microsoft.Network/networkInterfaces",
       "apiVersion": "2018-04-01",
       "location": "[parameters('location')]",
@@ -45,19 +29,81 @@
             "name": "ipconfig1",
             "properties": {
               "subnet": {
-                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('vnetName'), parameters('subnetName'))]"
+                "id": "[parameters('subnetId')]"
               },
               "privateIPAllocationMethod": "Dynamic",
-              "publicIpAddress": "[if(equals(parameters('publicIpAddressId'), 'unspecified'), json('null'), variables('publicIpAddressId'))]"
+              "publicIpAddress": {
+                "id": "[reference('publicip').outputs.publicIpAddressId.value]"
+              }
             }
           }
         ],
-        "networkSecurityGroup": "[if(equals(parameters('nsgId'), 'unspecified'), json('null'), variables('nsgId'))]"
+        "networkSecurityGroup": {
+          "id": "[reference('nsg').outputs.nsgId.value]"
+        }
+      }
+    },
+    {
+      "name": "nsg",
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2018-08-01",
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[uri(deployment().properties.templateLink.uri, 'nsg.json')]"
+        },
+        "parameters": {
+          "location": {
+            "value": "[parameters('location')]"
+          },
+          "nsgName": {
+            "value": "[concat(parameters('nicName'), '-nsg')]"
+          },
+          "nsgRules": {
+            "value": [
+              {
+                "name": "RDP",
+                "properties": {
+                  "priority": 300,
+                  "protocol": "TCP",
+                  "access": "Allow",
+                  "direction": "Inbound",
+                  "sourceAddressPrefix": "*",
+                  "sourcePortRange": "*",
+                  "destinationAddressPrefix": "*",
+                  "destinationPortRange": "3389"
+                }
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "name": "publicip",
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2018-08-01",
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[uri(deployment().properties.templateLink.uri, 'public-ip.json')]"
+        },
+        "parameters": {
+          "location": {
+            "value": "[parameters('location')]"
+          },
+          "publicIpAddressName": {
+            "value": "[concat(parameters('nicName'), '-publicip')]"
+          },
+          "dnsName": {
+            "value": "[parameters('nicName')]"
+          }
+        }
       }
     }
   ],
   "outputs": {
-    "resourceId": {
+    "nicId": {
       "type": "string",
       "value": "[resourceId('Microsoft.Network/networkInterfaces', parameters('nicName'))]"
     }

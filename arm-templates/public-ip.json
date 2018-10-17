@@ -5,43 +5,42 @@
     "location": {
       "type": "string"
     },
-    "name": {
+    "publicIpAddressName": {
       "type": "string"
     },
     "dnsName": {
       "type": "string"
     },
-    "type": {
+    "publicIpAddressType": {
       "type": "string",
       "defaultValue": "Dynamic"
     },
-    "sku": {
+    "publicIpAddressSku": {
       "type": "string",
       "defaultValue": "Basic"
-    },
-    "tags": {
-      "type": "object"
     }
+  },
+  "variables": {
   },
   "resources": [
     {
-      "name": "[parameters('name')]",
+      "name": "[parameters('publicIpAddressName')]",
       "type": "Microsoft.Network/publicIpAddresses",
       "apiVersion": "2018-08-01",
       "location": "[parameters('location')]",
       "properties": {
-        "publicIpAllocationMethod": "[parameters('type')]",
+        "publicIpAllocationMethod": "[parameters('publicIpAddressType')]",
         "dnsSettings": {
           "domainNameLabel": "[parameters('dnsName')]"
         }
       },
-      "tags": "[parameters('tags')]"
+      "tags": {}
     }
   ],
   "outputs": {
-    "resourceId": {
+    "publicIpAddressId": {
       "type": "string",
-      "value": "[resourceId('Microsoft.Network/publicIpAddresses', parameters('name'))]"
+      "value": "[resourceId('Microsoft.Network/publicIpAddresses', parameters('publicIpAddressName'))]"
     }
   }
 }
