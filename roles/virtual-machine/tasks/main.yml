@@ -1,3 +1,7 @@
+- name: Dump vars
+  debug:
+    var: smiths_subnet
+
 - name: Create virtual machine
   azure_rm_deployment:
     deployment_name: "vm_deployment_{{ smiths_vm_name }}"
