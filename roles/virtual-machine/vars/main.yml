@@ -1,6 +1,3 @@
-smiths_vm_template: "{{ lookup('file', '../../../arm-templates/virtual-machine.json') | from_json }}"
-
-
 smiths_os_type_mapping:
   "Windows Server 2016": "s"
   "Ubuntu Server 18.04 LTS": "x"
@@ -36,3 +33,12 @@ smiths_vm_purpose_code: "{{ smiths_vm_purpose_mapping[smiths_vm_purpose] }}"
 
 smiths_resource_group_name: "{{ smiths_division_code }}-{{ smiths_environment_code }}-{{ smiths_service_name }}-rg"
 smiths_vm_name: "{{ smiths_region_code }}{{ smiths_os_type_code }}{{ smiths_environment_char }}{{ smiths_vm_purpose_code }}{{ smiths_vm_id }}"
+
+smiths_network_mapping:
+  "zna1":
+    "AWX":
+      "resource_group": "bis-awx-dev-rg"
+      "vnet": "awx-vnet"
+      "subnet": "awx-subnet"
+
+smiths_subnet: "{{ smiths_network_mapping[smiths_region_code][smiths_network] }}"

@@ -3,8 +3,7 @@
     deployment_name: "vm_deployment_{{ smiths_vm_name }}"
     resource_group_name: "{{ smiths_resource_group_name }}"
     location: "{{ smiths_region_name }}"
-    template: "{{ smiths_vm_template }}"
-    # template_link: "https://raw.githubusercontent.com/cdhgee/azure-ansible-scripts/master/arm-templates/virtual-machine.json"
+    template_link: "https://raw.githubusercontent.com/cdhgee/azure-ansible-scripts/master/arm-templates/virtual-machine.json"
     tags: "{{ smiths_azure_tags }}"
     parameters:
       virtualMachineName:
@@ -18,16 +17,6 @@
           secretName: "localadminpassword"
       size:
         value: "Standard_B2ms"
-      subnetName:
-        value: "default-subnet"
-      subnetCIDR:
-        value: "10.0.0.0/24"
-      location:
-        value: "{{ smiths_region_name }}"
-      vnetName:
-        value: "bis-dev-vnet-demo"
-      vnetCIDR:
-        value: "10.0.0.0/16"
-      vmImage:
-        value: "{{ smiths_os_image }}"
+      subnet:
+        value: "{{ smiths_subnet }}"
 

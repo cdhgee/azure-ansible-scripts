@@ -17,8 +17,8 @@
     "size": {
       "type": "string"
     },
-    "subnetId": {
-      "type": "string"
+    "subnet": {
+      "type": "object"
     },
     "vmImage": {
       "type": "object"
@@ -104,7 +104,7 @@
             "value": "[concat(parameters('virtualMachineName'), '-nic0')]"
           },
           "subnetId": {
-            "value": "[parameters('subnetId')]"
+            "value": "[resourceId(parameters('subnet').resource_group, 'Microsoft.virtualNetworks', parameters('vnet'), parameters('subnet'))]"
           }
         }
       }

@@ -1,7 +1,9 @@
-- name: Test playbook
+- name: Create a virtual machine
   hosts: localhost
+  gather_facts: false
   connection: local
   roles:
   - naming
   - tagging
+  - iaas-naming
   - virtual-machine
