@@ -21,4 +21,6 @@
         value: "{{ smiths_subnet }}"
       location:
         value: "{{ smiths_region_name }}"
+      vmImage:
+        value: "{{ smiths_os_image }}"
 
