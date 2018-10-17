@@ -5,5 +5,4 @@
   roles:
   - naming
   - tagging
-  - iaas-naming
   - virtual-machine

@@ -19,4 +19,6 @@
         value: "Standard_B2ms"
       subnet:
         value: "{{ smiths_subnet }}"
+      location:
+        value: "{{ smiths_region_name }}"
 
