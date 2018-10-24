@@ -9,6 +9,11 @@ smiths_os_type_mapping:
 smiths_os_type_code: "{{ smiths_os_type_mapping[smiths_os] | default('u') }}"
 
 smiths_os_image_mapping:
+  "Windows Server 2012 R2":
+    publisher: "MicrosoftWindowsServer"
+    offer: "WindowsServer"
+    sku: "2016-R2-Datacenter"
+    version: "latest"
   "Windows Server 2016":
     publisher: "MicrosoftWindowsServer"
     offer: "WindowsServer"
@@ -35,10 +40,29 @@ smiths_resource_group_name: "{{ smiths_division_code }}-{{ smiths_environment_co
 smiths_vm_name: "{{ smiths_region_code }}{{ smiths_os_type_code }}{{ smiths_environment_char }}{{ smiths_vm_purpose_code }}{{ smiths_vm_id }}"
 
 smiths_network_mapping:
-  "zna1":
-    "AWX":
-      "resource_group": "bis-awx-dev-rg"
-      "vnet": "awx-vnet"
-      "subnet": "awx-subnet"
+  "BIS - Non-Production - App":
+    "resource_group": "{{ smiths_region_code }}-bis-npd-vnet-rg"
+    "vnet": "{{ smiths_region_code }}-bis-npd-vnet01"
+    "subnet": "{{ smiths_region_code }}-bis-npd-app-subnet01"
+  "BIS - Non-Production - Data":
+    "resource_group": "{{ smiths_region_code }}-bis-npd-vnet-rg"
+    "vnet": "{{ smiths_region_code }}-bis-npd-vnet01"
+    "subnet": "{{ smiths_region_code }}-bis-npd-data-subnet01"
+  "BIS - Production - App":
+    "resource_group": "{{ smiths_region_code }}-bis-prd-vnet-rg"
+    "vnet": "{{ smiths_region_code }}-bis-prd-vnet01"
+    "subnet": "{{ smiths_region_code }}-bis-prd-app-subnet01"
+  "BIS - Production - Data":
+    "resource_group": "{{ smiths_region_code }}-bis-prd-vnet-rg"
+    "vnet": "{{ smiths_region_code }}-bis-prd-vnet01"
+    "subnet": "{{ smiths_region_code }}-bis-prd-data-subnet01"
+  "BIS - DMZ":
+    "resource_group": "{{ smiths_region_code }}-bis-dmz-vnet-rg"
+    "vnet": "{{ smiths_region_code }}-bis-dmz-vnet01"
+    "subnet": "{{ smiths_region_code }}-bis-dmz-dmz-subnet01"
+  "BIS - Shared":
+    "resource_group": "{{ smiths_region_code }}-bis-shr-vnet-rg"
+    "vnet": "{{ smiths_region_code }}-bis-shr-vnet01"
+    "subnet": "{{ smiths_region_code }}-bis-shr-shared-subnet01"
 
-smiths_subnet: "{{ smiths_network_mapping[smiths_region_code][smiths_network] }}"
+smiths_subnet: "{{ smiths_network_mapping[smiths_network] }}"
