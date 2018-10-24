@@ -54,11 +54,7 @@
         "osProfile": {
           "computerName": "[parameters('virtualMachineName')]",
           "adminUsername": "[parameters('adminUsername')]",
-          "adminPassword": "[parameters('adminPassword')]",
-          "windowsConfiguration": {
-            "enableAutomaticUpdates": true,
-            "provisionVmAgent": true
-          }
+          "adminPassword": "[parameters('adminPassword')]"
         },
         "availabilitySet": {
           "id": "[reference('availabilitySet').outputs.availabilitySetId.value]"
