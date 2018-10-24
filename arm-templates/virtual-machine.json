@@ -104,7 +104,7 @@
             "value": "[concat(parameters('virtualMachineName'), '-nic0')]"
           },
           "subnetId": {
-            "value": "[resourceId(subscription().subscriptionId, parameters('network').resource_group, 'Microsoft.Network/virtualNetworks/networks', parameters('network').vnet, parameters('network').subnet)]"
+            "value": "[resourceId(subscription().subscriptionId, parameters('network').resource_group, 'Microsoft.Network/virtualNetworks/subnets', parameters('network').vnet, parameters('network').subnet)]"
           }
         }
       }
