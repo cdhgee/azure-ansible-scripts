@@ -65,4 +65,4 @@ smiths_network_mapping:
     "vnet": "{{ smiths_region_code }}-bis-shr-vnet01"
     "subnet": "{{ smiths_region_code }}-bis-shr-shared-subnet01"
 
-smiths_subnet: "{{ smiths_network_mapping[smiths_network] }}"
+smiths_network_info: "{{ smiths_network_mapping[smiths_network] }}"

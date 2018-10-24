@@ -17,8 +17,8 @@
           secretName: "localadminpassword"
       size:
         value: "Standard_B2ms"
-      subnet:
-        value: "{{ smiths_subnet }}"
+      network:
+        value: "{{ smiths_network_info }}"
       location:
         value: "{{ smiths_region_name }}"
       vmImage:
