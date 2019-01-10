@@ -1,0 +1,49 @@
+smiths_config_networking:
+  BIS Enterprise IT Primary:
+    zna1-bis-shr-vnet01:
+      resource-group: zna1-bis-shr-vnet-rg
+      address-prefixes:
+        - 10.216.16.0/22
+      dns-servers:
+        - 10.216.16.4
+        - 10.216.16.5
+      subnets:
+        - name: zna1-bis-shr-shared-subnet01
+          address-prefix: 10.216.16.0/23
+        - name: GatewaySubnet
+          address-prefix: 10.216.19.0/27
+  Smiths Detection Enterprise R&D:
+    zna1-detection-dev-vnet01:
+      resource-group: zna1-detection-dev-vnet-rg
+      network-watcher:
+        enable: true
+        name: zna1-detection-dev-nw01
+        resource-group: zna1-detection-dev-nw-rg
+      dns-servers:
+        - 10.216.16.4
+        - 10.216.16.5
+      address-prefixes:
+        - 10.216.65.0/24
+      subnets:
+        - name: zna1-detection-dev-rd-subnet01:
+          address-prefix: 10.216.65.0/24
+          route-table:
+            name: zna1-detection-dev-rd-subnet01-route
+            bgp-propagation: false
+            routes:
+              - name: Default
+                address-prefixes: 0.0.0.0/0 
+                next-hop-type: VirtualAppliance
+                next-hop-ip: 10.216.19.52
+              - name: BIS-Shared
+                address-prefixes: 10.216.0.0/22
+                next-hop-type: VirtualAppliance
+                next-hop-ip: 10.216.19.52
+      peerings:
+        - target:
+            subscription: BIS Enterprise IT Primary
+            virtual-network: zna1-bis-dev-shr-vnet01
+          allow-vnet-access: true
+          allow-forwarded-traffic: true
+          allow-gateway-transit: true
+          use-remote-gateways: false

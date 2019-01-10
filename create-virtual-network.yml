@@ -1,0 +1,13 @@
+- name: Create a vnet
+  hosts: localhost
+  gather_facts: false
+  connection: local
+  tasks:
+  - import_role:
+      name: configuration
+  - include_role: 
+      name: virtual-network
+    vars:
+      smiths_subscription: Smiths Detection Enterprise R&D
+      smiths_vnet: zna1-detection-dev-vnet01
+    

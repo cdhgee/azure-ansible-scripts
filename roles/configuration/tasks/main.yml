@@ -1,0 +1,7 @@
+- name: Load subscription configuration 
+  include_vars:
+    file: subscriptions.yml
+
+- name: Load networking configuration
+  include_vars:
+    file: networking.yml
