@@ -41,7 +41,6 @@
         name: "{{ vnet.name }}/{{ subnet.name }}" 
         apiVersion: "2018-08-01"
         location: "{{ vnet.location }}"
-        tags: "{{ smiths_azure_tags }}" 
         properties:
           addressSpace:
             addressPrefix: "{{ subnet.address_prefix }}"
