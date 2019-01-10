@@ -7,8 +7,6 @@
   azure_rm_deployment:
     deployment_name: "vnet-{{ ansible_date_time.iso8601_basic_short }}"
     resource_group_name: "{{ vnet.resource_group}}"
-    location: "{{ vnet.location }}"
-    tags: "{{ smiths_azure_tags }}"
     parameters: {}
     template:
       $schema: https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#
@@ -19,6 +17,7 @@
       - type: Microsoft.Network/virtualNetworks
         name: "{{ vnet.name }}" 
         apiVersion: "2018-08-01"
+        location: "{{ vnet.location }}"
         tags: "{{ smiths_azure_tags }}" 
         properties:
           addressSpace:
@@ -31,8 +30,6 @@
   azure_rm_deployment:
     deployment_name: "subnet-{{ ansible_date_time.iso8601_basic_short }}"
     resource_group_name: "{{ vnet.resource_group }}"
-    location: "{{ vnet.location }}"
-    tags: "{{ smiths_azure_tags }}"
     template:
       $schema: https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#
       contentVersion: 1.0.0.0
@@ -42,6 +39,7 @@
       - type: Microsoft.Network/virtualNetworks/subnets
         name: "{{ subnet.name }}" 
         apiVersion: "2018-08-01"
+        location: "{{ vnet.location }}"
         tags: "{{ smiths_azure_tags }}" 
         properties:
           addressSpace:
