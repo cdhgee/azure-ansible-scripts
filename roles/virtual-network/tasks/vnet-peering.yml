@@ -7,7 +7,7 @@
     remote_resource_group: "{{ smiths_config_networking[vnetpeering.remote.subscription][vnetpeering.remote.vnet_name].resource_group }}"
     remote_peering_name: "{{ vnet.name }}-vnetpeer"
 
-- name: Create virtual network peering (local)
+- name: Create virtual network peering from local to remote
   azure_rm_deployment:
     deployment_name: "peering_{{ ansible_date_time.iso8601_basic_short }}"
     resource_group_name: "{{ vnet.resource_group }}"
@@ -18,8 +18,8 @@
       parameters: {}
       variables: {}
       resources: 
-      - type: Microsoft.Network/virtualNetworkPeerings
-        name: "{{ local_peering_name }}" 
+      - type: Microsoft.Network/virtualNetworks/virtualNetworkPeerings
+        name: "{{ vnet.name }}/{{ local_peering_name }}" 
         apiVersion: "2018-08-01"
         location: "{{ vnet.location }}"
         properties:
@@ -30,7 +30,7 @@
           remoteVirtualNetwork: 
             id: "{{ remote_id }}"
 
-- name: Create virtual network peering (remote)
+- name: Create virtual network peering from remote to local
   azure_rm_deployment:
     deployment_name: "peering_{{ ansible_date_time.iso8601_basic_short }}"
     resource_group_name: "{{ remote_resource_group }}"
@@ -42,8 +42,8 @@
       parameters: {}
       variables: {}
       resources: 
-      - type: Microsoft.Network/virtualNetworkPeerings
-        name: "{{ remote_peering_name }}" 
+      - type: Microsoft.Network/virtualNetworks/virtualNetworkPeerings
+        name: "{{ vnetpeering.vnet_name }}/{{ remote_peering_name }}" 
         apiVersion: "2018-08-01"
         location: "{{ vnet.location }}"
         properties:
