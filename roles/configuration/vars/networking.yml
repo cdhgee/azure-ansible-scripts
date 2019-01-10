@@ -48,5 +48,5 @@ smiths_config_networking:
             vnet_name: zna1-bis-shr-vnet01
           allow_vnet_access: true
           allow_forwarded_traffic: true
-          allow_gateway_transit: true
+          allow_gateway_transit: false
           use_remote_gateways: false

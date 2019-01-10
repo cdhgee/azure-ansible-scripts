@@ -9,7 +9,7 @@
 
 - name: Create virtual network peering from local to remote
   azure_rm_deployment:
-    deployment_name: "peering_{{ ansible_date_time.iso8601_basic_short }}"
+    deployment_name: "peer_out_{{ ansible_date_time.iso8601_basic_short }}"
     resource_group_name: "{{ vnet.resource_group }}"
     location: "{{ vnet.location }}"
     template:
@@ -32,7 +32,7 @@
 
 - name: Create virtual network peering from remote to local
   azure_rm_deployment:
-    deployment_name: "peering_{{ ansible_date_time.iso8601_basic_short }}"
+    deployment_name: "peer_in_{{ ansible_date_time.iso8601_basic_short }}"
     resource_group_name: "{{ remote_resource_group }}"
     location: "{{ vnet.location }}"
     subscription_id: "{{ remote_subscription_id }}"
@@ -43,7 +43,7 @@
       variables: {}
       resources: 
       - type: Microsoft.Network/virtualNetworks/virtualNetworkPeerings
-        name: "{{ vnetpeering.vnet_name }}/{{ remote_peering_name }}" 
+        name: "{{ vnetpeering.remote.vnet_name }}/{{ remote_peering_name }}" 
         apiVersion: "2018-08-01"
         location: "{{ vnet.location }}"
         properties:
