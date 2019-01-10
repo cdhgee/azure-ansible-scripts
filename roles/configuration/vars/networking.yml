@@ -1,49 +1,52 @@
 smiths_config_networking:
   BIS Enterprise IT Primary:
     zna1-bis-shr-vnet01:
-      resource-group: zna1-bis-shr-vnet-rg
-      address-prefixes:
+      resource_group: zna1-bis-shr-vnet-rg
+      location: North Central US
+      address_prefixes:
         - 10.216.16.0/22
-      dns-servers:
+      dns_servers:
         - 10.216.16.4
         - 10.216.16.5
       subnets:
         - name: zna1-bis-shr-shared-subnet01
-          address-prefix: 10.216.16.0/23
+          address_prefix: 10.216.16.0/23
         - name: GatewaySubnet
-          address-prefix: 10.216.19.0/27
+          address_prefix: 10.216.19.0/27
   Smiths Detection Enterprise R&D:
     zna1-detection-dev-vnet01:
-      resource-group: zna1-detection-dev-vnet-rg
-      network-watcher:
+      resource_group: zna1-detection-dev-vnet-rg
+      location: North Central US
+      network_watcher:
         enable: true
-        name: zna1-detection-dev-nw01
-        resource-group: zna1-detection-dev-nw-rg
-      dns-servers:
+        name: zna1-detection_dev_nw01
+        resource_group: zna1-detection-dev-nw-rg
+      dns_servers:
         - 10.216.16.4
         - 10.216.16.5
-      address-prefixes:
+      address_prefixes:
         - 10.216.65.0/24
       subnets:
         - name: zna1-detection-dev-rd-subnet01
-          address-prefix: 10.216.65.0/24
-          route-table:
+          location: North Central US
+          address_prefix: 10.216.65.0/24
+          route_table:
             name: zna1-detection-dev-rd-subnet01-route
-            bgp-propagation: false
+            bgp_propagation: false
             routes:
               - name: Default
-                address-prefixes: 0.0.0.0/0 
-                next-hop-type: VirtualAppliance
-                next-hop-ip: 10.216.19.52
-              - name: BIS-Shared
-                address-prefixes: 10.216.0.0/22
-                next-hop-type: VirtualAppliance
-                next-hop-ip: 10.216.19.52
+                address_prefixes: 0.0.0.0/0 
+                next_hop_type: VirtualAppliance
+                next_hop_ip: 10.216.19.52
+              - name: BIS_Shared
+                address_prefixes: 10.216.0.0/22
+                next_hop_type: VirtualAppliance
+                next_hop_ip: 10.216.19.52
       peerings:
-        - target:
+        - remote:
             subscription: BIS Enterprise IT Primary
-            virtual-network: zna1-bis-dev-shr-vnet01
-          allow-vnet-access: true
-          allow-forwarded-traffic: true
-          allow-gateway-transit: true
-          use-remote-gateways: false
+            vnet_name: zna1-bis_dev_shr_vnet01
+          allow_vnet_access: true
+          allow_forwarded_traffic: true
+          allow_gateway_transit: true
+          use_remote_gateways: false

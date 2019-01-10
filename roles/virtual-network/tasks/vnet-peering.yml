@@ -1,26 +1,26 @@
 - name: Get local and remote vnet details
   set_fact:
-    local_peering_name: "{{ vnetpeering.target.virtual_network }}-vnetpeer"
+    local_peering_name: "{{ vnetpeering.remote.vnet_name }}-vnetpeer"
     local_id: "/subscriptions/{{ smiths_config_subscriptions[smiths_subscription].id }}/resourceGroups/{{ smiths_resource_group_name }}/providers/Microsoft.Network/virtualNetworks/{{ vnet.name }}"
-    remote_id: "/subscriptions/{{ smiths_config_subscriptions[vnetpeering.target.subscription].id }}/resourceGroups/{{ smiths_config_networking[vnetpeering.target.subscription][vnetpeering.target.virtual_network].resource_group }}/providers/Microsoft.Network/virtualNetworks/{{ vnetpeering.target.virtual_network }}"
-    remote_subscription_id: "{{ smiths_config_subscriptions[vnetpeering.target.subscription].id }}"`
-    remote_resource_group: "{{ smiths_config_networking[vnetpeering.target.subscription][vnetpeering.target.virtual_network].resource_group }}"
+    remote_id: "/subscriptions/{{ smiths_config_subscriptions[vnetpeering.remote.subscription].id }}/resourceGroups/{{ smiths_config_networking[vnetpeering.remote.subscription][vnetpeering.remote.vnet_name].resource_group }}/providers/Microsoft.Network/virtualNetworks/{{ vnetpeering.remote.vnet_name }}"
+    remote_subscription_id: "{{ smiths_config_subscriptions[vnetpeering.remote.subscription].id }}"`
+    remote_resource_group: "{{ smiths_config_networking[vnetpeering.remote.subscription][vnetpeering.remote.vnet_name].resource_group }}"
     remote_peering_name: "{{ vnet.name }}-vnetpeer"
 
 - name: Create virtual network peering (local)
   azure_rm_deployment:
     deployment_name: "peering_{{ ansible_date_time.iso8601_basic_short }}"
-    resource_group_name: "{{ smiths_resource_group_name }}"
-    location: "{{ smiths_region_name }}"
+    resource_group_name: "{{ vnet.resource_group }}"
+    location: "{{ vnet.location }}"
     template:
-      $schema: https://schema.management.azure.com/schemas/2015_01_01/deploymentTemplate.json#
+      $schema: https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#
       contentVersion: 1.0.0.0
       parameters: {}
       variables: {}
       resources: 
       - type: Microsoft.Network/virtualNetworkPeerings
         name: "{{ local_peering_name }}" 
-        apiVersion: 2018_08_01
+        apiVersion: 2018-08-01
         properties:
           allowVirtualNetworkAccess: "{{ vnetpeering.allow_vnet_access }}"
           allowForwardedTraffic: "{{ vnetpeering.allow_forwarded_traffic }}"
@@ -34,16 +34,16 @@
     deployment_name: "peering_{{ ansible_date_time.iso8601_basic_short }}"
     resource_group_name: "{{ remote_resource_group }}"
     subscription_id: "{{ remote_subscription_id }}"
-    location: "{{ smiths_region_name }}"
+    location: "{{ vnet.location }}"
     template:
-      $schema: https://schema.management.azure.com/schemas/2015_01_01/deploymentTemplate.json#
+      $schema: https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#
       contentVersion: 1.0.0.0
       parameters: {}
       variables: {}
       resources: 
       - type: Microsoft.Network/virtualNetworkPeerings
         name: "{{ remote_peering_name }}" 
-        apiVersion: 2018_08_01
+        apiVersion: 2018-08-01
         properties:
           allowVirtualNetworkAccess: "{{ vnetpeering.allow_vnet_access }}"
           allowForwardedTraffic: "{{ vnetpeering.allow_forwarded_traffic }}"

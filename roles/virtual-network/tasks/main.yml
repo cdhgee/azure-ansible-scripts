@@ -6,8 +6,8 @@
 - name: Create virtual network
   azure_rm_deployment:
     deployment_name: "vnet-{{ ansible_date_time.iso8601_basic_short }}"
-    resource_group_name: "{{ smiths_resource_group_name }}"
-    location: "{{ smiths_region_name }}"
+    resource_group_name: "{{ vnet.resource_group}}"
+    location: "{{ vnet.location }}"
     tags: "{{ smiths_azure_tags }}"
     parameters: {}
     template:
@@ -19,7 +19,6 @@
       - type: Microsoft.Network/virtualNetworks
         name: "{{ vnet_name }}" 
         apiVersion: 2018-08-01
-        location: "{{ smiths_region_name }}" 
         tags: "{{ smiths_azure_tags }}" 
         properties:
           addressSpace:
@@ -31,8 +30,8 @@
 - name: Create subnets
   azure_rm_deployment:
     deployment_name: "subnet-{{ ansible_date_time.iso8601_basic_short }}"
-    resource_group_name: "{{ smiths_resource_group_name }}"
-    location: "{{ smiths_region_name }}"
+    resource_group_name: "{{ vnet.resource_group }}"
+    location: "{{ vnet.location }}"
     tags: "{{ smiths_azure_tags }}"
     template:
       $schema: https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#
@@ -41,13 +40,12 @@
       variables: {}
       resources: 
       - type: Microsoft.Network/virtualNetworks/subnets
-        name: "{{ smiths_subnet.key }}" 
+        name: "{{ subnet.name }}" 
         apiVersion: 2018-08-01
-        location: "{{ smiths_region_name }}" 
         tags: "{{ smiths_azure_tags }}" 
         properties:
           addressSpace:
-            addressPrefixes: "{{ subnet.address-prefixes }}"
+            addressPrefixes: "{{ subnet.address_prefixes }}"
   loop: "{{ vnet.subnets }}"
   loop_control:
     loop_var: subnet
