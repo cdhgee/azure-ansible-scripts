@@ -1,6 +1,6 @@
 - name: Get vnet details
   set_fact:
-    vnet: "{{ smiths_config_networking[smiths_subscription][smiths_vnet] | combine({name: smiths_vnet}) }}"
+    vnet: "{{ smiths_config_networking[smiths_subscription][smiths_vnet] | combine({'name': smiths_vnet}) }}"
 
 
 - name: Create virtual network
