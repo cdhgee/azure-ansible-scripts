@@ -17,7 +17,7 @@
       variables: {}
       resources: 
       - type: Microsoft.Network/virtualNetworks
-        name: "{{ vnet_name }}" 
+        name: "{{ vnet.name }}" 
         apiVersion: 2018-08-01
         tags: "{{ smiths_azure_tags }}" 
         properties:
