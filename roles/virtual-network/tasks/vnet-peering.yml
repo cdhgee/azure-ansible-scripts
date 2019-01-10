@@ -20,7 +20,7 @@
       resources: 
       - type: Microsoft.Network/virtualNetworkPeerings
         name: "{{ local_peering_name }}" 
-        apiVersion: 2018-08-01
+        apiVersion: "2018-08-01"
         properties:
           allowVirtualNetworkAccess: "{{ vnetpeering.allow_vnet_access }}"
           allowForwardedTraffic: "{{ vnetpeering.allow_forwarded_traffic }}"
@@ -43,7 +43,7 @@
       resources: 
       - type: Microsoft.Network/virtualNetworkPeerings
         name: "{{ remote_peering_name }}" 
-        apiVersion: 2018-08-01
+        apiVersion: "2018-08-01"
         properties:
           allowVirtualNetworkAccess: "{{ vnetpeering.allow_vnet_access }}"
           allowForwardedTraffic: "{{ vnetpeering.allow_forwarded_traffic }}"
