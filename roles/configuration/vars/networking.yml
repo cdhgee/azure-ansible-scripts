@@ -35,11 +35,11 @@ smiths_config_networking:
             bgp_propagation: false
             routes:
               - name: Default
-                address_prefixes: 0.0.0.0/0 
+                address_prefix: 0.0.0.0/0 
                 next_hop_type: VirtualAppliance
                 next_hop_ip: 10.216.19.52
               - name: BIS_Shared
-                address_prefixes: 10.216.0.0/22
+                address_prefix: 10.216.0.0/22
                 next_hop_type: VirtualAppliance
                 next_hop_ip: 10.216.19.52
       peerings:
