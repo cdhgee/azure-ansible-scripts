@@ -19,7 +19,7 @@ smiths_config_networking:
       location: North Central US
       network_watcher:
         enable: true
-        name: zna1-detection_dev_nw01
+        name: zna1-detection-dev-nw01
         resource_group: zna1-detection-dev-nw-rg
       dns_servers:
         - 10.216.16.4
@@ -38,14 +38,14 @@ smiths_config_networking:
                 address_prefix: 0.0.0.0/0 
                 next_hop_type: VirtualAppliance
                 next_hop_ip: 10.216.19.52
-              - name: BIS_Shared
+              - name: BIS-Shared
                 address_prefix: 10.216.0.0/22
                 next_hop_type: VirtualAppliance
                 next_hop_ip: 10.216.19.52
       peerings:
         - remote:
             subscription: BIS Enterprise IT Primary
-            vnet_name: zna1-bis_dev_shr_vnet01
+            vnet_name: zna1-bis-dev-shr-vnet01
           allow_vnet_access: true
           allow_forwarded_traffic: true
           allow_gateway_transit: true
