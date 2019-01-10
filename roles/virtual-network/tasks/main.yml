@@ -7,7 +7,7 @@
   azure_rm_deployment:
     deployment_name: "vnet-{{ ansible_date_time.iso8601_basic_short }}"
     resource_group_name: "{{ vnet.resource_group}}"
-    parameters: {}
+    location: "{{ vnet.location }}"
     template:
       $schema: https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#
       contentVersion: 1.0.0.0
@@ -30,6 +30,7 @@
   azure_rm_deployment:
     deployment_name: "subnet-{{ ansible_date_time.iso8601_basic_short }}"
     resource_group_name: "{{ vnet.resource_group }}"
+    location: "{{ vnet.location }}"
     template:
       $schema: https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#
       contentVersion: 1.0.0.0
