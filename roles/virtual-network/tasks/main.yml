@@ -38,7 +38,7 @@
       variables: {}
       resources: 
       - type: Microsoft.Network/virtualNetworks/subnets
-        name: "{{ subnet.name }}" 
+        name: "{{ vnet.name }}/{{ subnet.name }}" 
         apiVersion: "2018-08-01"
         location: "{{ vnet.location }}"
         tags: "{{ smiths_azure_tags }}" 
