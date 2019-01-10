@@ -45,7 +45,7 @@ smiths_config_networking:
       peerings:
         - remote:
             subscription: BIS Enterprise IT Primary
-            vnet_name: zna1-bis-dev-shr-vnet01
+            vnet_name: zna1-bis-shr-vnet01
           allow_vnet_access: true
           allow_forwarded_traffic: true
           allow_gateway_transit: true
