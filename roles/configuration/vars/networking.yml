@@ -25,7 +25,7 @@ smiths_config_networking:
       address-prefixes:
       - 10.216.65.0/24
       subnets:
-      - name: zna1-detection-dev-rd-subnet01:
+      - name: zna1-detection-dev-rd-subnet01
         address-prefix: 10.216.65.0/24
         route-table:
           name: zna1-detection-dev-rd-subnet01-route
