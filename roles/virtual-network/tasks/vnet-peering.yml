@@ -7,6 +7,10 @@
     remote_resource_group: "{{ smiths_config_networking[vnetpeering.remote.subscription][vnetpeering.remote.vnet_name].resource_group }}"
     remote_peering_name: "{{ vnet.name }}-vnetpeer"
 
+- name: Dump env
+  debug:
+    msg: "{{ ansible_env }}"
+
 - name: Create virtual network peering from local to remote
   azure_rm_deployment:
     deployment_name: "peer_out_{{ ansible_date_time.iso8601_basic_short }}"
