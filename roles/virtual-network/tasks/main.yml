@@ -44,7 +44,7 @@
         tags: "{{ smiths_azure_tags }}" 
         properties:
           addressSpace:
-            addressPrefixes: "{{ subnet.address_prefixes }}"
+            addressPrefixes: "{{ subnet.address_prefix }}"
   loop: "{{ vnet.subnets }}"
   loop_control:
     loop_var: subnet
