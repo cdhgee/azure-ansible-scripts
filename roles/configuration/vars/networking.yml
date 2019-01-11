@@ -26,7 +26,7 @@ smiths_config_networking:
         additional_tags:
           Environment: Development
           Division: Smiths Detection
-          Timezone: -0600
+          Timezone: "-0600"
       resource_group: zna1-detection-dev-vnet-rg
       location: North Central US
       network_watcher:

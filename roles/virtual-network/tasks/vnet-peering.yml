@@ -22,7 +22,6 @@
         name: "{{ vnet.name }}/{{ local_peering_name }}" 
         apiVersion: "2018-08-01"
         location: "{{ vnet.location }}"
-        tags: "{{ vnet_tags }}"
         properties:
           allowVirtualNetworkAccess: "{{ vnetpeering.allow_vnet_access }}"
           allowForwardedTraffic: "{{ vnetpeering.allow_forwarded_traffic }}"
@@ -50,7 +49,6 @@
         name: "{{ vnetpeering.remote.vnet_name }}/{{ remote_peering_name }}" 
         apiVersion: "2018-08-01"
         location: "{{ vnet.location }}"
-        tags: "{{ vnet_tags }}"
         properties:
           allowVirtualNetworkAccess: "{{ vnetpeering.allow_vnet_access }}"
           allowForwardedTraffic: "{{ vnetpeering.allow_forwarded_traffic }}"
