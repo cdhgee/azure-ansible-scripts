@@ -48,7 +48,6 @@
         name: "{{ vnet.name }}/{{ subnet.name }}" 
         apiVersion: "2018-08-01"
         location: "{{ vnet.location }}"
-        tags: "{{ vnet_tags }}"
         properties:
           addressPrefix: "{{ subnet.address_prefix }}"
   loop: "{{ vnet.subnets }}"
