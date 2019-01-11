@@ -6,7 +6,7 @@ smiths_config_networking:
         additional_tags:
           Environment: Production
           Division: BIS
-          Timezone: -0600
+          Timezone: "-0600"
       resource_group: zna1-bis-shr-vnet-rg
       location: North Central US
       address_prefixes:
