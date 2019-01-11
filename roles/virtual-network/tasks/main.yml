@@ -1,7 +1,11 @@
-- name: Get vnet details
+- name: Prepare virtual network configuration 
   set_fact:
     vnet: "{{ smiths_config_networking[smiths_subscription][smiths_vnet] | combine({'name': smiths_vnet}) }}"
+    vnet_tags: "{{ smiths_config_tag_presets[vnet.metadata.preset] | combine(vnet.metadata.additional_tags) }}"
 
+- name: Dump tags
+  debug:
+    var: vnet_tags
 
 - name: Create virtual network
   azure_rm_deployment:
@@ -18,7 +22,7 @@
         name: "{{ vnet.name }}" 
         apiVersion: "2018-08-01"
         location: "{{ vnet.location }}"
-        tags: "{{ smiths_azure_tags }}" 
+        tags: "{{ vnet_tags }}" 
         properties:
           addressSpace:
             addressPrefixes: "{{ vnet.address_prefixes }}"
@@ -41,6 +45,7 @@
         name: "{{ vnet.name }}/{{ subnet.name }}" 
         apiVersion: "2018-08-01"
         location: "{{ vnet.location }}"
+        tags: "{{ vnet_tags }}"
         properties:
           addressPrefix: "{{ subnet.address_prefix }}"
   loop: "{{ vnet.subnets }}"

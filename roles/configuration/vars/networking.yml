@@ -1,6 +1,12 @@
 smiths_config_networking:
   BIS Enterprise IT Primary:
     zna1-bis-shr-vnet01:
+      metadata:
+        preset: networking
+        additional_tags:
+          Environment: Production
+          Division: BIS
+          Timezone: -0600
       resource_group: zna1-bis-shr-vnet-rg
       location: North Central US
       address_prefixes:
@@ -15,6 +21,12 @@ smiths_config_networking:
           address_prefix: 10.216.19.0/27
   Smiths Detection Enterprise R&D:
     zna1-detection-dev-vnet01:
+      metadata:
+        preset: networking
+        additional_tags:
+          Environment: Development
+          Division: Smiths Detection
+          Timezone: -0600
       resource_group: zna1-detection-dev-vnet-rg
       location: North Central US
       network_watcher:

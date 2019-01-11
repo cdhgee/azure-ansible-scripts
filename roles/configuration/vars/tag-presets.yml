@@ -1,0 +1,13 @@
+smiths_config_tag_presets:
+  networking:
+    Service: Infrastructure
+    Application: Networking
+    Data Classification: Internal
+    PII: No
+    Owner Phone: +1 240-361-8382
+    Schedule: 24 x 7
+    SME E-mail: BIS Security Team
+    Owner E-mail: mike.barker@smiths.com
+    Department: IT
+    PCI DSS: No
+    Maintenance Windows: Cloud Native
