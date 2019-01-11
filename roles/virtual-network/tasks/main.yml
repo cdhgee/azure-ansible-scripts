@@ -1,6 +1,9 @@
 - name: Prepare virtual network configuration 
   set_fact:
     vnet: "{{ smiths_config_networking[smiths_subscription][smiths_vnet] | combine({'name': smiths_vnet}) }}"
+
+- name: Prepare virtual network tags
+  set_fact:
     vnet_tags: "{{ smiths_config_tag_presets[vnet.metadata.preset] | combine(vnet.metadata.additional_tags) }}"
 
 - name: Dump tags
