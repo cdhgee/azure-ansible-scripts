@@ -29,10 +29,9 @@
             dnsServers: "{{ vnet.dns_servers }}"
           subnets: []
 
-
 - include_tasks: subnet.yml
   loop: "{{ vnet.subnets }}"
-  lop_control:
+  loop_control:
     loop_var: subnet
 
 - include_tasks: vnet-peering.yml
