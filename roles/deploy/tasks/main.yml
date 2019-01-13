@@ -1,0 +1,14 @@
+  azure_rm_deployment:
+    deployment_name: "{{ deployment.name }}-{{ ansible_date_time.iso8601_basic_short }}"
+    resource_group_name: "{{ deployment.resource_group}}"
+    location: "{{ deployment.location }}"
+    subscription_id: "{{ deployment.credentials.subscription_id | default(ansible_env.AZURE_SUBSCRIPTION_ID) }}"
+    tenant: "{{ deployment.credentials.tenant | default(ansible_env.AZURE_TENANT) }}"
+    secret: "{{ deployment.credentials.secret | default(ansible_env.AZURE_SECRET) }}"
+    client_id: "{{ deployment.credentials.client_id | default(ansible_env.AZURE_CLIENT_ID) }}"
+    template:
+      $schema: https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#
+      contentVersion: 1.0.0.0
+      parameters: "{{ deployment.parameters | default({}) }}"
+      variables: "{{ deployment.variables| default({}) }}"
+      resources: "{{ deployment.resources | default([]) }}" 
