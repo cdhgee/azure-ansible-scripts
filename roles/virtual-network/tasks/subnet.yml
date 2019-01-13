@@ -18,9 +18,10 @@
 - name: Prepare custom routes
   set_fact:
     custom_routes: "{{ (custom_routes | default([])) + [ { 'name': '{{ route.name }}', 'properties': { 'addressPrefix': '{{ route.address_prefix }}', 'nextHopType': '{{ route.next_hop_type }}', 'nextHopIpAddress': '{{ route.next_hop_ip }}' } } ] }}"
-  loop: "{{ subnet.routes }}"
+  loop: "{{ subnet.route_table.routes }}"
   loop_control: 
     loop_var: route
+  when: subnet.route_table is defined and (subnet.route_table.routes | list).length > 0
 
 - name: Create route table
   include_role:
@@ -37,7 +38,6 @@
           location: "{{ vnet.location }}"
           tags: "{{ vnet_tags }}"
           properties:
-            disableBgpRoutePropagation: "{{ not subnet.bgp_propagation }}"
             routes: "{{ custom_routes | default([]) }}"
 
 - name: Create subnet
