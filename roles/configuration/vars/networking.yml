@@ -57,10 +57,15 @@ smiths_config_networking:
             name: zna1-detection-dev-rd-subnet01-nsg
             rules: []
       peerings:
-        - remote:
+        - local: 
+            allow_vnet_access: true
+            allow_forwarded_traffic: true
+            allow_gateway_transit: false
+            use_remote_gateways: false
+          remote:
             subscription: BIS Enterprise IT Primary
             vnet_name: zna1-bis-shr-vnet01
-          allow_vnet_access: true
-          allow_forwarded_traffic: true
-          allow_gateway_transit: false
-          use_remote_gateways: false
+            allow_vnet_access: true
+            allow_forwarded_traffic: true
+            allow_gateway_transit: true 
+            use_remote_gateways: false

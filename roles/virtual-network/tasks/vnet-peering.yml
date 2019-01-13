@@ -1,58 +1,49 @@
-- name: Get local and remote vnet details
+- name: Prepare vnet peering details
   set_fact:
-    local_peering_name: "{{ vnetpeering.remote.vnet_name }}-vnetpeer"
     local_id: "/subscriptions/{{ smiths_config_subscriptions[smiths_subscription].id }}/resourceGroups/{{ vnet.resource_group }}/providers/Microsoft.Network/virtualNetworks/{{ vnet.name }}"
     remote_id: "/subscriptions/{{ smiths_config_subscriptions[vnetpeering.remote.subscription].id }}/resourceGroups/{{ smiths_config_networking[vnetpeering.remote.subscription][vnetpeering.remote.vnet_name].resource_group }}/providers/Microsoft.Network/virtualNetworks/{{ vnetpeering.remote.vnet_name }}"
     remote_subscription_id: "{{ smiths_config_subscriptions[vnetpeering.remote.subscription].id }}"
     remote_resource_group: "{{ smiths_config_networking[vnetpeering.remote.subscription][vnetpeering.remote.vnet_name].resource_group }}"
-    remote_peering_name: "{{ vnet.name }}-vnetpeer"
 
 - name: Create virtual network peering from local to remote
-  azure_rm_deployment:
-    deployment_name: "peer_out_{{ ansible_date_time.iso8601_basic_short }}"
-    resource_group_name: "{{ vnet.resource_group }}"
-    location: "{{ vnet.location }}"
-    template:
-      $schema: https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#
-      contentVersion: 1.0.0.0
-      parameters: {}
-      variables: {}
-      resources: 
-      - type: Microsoft.Network/virtualNetworks/virtualNetworkPeerings
-        name: "{{ vnet.name }}/{{ local_peering_name }}" 
-        apiVersion: "2018-08-01"
-        location: "{{ vnet.location }}"
-        properties:
-          allowVirtualNetworkAccess: "{{ vnetpeering.allow_vnet_access }}"
-          allowForwardedTraffic: "{{ vnetpeering.allow_forwarded_traffic }}"
-          allowGatewayTransit: "{{ vnetpeering.allow_gateway_transit }}"
-          useRemoteGateways: "{{ vnetpeering.use_remote_gateways }}"
-          remoteVirtualNetwork: 
-            id: "{{ remote_id }}"
+  include_role:
+    name: deploy
+  vars:
+    deployment:
+      name: peer_out 
+      resource_group: "{{ vnet.resource_group }}"
+      location: "{{ vnet.location }}"
+      resources:
+        - type: Microsoft.Network/virtualNetworks/virtualNetworkPeerings
+          name: "{{ vnet.name }}/{{ vnetpeering.remote.vnet_name }}-vnetpeer" 
+          apiVersion: "2018-08-01"
+          location: "{{ vnet.location }}"
+          properties:
+            allowVirtualNetworkAccess: "{{ vnetpeering.local.allow_vnet_access }}"
+            allowForwardedTraffic: "{{ vnetpeering.local.allow_forwarded_traffic }}"
+            allowGatewayTransit: "{{ vnetpeering.local.allow_gateway_transit }}"
+            useRemoteGateways: "{{ vnetpeering.local.use_remote_gateways }}"
+            remoteVirtualNetwork: 
+              id: "{{ remote_id }}"
 
 - name: Create virtual network peering from remote to local
-  azure_rm_deployment:
-    deployment_name: "peer_in_{{ ansible_date_time.iso8601_basic_short }}"
-    resource_group_name: "{{ remote_resource_group }}"
-    location: "{{ vnet.location }}"
-    subscription_id: "{{ remote_subscription_id }}"
-    tenant: "{{ ansible_env.AZURE_TENANT }}"
-    secret: "{{ ansible_env.AZURE_SECRET }}"
-    client_id: "{{ ansible_env.AZURE_CLIENT_ID }}"
-    template:
-      $schema: https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#
-      contentVersion: 1.0.0.0
-      parameters: {}
-      variables: {}
-      resources: 
-      - type: Microsoft.Network/virtualNetworks/virtualNetworkPeerings
-        name: "{{ vnetpeering.remote.vnet_name }}/{{ remote_peering_name }}" 
-        apiVersion: "2018-08-01"
-        location: "{{ vnet.location }}"
-        properties:
-          allowVirtualNetworkAccess: "{{ vnetpeering.allow_vnet_access }}"
-          allowForwardedTraffic: "{{ vnetpeering.allow_forwarded_traffic }}"
-          allowGatewayTransit: "{{ vnetpeering.allow_gateway_transit }}"
-          useRemoteGateways: "{{ vnetpeering.use_remote_gateways }}"
-          remoteVirtualNetwork: 
-            id: "{{ local_id }}"
+  include_role:
+    name: deploy
+  vars:
+    deployment:
+      name: peer_in 
+      resource_group: "{{ remote_resource_group }}"
+      location: "{{ vnet.location }}"
+      subscription_id: "{{ remote_subscription_id }}"
+      resources:
+        - type: Microsoft.Network/virtualNetworks/virtualNetworkPeerings
+          name: "{{ vnetpeering.remote.vnet_name }}/{{ vnet.name }}-vnetpeer" 
+          apiVersion: "2018-08-01"
+          location: "{{ vnet.location }}"
+          properties:
+            allowVirtualNetworkAccess: "{{ vnetpeering.remote.allow_vnet_access }}"
+            allowForwardedTraffic: "{{ vnetpeering.remote.allow_forwarded_traffic }}"
+            allowGatewayTransit: "{{ vnetpeering.remote.allow_gateway_transit }}"
+            useRemoteGateways: "{{ vnetpeering.remote.use_remote_gateways }}"
+            remoteVirtualNetwork: 
+              id: "{{ local_id }}"
