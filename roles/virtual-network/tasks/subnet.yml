@@ -21,7 +21,6 @@
   loop: "{{ subnet.routes }}"
   loop_control: 
     loop_var: route
-  when: subnet.routes is defined and (subnet.routes | length) > 0
 
 - name: Create route table
   include_role:
@@ -39,7 +38,7 @@
           tags: "{{ vnet_tags }}"
           properties:
             disableBgpRoutePropagation: "{{ not subnet.bgp_propagation }}"
-            routes: "{{ custom_routes }}"
+            routes: "{{ custom_routes | default([]) }}"
 
 - name: Create subnet
   include_role:
