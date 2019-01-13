@@ -21,7 +21,7 @@
   loop: "{{ subnet.route_table.routes }}"
   loop_control: 
     loop_var: route
-  when: subnet.route_table is defined and (subnet.route_table.routes | list).length > 0
+  when: subnet.route_table is defined and (subnet.route_table.routes | length) > 0
 
 - name: Create route table
   include_role:
