@@ -23,6 +23,10 @@
     loop_var: route
   when: subnet.route_table is defined and (subnet.route_table.routes | length) > 0
 
+- name: Dump routing table
+  debug:
+    var: custom_routes
+
 - name: Create route table
   include_role:
     name: deploy
