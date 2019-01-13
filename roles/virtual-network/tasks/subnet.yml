@@ -1,3 +1,20 @@
+- name: Create network security group
+  include_role:
+    name: deploy
+  vars:
+    deployment:
+      name: nsg
+      resource_group: "{{ vnet.resource_group }}"
+      location: "{{ vnet.location }}"
+      resources:
+        - type: Microsoft.Network/networkSecurityGroups
+          name: "{{ subnet.name }}-nsg" 
+          apiVersion: "2018-08-01"
+          location: "{{ vnet.location }}"
+          tags: "{{ vnet_tags }}"
+          properties:
+            securityRules: "{{ subnet.nsg_rules | default([]) }}"
+
 - name: Create subnet
   include_role:
     name: deploy
@@ -13,21 +30,5 @@
           location: "{{ vnet.location }}"
           properties:
             addressPrefix: "{{ subnet.address_prefix }}"
-
-- name: Create network security group
-  include_role:
-    name: deploy
-  vars:
-    deployment:
-      name: nsg
-      resource_group: "{{ vnet.resource_group }}"
-      location: "{{ vnet.location }}"
-      resources:
-        - type: Microsoft.Network/networkSecurityGroups
-          name: "{{ subnet.nsg.name }}" 
-          apiVersion: "2018-08-01"
-          location: "{{ vnet.location }}"
-          tags: "{{ vnet_tags }}"
-          properties:
-            securityRules: []
-  when: subnet.nsg is defined
+            networkSecurityGroup:
+              id: "[resourceId('Microsoft.Network/networkSecurityGroups', '{{ subnet.name }}-nsg')]"
