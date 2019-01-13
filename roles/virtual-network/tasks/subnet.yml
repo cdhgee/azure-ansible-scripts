@@ -18,7 +18,7 @@
 - name: Prepare custom routes
   set_fact:
     custom_routes: "{{ (custom_routes | default([])) + [ { 'name': '{{ route.name }}', 'properties': { 'addressPrefix': '{{ route.address_prefix }}', 'nextHopType': '{{ route.next_hop_type }}', 'nextHopIpAddress': '{{ route.next_hop_ip }}' } } ] }}"
-  loop: subnet.routes
+  loop: "{{ subnet.routes }}"
   loop_control: 
     loop_var: route
   when: subnet.routes is defined and (subnet.routes | length) > 0
