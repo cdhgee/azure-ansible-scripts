@@ -15,6 +15,32 @@
           properties:
             securityRules: "{{ subnet.nsg_rules | default([]) }}"
 
+- name: Prepare custom routes
+  set_fact:
+    custom_routes: "{{ (custom_routes | default([])) + [ { 'name': '{{ route.name }}', 'properties': { 'addressPrefix': '{{ route.address_prefix }}', 'nextHopType': '{{ route.next_hop_type }}', 'nextHopIpAddress': '{{ route.next_hop_ip }}' } } ] }}"
+  loop: subnet.routes
+  loop_control: 
+    loop_var: route
+  when: subnet.routes is defined and (subnet.routes | length) > 0
+
+- name: Create route table
+  include_role:
+    name: deploy
+  vars:
+    deployment:
+      name: route_table
+      resource_group: "{{ vnet.resource_group }}"
+      location: "{{ vnet.location }}"
+      resources:
+        - type: Microsoft.Network/routeTables
+          name: "{{ subnet.name }}-route"
+          apiVersion: "2018-08-01"
+          location: "{{ vnet.location }}"
+          tags: "{{ vnet_tags }}"
+          properties:
+            disableBgpRoutePropagation: !subnet.bgp_propagation
+            routes: "{{ custom_routes }}"
+
 - name: Create subnet
   include_role:
     name: deploy

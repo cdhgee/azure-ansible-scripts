@@ -42,7 +42,6 @@ smiths_config_networking:
         - name: zna1-detection-dev-rd-subnet01
           address_prefix: 10.216.65.0/24
           route_table:
-            name: zna1-detection-dev-rd-subnet01-route
             bgp_propagation: false
             routes:
               - name: Default
@@ -53,9 +52,6 @@ smiths_config_networking:
                 address_prefix: 10.216.0.0/22
                 next_hop_type: VirtualAppliance
                 next_hop_ip: 10.216.19.52
-          nsg:
-            name: zna1-detection-dev-rd-subnet01-nsg
-            rules: []
       peerings:
         - local: 
             allow_vnet_access: true
