@@ -38,7 +38,7 @@
           location: "{{ vnet.location }}"
           tags: "{{ vnet_tags }}"
           properties:
-            disableBgpRoutePropagation: !subnet.bgp_propagation
+            disableBgpRoutePropagation: "{{ not subnet.bgp_propagation }}"
             routes: "{{ custom_routes }}"
 
 - name: Create subnet
