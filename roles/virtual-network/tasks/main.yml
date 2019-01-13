@@ -6,10 +6,6 @@
   set_fact:
     vnet_tags: "{{ smiths_config_tag_presets[vnet.metadata.preset] | combine(vnet.metadata.additional_tags) }}"
 
-- name: Dump tags
-  debug:
-    var: vnet_tags
-
 - name: Create virtual network
   azure_rm_deployment:
     deployment_name: "vnet-{{ ansible_date_time.iso8601_basic_short }}"
