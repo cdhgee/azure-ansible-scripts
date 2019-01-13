@@ -1,0 +1,37 @@
+- name: Create subnet
+  azure_rm_deployment:
+    deployment_name: "subnet-{{ ansible_date_time.iso8601_basic_short }}"
+    resource_group_name: "{{ vnet.resource_group }}"
+    location: "{{ vnet.location }}"
+    template:
+      $schema: https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#
+      contentVersion: 1.0.0.0
+      parameters: {}
+      variables: {}
+      resources: 
+      - type: Microsoft.Network/virtualNetworks/subnets
+        name: "{{ vnet.name }}/{{ subnet.name }}" 
+        apiVersion: "2018-08-01"
+        location: "{{ vnet.location }}"
+        properties:
+          addressPrefix: "{{ subnet.address_prefix }}"
+
+- name: Create network security group
+  azure_rm_deployment:
+    deployment_name: "nsg-{{ ansible_date_time.iso8601_basic_short }}"
+    resource_group_name: "{{ vnet.resource_group }}"
+    location: "{{ vnet.location }}"
+    template:
+      $schema: https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#
+      contentVersion: 1.0.0.0
+      parameters: {}
+      variables: {}
+      resources: 
+      - type: Microsoft.Network/networkSecurityGroups
+        name: "{{ subnet.nsg.name }}" 
+        apiVersion: "2018-08-01"
+        location: "{{ vnet.location }}"
+        tags: "{{ vnet_tags }}"
+        properties:
+          securityRules: []
+  when: subnet.nsg is defined
