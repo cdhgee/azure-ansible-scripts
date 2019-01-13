@@ -7,27 +7,25 @@
     vnet_tags: "{{ smiths_config_tag_presets[vnet.metadata.preset] | combine(vnet.metadata.additional_tags) }}"
 
 - name: Create virtual network
-  azure_rm_deployment:
-    deployment_name: "vnet-{{ ansible_date_time.iso8601_basic_short }}"
-    resource_group_name: "{{ vnet.resource_group}}"
-    location: "{{ vnet.location }}"
-    template:
-      $schema: https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#
-      contentVersion: 1.0.0.0
-      parameters: {}
-      variables: {}
-      resources: 
-      - type: Microsoft.Network/virtualNetworks
-        name: "{{ vnet.name }}" 
-        apiVersion: "2018-08-01"
-        location: "{{ vnet.location }}"
-        tags: "{{ vnet_tags }}" 
-        properties:
-          addressSpace:
-            addressPrefixes: "{{ vnet.address_prefixes }}"
-          dhcpOptions:
-            dnsServers: "{{ vnet.dns_servers }}"
-          subnets: []
+  include_role:
+    name: deploy
+  vars: 
+    deployment:
+      name: vnet
+      resource_group: "{{ vnet.resource_group }}"
+      location: "{{ vnet.location }}"
+      resources:
+        - type: Microsoft.Network/virtualNetworks
+          name: "{{ vnet.name }}" 
+          apiVersion: "2018-08-01"
+          location: "{{ vnet.location }}"
+          tags: "{{ vnet_tags }}" 
+          properties:
+            addressSpace:
+              addressPrefixes: "{{ vnet.address_prefixes }}"
+            dhcpOptions:
+              dnsServers: "{{ vnet.dns_servers }}"
+            subnets: []
 
 - include_tasks: subnet.yml
   loop: "{{ vnet.subnets }}"

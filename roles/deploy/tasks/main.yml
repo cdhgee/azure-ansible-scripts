@@ -1,6 +1,6 @@
   azure_rm_deployment:
     deployment_name: "{{ deployment.name }}-{{ ansible_date_time.iso8601_basic_short }}"
-    resource_group_name: "{{ deployment.resource_group}}"
+    resource_group_name: "{{ deployment.resource_group }}"
     location: "{{ deployment.location }}"
     subscription_id: "{{ deployment.credentials.subscription_id | default(ansible_env.AZURE_SUBSCRIPTION_ID) }}"
     tenant: "{{ deployment.credentials.tenant | default(ansible_env.AZURE_TENANT) }}"
