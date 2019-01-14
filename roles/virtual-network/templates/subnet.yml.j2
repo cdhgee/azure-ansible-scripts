@@ -26,4 +26,4 @@ resources:
 outputs: 
   subnet0:
     type: object
-    value: "[reference('{{ vnet.subnets[0].name }}')]"
+    value: "[reference('{{ vnet.subnets[0].name }}', '2018-08-01', 'Full')]"
