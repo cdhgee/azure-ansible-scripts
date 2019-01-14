@@ -63,13 +63,13 @@
 {% for vnetpeering in vnet.peerings %}{# for vnet.peerings #}
 - name: vnet-peering
   resource_group: {{ smiths_config_networking[vnetpeering.remote.subscription].virtual_networks[vnetpeering.remote.vnet_name].resource_group }}
-  resource_group: {{ smiths_config_networking[vnetpeering.remote.subscription].virtual_networks[vnetpeering.remote.vnet_name].location }}
+  location: {{ smiths_config_networking[vnetpeering.remote.subscription].virtual_networks[vnetpeering.remote.vnet_name].location }}
   subscription_id: {{ smiths_config_subscriptions[vnetpeering.remote.subscription].subscription_id }}
   resources:
     - type: Microsoft.Network/virtualNetworks/virtualNetworkPeerings
       name: {{ vnetpeering.remote.vnet_name }}/{{ vnet.name }}-vnetpeer
       apiVersion: "2018-08-01"
-      location: {{ vnet.location }}
+      location: {{ smiths_config_networking[vnetpeering.remote.subscription].virtual_networks[vnetpeering.remote.vnet_name].location }}
       properties:
         allowVirtualNetworkAccess: {{ vnetpeering.remote.allow_vnet_access }}
         allowForwardedTraffic: {{ vnetpeering.remote.allow_forwarded_traffic }}
