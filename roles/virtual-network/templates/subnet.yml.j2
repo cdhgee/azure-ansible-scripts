@@ -25,4 +25,4 @@ resources:
 outputs: 
   subnet0:
     type: object
-    value: [reference({{ subnet[0].name }})]
+    value: [reference({{ vnet.subnets[0].name }})]
