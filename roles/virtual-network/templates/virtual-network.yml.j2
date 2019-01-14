@@ -62,8 +62,8 @@
 {% if vnet.peerings is defined and (vnet.peerings | length) > 0 %}{# if vnet.peerings #}
 {% for vnetpeering in vnet.peerings %}{# for vnet.peerings #}
 - name: vnet-peering
-  resource_group: {{ vnet.resource_group }}
-  location: {{ vnet.location }}
+  resource_group: {{ smiths_config_networking[vnetpeering.remote.subscription].virtual_networks[vnetpeering.remote.vnet_name].resource_group }}
+  resource_group: {{ smiths_config_networking[vnetpeering.remote.subscription].virtual_networks[vnetpeering.remote.vnet_name].location }}
   subscription_id: {{ smiths_config_subscriptions[vnetpeering.remote.subscription].subscription_id }}
   resources:
     - type: Microsoft.Network/virtualNetworks/virtualNetworkPeerings
