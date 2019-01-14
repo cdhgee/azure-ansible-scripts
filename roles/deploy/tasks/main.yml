@@ -13,4 +13,4 @@
       parameters: "{{ deployment.parameters | default({}) }}"
       variables: "{{ deployment.variables| default({}) }}"
       resources: "{{ deployment.resources | default([]) }}" 
-      outputs: "{{ deployments.outputs | default({}) }}"
+      outputs: "{{ deployment.outputs | default({}) }}"
