@@ -1,0 +1,28 @@
+name: subnet 
+resource_group: {{ vnet.resource_group }}
+location: {{ vnet.location }}
+resources:
+  {% for subnet in vnet.subnets %}
+  - type: Microsoft.Network/virtualNetworks/subnets
+    name: {{ vnet.name }}/{{ subnet.name }} 
+    apiVersion: 2018-08-01
+    location: {{ vnet.location }}
+    properties:
+      addressPrefix: {{ subnet.address_prefix }}
+      {% if subnet.nsg is defined %}
+      networkSecurityGroup:
+        id: [resourceId('Microsoft.Network/networkSecurityGroups', '{{ subnet.name }}-nsg')]
+      {% endif %}
+  {% if subnet.nsg is defined %}
+  - type: Microsoft.Network/networkSecurityGroups
+    name: {{ subnet.name }}-nsg
+    apiVersion: 2018-08-01
+    location: {{ vnet.location }}
+    properties:
+      securityRules: []
+  {% endif %}
+  {% endfor %}
+outputs: 
+  subnet0:
+    type: object
+    value: [reference({{ subnet[0].name }})]

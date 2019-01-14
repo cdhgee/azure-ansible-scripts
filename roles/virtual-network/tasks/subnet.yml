@@ -1,3 +1,11 @@
+- name: Prepare subnet template
+  set_fact:
+    subnet_template: "{{ lookup('template', 'subnet.yml.j2') | from_yaml }}"
+
+- name: Print subnet template
+  debug:
+    var: "{{ subnet_template }}"
+
 - name: Create network security group
   include_role:
     name: deploy
