@@ -1,7 +1,7 @@
 smiths_config_subscriptions:
-  "BIS Enterprise IT Primary": 
-    id: "823c312b-c266-4f6b-a93e-4b71bf0af10e"
+  "BIS Enterprise IT Primary":
+    subscription_id: "823c312b-c266-4f6b-a93e-4b71bf0af10e"
   "Smiths Detection Enterprise R&D":
-    id: "00703ce6-eb7c-48d0-88d2-12d25c123a7c"
+    subscription_id: "00703ce6-eb7c-48d0-88d2-12d25c123a7c"
   "Smiths Group Digital Forge Enterprise R&D":
-    id: "83002777-55e5-4667-8a75-0eb7a35d40b8"
+    subscription_id: "83002777-55e5-4667-8a75-0eb7a35d40b8"

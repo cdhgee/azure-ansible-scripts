@@ -46,7 +46,7 @@
               allowGatewayTransit: {{ vnetpeering.local.allow_gateway_transit }}
               useRemoteGateways: {{ vnetpeering.local.use_remote_gateways }}
               remoteVirtualNetwork:
-                id: "[resourceId('{{ smiths_config_subscriptions[vnetpeering.remote.subscription].id }}', '{{ smiths_config_networking[vnetpeering.remote.subscription].virtual_networks[vnetpeering.remote.vnet_name].resource_group }}', 'Microsoft.Network/virtualNetworks', '{{ vnetpeering.remote.vnet_name }}')]"
+                id: "[resourceId('{{ smiths_config_subscriptions[vnetpeering.remote.subscription].subscription_id }}', '{{ smiths_config_networking[vnetpeering.remote.subscription].virtual_networks[vnetpeering.remote.vnet_name].resource_group }}', 'Microsoft.Network/virtualNetworks', '{{ vnetpeering.remote.vnet_name }}')]"
           {% endfor %}{# for vnetpeering #}
         {% endif %}{# if vnet.peerings #}
     {% for subnet in vnet.subnets %}{# for subnet #}
@@ -64,7 +64,7 @@
 - name: vnet-peering
   resource_group: {{ vnet.resource_group }}
   location: {{ vnet.location }}
-  subscription_id: {{ vnetpeering.remote.subscription_id }}
+  subscription_id: {{ smiths_config_subscriptions[vnetpeering.remote.subscription].subscription_id }}
   resources:
     - type: Microsoft.Network/virtualNetworks/virtualNetworkPeerings
       name: {{ vnetpeering.remote.vnet_name }}/{{ vnet.name }}-vnetpeer
@@ -74,6 +74,6 @@
         allowGatewayTransit: {{ vnetpeering.remote.allow_gateway_transit }}
         useRemoteGateways: {{ vnetpeering.remote.use_remote_gateways }}
         remoteVirtualNetwork:
-          id: "[resourceId('{{ smiths_config_subscriptions[smiths_subscription].id }}', '{{ vnet.resource_group }}', 'Microsoft.Network/virtualNetworks', '{{ vnet.name }}')]"
+          id: "[resourceId('{{ smiths_config_subscriptions[smiths_subscription].subscription_id }}', '{{ vnet.resource_group }}', 'Microsoft.Network/virtualNetworks', '{{ vnet.name }}')]"
 {% endfor %}{# for vnet.peerings #}
 {% endif %}{# if vnet.peerings #}
