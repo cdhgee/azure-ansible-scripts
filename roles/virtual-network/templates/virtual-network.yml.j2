@@ -7,12 +7,21 @@ resources:
     name: {{ vnet.name }}
     apiVersion: "2018-08-01"
     location: {{ vnet.location }}
-    tags: {{ vnet_tags }}
+    tags:
+    {% for tag in (vnet_tags | dict2items) %}{# for tag #}
+      {{ tag.key }}: {{ tag.value }}
+    {% endfor %}{# for tag #}
     properties:
       addressSpace:
-        addressPrefixes: "{{ vnet.address_prefixes }}"
+        addressPrefixes:
+        {% for address_prefix in vnet.address_prefixes %}}{# for address_prefix #}
+          - {{ address_prefix }}
+        {% endfor %}{# for address_prefix #}
       dhcpOptions:
-        dnsServers: "{{ vnet.dns_servers }}"
+        dnsServers:
+        {% for dns_server in vnet.dns_servers %}{# for dns_server #}
+          - {{ dns_server }}
+        {% endfor %}{# for dns_server #}
       {% if vnet.subnets is defined and (vnet.subnets | length) > 0 %}{# if vnet.subnets #}
       subnets:
         {% for subnet in vnet.subnets %}{# for subnet #}
@@ -32,10 +41,10 @@ resources:
         {% for vnetpeering in vnet.peerings %}
         - name: {{ vnetpeering.remote.vnet_name }}-vnetpeer
           properties:
-            allowVirtualNetworkAccess: "{{ vnetpeering.local.allow_vnet_access }}"
-            allowForwardedTraffic: "{{ vnetpeering.local.allow_forwarded_traffic }}"
-            allowGatewayTransit: "{{ vnetpeering.local.allow_gateway_transit }}"
-            useRemoteGateways: "{{ vnetpeering.local.use_remote_gateways }}"
+            allowVirtualNetworkAccess: {{ vnetpeering.local.allow_vnet_access }}
+            allowForwardedTraffic: {{ vnetpeering.local.allow_forwarded_traffic }}
+            allowGatewayTransit: {{ vnetpeering.local.allow_gateway_transit }}
+            useRemoteGateways: {{ vnetpeering.local.use_remote_gateways }}
             remoteVirtualNetwork:
               id: "[resourceId('{{ smiths_config_subscriptions[vnetpeering.remote.subscription].id }}', '{{ smiths_config_networking[vnetpeering.remote.subscription][vnetpeering.remote.vnet_name].resource_group }}', 'Microsoft.Network/virtualNetworks', '{{ vnetpeering.remote.vnet_name }}')]"
         {% endfor %}{# for vnetpeering #}
