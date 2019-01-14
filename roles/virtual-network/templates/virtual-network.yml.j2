@@ -68,6 +68,8 @@
   resources:
     - type: Microsoft.Network/virtualNetworks/virtualNetworkPeerings
       name: {{ vnetpeering.remote.vnet_name }}/{{ vnet.name }}-vnetpeer
+      apiVersion: "2018-08-01"
+      location: {{ vnet.location }}
       properties:
         allowVirtualNetworkAccess: {{ vnetpeering.remote.allow_vnet_access }}
         allowForwardedTraffic: {{ vnetpeering.remote.allow_forwarded_traffic }}
