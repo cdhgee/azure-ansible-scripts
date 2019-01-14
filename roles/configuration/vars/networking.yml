@@ -1,67 +1,69 @@
 smiths_config_networking:
   BIS Enterprise IT Primary:
-    zna1-bis-shr-vnet01:
-      metadata:
-        preset: networking
-        additional_tags:
-          Environment: Production
-          Division: BIS
-          Timezone: "-0600"
-      resource_group: zna1-bis-shr-vnet-rg
-      location: North Central US
-      address_prefixes:
-        - 10.216.16.0/22
-      dns_servers:
-        - 10.216.16.4
-        - 10.216.16.5
-      subnets:
-        - name: zna1-bis-shr-shared-subnet01
-          address_prefix: 10.216.16.0/23
-        - name: GatewaySubnet
-          address_prefix: 10.216.19.0/27
+    virtual_networks:
+      zna1-bis-shr-vnet01:
+        metadata:
+          preset: networking
+          additional_tags:
+            Environment: Production
+            Division: BIS
+            Timezone: "-0600"
+        resource_group: zna1-bis-shr-vnet-rg
+        location: North Central US
+        address_prefixes:
+          - 10.216.16.0/22
+        dns_servers:
+          - 10.216.16.4
+          - 10.216.16.5
+        subnets:
+          - name: zna1-bis-shr-shared-subnet01
+            address_prefix: 10.216.16.0/23
+          - name: GatewaySubnet
+            address_prefix: 10.216.19.0/27
   Smiths Detection Enterprise R&D:
-    zna1-detection-dev-vnet01:
-      metadata:
-        preset: networking
-        additional_tags:
-          Environment: Development
-          Division: Smiths Detection
-          Timezone: "-0600"
-      resource_group: zna1-detection-dev-vnet-rg
-      location: North Central US
-      network_watcher:
-        enable: true
-        name: zna1-detection-dev-nw01
+    network_watcher:
+      - name: zna1-detection-dev-nw01
+        location: North Central US
         resource_group: zna1-detection-dev-nw-rg
-      dns_servers:
-        - 10.216.16.4
-        - 10.216.16.5
-      address_prefixes:
-        - 10.216.65.0/24
-      subnets:
-        - name: zna1-detection-dev-rd-subnet01
-          address_prefix: 10.216.65.0/24
-          route_table:
-            bgp_propagation: false
-            routes:
-              - name: Default
-                address_prefix: 0.0.0.0/0 
-                next_hop_type: VirtualAppliance
-                next_hop_ip: 10.216.19.52
-              - name: BIS-Shared
-                address_prefix: 10.216.0.0/22
-                next_hop_type: VirtualAppliance
-                next_hop_ip: 10.216.19.52
-      peerings:
-        - local: 
-            allow_vnet_access: true
-            allow_forwarded_traffic: true
-            allow_gateway_transit: false
-            use_remote_gateways: false
-          remote:
-            subscription: BIS Enterprise IT Primary
-            vnet_name: zna1-bis-shr-vnet01
-            allow_vnet_access: true
-            allow_forwarded_traffic: true
-            allow_gateway_transit: true 
-            use_remote_gateways: false
+    virtual_networks:
+      zna1-detection-dev-vnet01:
+        metadata:
+          preset: networking
+          additional_tags:
+            Environment: Development
+            Division: Smiths Detection
+            Timezone: "-0600"
+        resource_group: zna1-detection-dev-vnet-rg
+        location: North Central US
+        dns_servers:
+          - 10.216.16.4
+          - 10.216.16.5
+        address_prefixes:
+          - 10.216.65.0/24
+        subnets:
+          - name: zna1-detection-dev-rd-subnet01
+            address_prefix: 10.216.65.0/24
+            route_table:
+              bgp_propagation: false
+              routes:
+                - name: Default
+                  address_prefix: 0.0.0.0/0
+                  next_hop_type: VirtualAppliance
+                  next_hop_ip: 10.216.19.52
+                - name: BIS-Shared
+                  address_prefix: 10.216.0.0/22
+                  next_hop_type: VirtualAppliance
+                  next_hop_ip: 10.216.19.52
+        peerings:
+          - local:
+              allow_vnet_access: true
+              allow_forwarded_traffic: true
+              allow_gateway_transit: false
+              use_remote_gateways: false
+            remote:
+              subscription: BIS Enterprise IT Primary
+              vnet_name: zna1-bis-shr-vnet01
+              allow_vnet_access: true
+              allow_forwarded_traffic: true
+              allow_gateway_transit: true
+              use_remote_gateways: false

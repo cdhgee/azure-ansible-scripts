@@ -1,6 +1,6 @@
 - name: Prepare virtual network configuration
   set_fact:
-    vnet: "{{ smiths_config_networking[smiths_subscription][smiths_vnet] | combine({'name': smiths_vnet}) }}"
+    vnet: "{{ smiths_config_networking[smiths_subscription].virtual_networks[smiths_vnet] | combine({'name': smiths_vnet}) }}"
 
 - name: Prepare virtual network tags
   set_fact:
@@ -13,41 +13,10 @@
 - name: Print virtual network template
   debug:
     var: vnet_template
+    verbosity: 4
 
 - name: Execute virtual network template
   include_role:
     name: deploy
   vars:
     deployment: "{{ vnet_template }}"
-
-
-# - name: Create virtual network
-#   include_role:
-#     name: deploy
-#   vars:
-#     deployment:
-#       name: vnet
-#       resource_group: "{{ vnet.resource_group }}"
-#       location: "{{ vnet.location }}"
-#       resources:
-#         - type: Microsoft.Network/virtualNetworks
-#           name: "{{ vnet.name }}"
-#           apiVersion: "2018-08-01"
-#           location: "{{ vnet.location }}"
-#           tags: "{{ vnet_tags }}"
-#           properties:
-#             addressSpace:
-#               addressPrefixes: "{{ vnet.address_prefixes }}"
-#             dhcpOptions:
-#               dnsServers: "{{ vnet.dns_servers }}"
-#             subnets: []
-
-# - include_tasks: subnet.yml
-#   loop: "{{ vnet.subnets }}"
-#   loop_control:
-#     loop_var: subnet
-
-# - include_tasks: vnet-peering.yml
-#   loop: "{{ vnet.peerings }}"
-#   loop_control:
-#     loop_var: vnetpeering
