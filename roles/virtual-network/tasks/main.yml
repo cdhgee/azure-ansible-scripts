@@ -10,9 +10,15 @@
   set_fact:
     vnet_template: "{{ lookup('template', 'virtual-network.yml.j2') | from_yaml }}"
 
-- name: Print subnet template
+- name: Print virtual network template
   debug:
     var: vnet_template
+
+- name: Execute virtual network template
+  include_role:
+    name: deploy
+  vars:
+    deployment: "{{ vnet_template }}"
 
 
 # - name: Create virtual network
