@@ -13,21 +13,21 @@ resources:
         addressPrefixes: "{{ vnet.address_prefixes }}"
       dhcpOptions:
         dnsServers: "{{ vnet.dns_servers }}"
-      {% if vnet.subnets is defined and (vnet.subnets | length) > 0 %} {# if vnet.subnets #}
+      {% if vnet.subnets is defined and (vnet.subnets | length) > 0 %}{# if vnet.subnets #}
       subnets:
-        {% for subnet in vnet.subnets %} {# for subnet #}
+        {% for subnet in vnet.subnets %}{# for subnet #}
         - name: {{ subnet.name }}
           properties:
             addressPrefix: {{ subnet.address_prefix }}
-          {% if subnet.nsg is defined %} {# if subnet.nsg #}
+          {% if subnet.nsg is defined %}{# if subnet.nsg #}
           networkSecurityGroup:
             id: [reference('{{ subnet.name }}-nsg', '2018-08-01', 'Full').resourceId]
-          {% endif %} {# if subnet.nsg #}
-        {% endfor %} {# for subnet #}
-      {% else %} {# if vnet.subnets #}
+          {% endif %}{# if subnet.nsg #}
+        {% endfor %}{# for subnet #}
+      {% else %}{# if vnet.subnets #}
       subnets: []
-      {% endif %} {# if vnet.subnets #}
-      {% if vnet.peerings is defined and (vnet.peerings | length) > 0 %} {# if vnet.peerings #}
+      {% endif %}{# if vnet.subnets #}
+      {% if vnet.peerings is defined and (vnet.peerings | length) > 0 %}{# if vnet.peerings #}
       virtualNetworkPeerings:
         {% for vnetpeering in vnet.peerings %}
         - name: {{ vnetpeering.remote.vnet_name }}-vnetpeer
@@ -38,9 +38,9 @@ resources:
             useRemoteGateways: "{{ vnetpeering.local.use_remote_gateways }}"
             remoteVirtualNetwork:
               id: "[resourceId('{{ smiths_config_subscriptions[vnetpeering.remote.subscription].id }}', '{{ smiths_config_networking[vnetpeering.remote.subscription][vnetpeering.remote.vnet_name].resource_group }}', 'Microsoft.Network/virtualNetworks', '{{ vnetpeering.remote.vnet_name }}')]"
-        {% endfor %} {# for vnetpeering #}
-      {% endif %} {# if vnet.peerings #}
-  {% for subnet in vnet.subnets %} {# for subnet #}
+        {% endfor %}{# for vnetpeering #}
+      {% endif %}{# if vnet.peerings #}
+  {% for subnet in vnet.subnets %}{# for subnet #}
   {% if subnet.nsg is defined %}
   - type: Microsoft.Network/networkSecurityGroups
     name: {{ subnet.name }}-nsg
@@ -48,5 +48,5 @@ resources:
     location: {{ vnet.location }}
     properties:
       securityRules: []
-  {% endif %}
-  {% endfor %} {# subnet #}
+  {% endif %}{# if subnet.nsg #}
+  {% endfor %}{# for subnet #}
