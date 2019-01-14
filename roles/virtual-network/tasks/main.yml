@@ -22,4 +22,4 @@
     deployment: "{{ template }}"
   loop: "{{ vnet_templates }}"
   loop_control:
-    var: template
+    loop_var: template
