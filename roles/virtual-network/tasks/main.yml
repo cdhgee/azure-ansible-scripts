@@ -6,17 +6,20 @@
   set_fact:
     vnet_tags: "{{ smiths_config_tag_presets[vnet.metadata.preset] | combine(vnet.metadata.additional_tags) }}"
 
-- name: Prepare virtual network template
+- name: Prepare virtual network templates
   set_fact:
-    vnet_template: "{{ lookup('template', 'virtual-network.yml.j2') | from_yaml }}"
+    vnet_templates: "{{ lookup('template', 'virtual-network.yml.j2') | from_yaml }}"
 
-- name: Print virtual network template
+- name: Print virtual network templates
   debug:
-    var: vnet_template
+    var: vnet_templates
     verbosity: 4
 
-- name: Execute virtual network template
+- name: Execute virtual network templates
   include_role:
     name: deploy
   vars:
-    deployment: "{{ vnet_template }}"
+    deployment: "{{ template }}"
+  loop: "{{ vnet_templates }}"
+  loop_control:
+    var: template
