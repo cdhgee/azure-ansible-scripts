@@ -1,3 +1,4 @@
+#jinja2:trim_blocks: "true", lstrip_blocks: "true"
 subnet_deployment:
   name: subnet 
   resource_group: {{ vnet.resource_group }}
@@ -6,7 +7,7 @@ subnet_deployment:
   {% for subnet in vnet.subnets %}
     - type: Microsoft.Network/virtualNetworks/subnets
       name: {{ vnet.name }}/{{ subnet.name }} 
-      apiVersion: 2018-08-01
+      apiVersion: "2018-08-01"
       location: {{ vnet.location }}
       properties:
         addressPrefix: {{ subnet.address_prefix }}
