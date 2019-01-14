@@ -30,7 +30,7 @@ resources:
       {% if vnet.peerings is defined and (vnet.peerings | length) > 0 %} {# if vnet.peerings #}
       virtualNetworkPeerings:
         {% for vnetpeering in vnet.peerings %}
-        - name: {{ vnetpeering.remote_vnet_name }}-vnetpeer
+        - name: {{ vnetpeering.remote.vnet_name }}-vnetpeer
           properties:
             allowVirtualNetworkAccess: "{{ vnetpeering.local.allow_vnet_access }}"
             allowForwardedTraffic: "{{ vnetpeering.local.allow_forwarded_traffic }}"
