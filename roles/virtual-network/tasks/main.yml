@@ -8,7 +8,7 @@
 
 - name: Prepare virtual network template
   set_fact:
-    vnet_template: "{{ lookup('template', 'subnet.yml.j2') | from_yaml }}"
+    vnet_template: "{{ lookup('template', 'virtual-network.yml.j2') | from_yaml }}"
 
 - name: Print subnet template
   debug:
