@@ -21,7 +21,7 @@ resources:
             addressPrefix: {{ subnet.address_prefix }}
           {% if subnet.nsg is defined %} {# if subnet.nsg #}
           networkSecurityGroup:
-            id: [reference('{{ subnet.name }}-nsg', '2018-08-01', Full).resourceId]
+            id: [reference('{{ subnet.name }}-nsg', '2018-08-01', 'Full').resourceId]
           {% endif %} {# if subnet.nsg #}
         {% endfor %} {# for subnet #}
       {% else %} {# if vnet.subnets #}
@@ -49,11 +49,4 @@ resources:
     properties:
       securityRules: []
   {% endif %}
-  {% for vnetpeering in subnet.peerings %}
-  - type: Microsoft.Network/virtualNetworks/virtualNetworkPeerings
-    name: "{{ vnet.name }}/{{ vnetpeering.remote.vnet_name }}-vnetpeer"
-    apiVersion: "2018-08-01"
-    location: "{{ vnet.location }}"
-    properties:
-  {% endfor %} {# peering #}
   {% endfor %} {# subnet #}
