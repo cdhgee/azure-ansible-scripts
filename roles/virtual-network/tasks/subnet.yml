@@ -4,7 +4,7 @@
 
 - name: Print subnet template
   debug:
-    var: "{{ subnet_template }}"
+    var: subnet_template
 
 - name: Create network security group
   include_role:

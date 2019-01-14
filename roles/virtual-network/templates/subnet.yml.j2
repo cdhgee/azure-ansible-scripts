@@ -17,7 +17,7 @@ subnet_deployment:
     {% if subnet.nsg is defined %}
     - type: Microsoft.Network/networkSecurityGroups
       name: {{ subnet.name }}-nsg
-      apiVersion: 2018-08-01
+      apiVersion: "2018-08-01"
       location: {{ vnet.location }}
       properties:
         securityRules: []
