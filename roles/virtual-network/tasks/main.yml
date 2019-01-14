@@ -1,4 +1,4 @@
-- name: Prepare virtual network configuration 
+- name: Prepare virtual network configuration
   set_fact:
     vnet: "{{ smiths_config_networking[smiths_subscription][smiths_vnet] | combine({'name': smiths_vnet}) }}"
 
@@ -6,33 +6,42 @@
   set_fact:
     vnet_tags: "{{ smiths_config_tag_presets[vnet.metadata.preset] | combine(vnet.metadata.additional_tags) }}"
 
-- name: Create virtual network
-  include_role:
-    name: deploy
-  vars: 
-    deployment:
-      name: vnet
-      resource_group: "{{ vnet.resource_group }}"
-      location: "{{ vnet.location }}"
-      resources:
-        - type: Microsoft.Network/virtualNetworks
-          name: "{{ vnet.name }}" 
-          apiVersion: "2018-08-01"
-          location: "{{ vnet.location }}"
-          tags: "{{ vnet_tags }}" 
-          properties:
-            addressSpace:
-              addressPrefixes: "{{ vnet.address_prefixes }}"
-            dhcpOptions:
-              dnsServers: "{{ vnet.dns_servers }}"
-            subnets: []
+- name: Prepare virtual network template
+  set_fact:
+    vnet_template: "{{ lookup('template', 'subnet.yml.j2') | from_yaml }}"
 
-- include_tasks: subnet.yml
-  loop: "{{ vnet.subnets }}"
-  loop_control:
-    loop_var: subnet
+- name: Print subnet template
+  debug:
+    var: vnet_template
 
-- include_tasks: vnet-peering.yml
-  loop: "{{ vnet.peerings }}"
-  loop_control:
-    loop_var: vnetpeering
+
+# - name: Create virtual network
+#   include_role:
+#     name: deploy
+#   vars:
+#     deployment:
+#       name: vnet
+#       resource_group: "{{ vnet.resource_group }}"
+#       location: "{{ vnet.location }}"
+#       resources:
+#         - type: Microsoft.Network/virtualNetworks
+#           name: "{{ vnet.name }}"
+#           apiVersion: "2018-08-01"
+#           location: "{{ vnet.location }}"
+#           tags: "{{ vnet_tags }}"
+#           properties:
+#             addressSpace:
+#               addressPrefixes: "{{ vnet.address_prefixes }}"
+#             dhcpOptions:
+#               dnsServers: "{{ vnet.dns_servers }}"
+#             subnets: []
+
+# - include_tasks: subnet.yml
+#   loop: "{{ vnet.subnets }}"
+#   loop_control:
+#     loop_var: subnet
+
+# - include_tasks: vnet-peering.yml
+#   loop: "{{ vnet.peerings }}"
+#   loop_control:
+#     loop_var: vnetpeering

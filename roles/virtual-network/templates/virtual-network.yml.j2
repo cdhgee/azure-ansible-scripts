@@ -1,0 +1,59 @@
+#jinja2:trim_blocks: "true", lstrip_blocks: "true"
+name: subnet
+resource_group: {{ vnet.resource_group }}
+location: {{ vnet.location }}
+resources:
+  - type: Microsoft.Network/virtualNetworks
+    name: {{ vnet.name }}
+    apiVersion: "2018-08-01"
+    location: {{ vnet.location }}
+    tags: {{ vnet_tags }}
+    properties:
+      addressSpace:
+        addressPrefixes: "{{ vnet.address_prefixes }}"
+      dhcpOptions:
+        dnsServers: "{{ vnet.dns_servers }}"
+      {% if vnet.subnets is defined and (vnet.subnets | length) > 0 %} {# if vnet.subnets #}
+      subnets:
+        {% for subnet in vnet.subnets %} {# for subnet #}
+        - name: {{ subnet.name }}
+          properties:
+            addressPrefix: {{ subnet.address_prefix }}
+          {% if subnet.nsg is defined %} {# if subnet.nsg #}
+          networkSecurityGroup:
+            id: [reference('{{ subnet.name }}-nsg', '2018-08-01', Full).resourceId]
+          {% endif %} {# if subnet.nsg #}
+        {% endfor %} {# for subnet #}
+      {% else %} {# if vnet.subnets #}
+      subnets: []
+      {% endif %} {# if vnet.subnets #}
+      {% if vnet.peerings is defined and (vnet.peerings | length) > 0 %} {# if vnet.peerings #}
+      virtualNetworkPeerings:
+        {% for vnetpeering in vnet.peerings %}
+        - name: {{ vnetpeering.remote_vnet_name }}-vnetpeer
+          properties:
+            allowVirtualNetworkAccess: "{{ vnetpeering.local.allow_vnet_access }}"
+            allowForwardedTraffic: "{{ vnetpeering.local.allow_forwarded_traffic }}"
+            allowGatewayTransit: "{{ vnetpeering.local.allow_gateway_transit }}"
+            useRemoteGateways: "{{ vnetpeering.local.use_remote_gateways }}"
+            remoteVirtualNetwork:
+              id: "[resourceId('{{ smiths_config_subscriptions[vnetpeering.remote.subscription].id }}', '{{ smiths_config_networking[vnetpeering.remote.subscription][vnetpeering.remote.vnet_name].resource_group }}', 'Microsoft.Network/virtualNetworks', '{{ vnetpeering.remote.vnet_name }}')]"
+        {% endfor %} {# for vnetpeering #}
+      {% endif %} {# if vnet.peerings #}
+  {% for subnet in vnet.subnets %} {# for subnet #}
+  {% if subnet.nsg is defined %}
+  - type: Microsoft.Network/networkSecurityGroups
+    name: {{ subnet.name }}-nsg
+    apiVersion: "2018-08-01"
+    location: {{ vnet.location }}
+    properties:
+      securityRules: []
+  {% endif %}
+  {% for vnetpeering in subnet.peerings %}
+  - type: Microsoft.Network/virtualNetworks/virtualNetworkPeerings
+    name: "{{ vnet.name }}/{{ vnetpeering.remote.vnet_name }}-vnetpeer"
+    apiVersion: "2018-08-01"
+    location: "{{ vnet.location }}"
+    properties:
+  {% endfor %} {# peering #}
+  {% endfor %} {# subnet #}
