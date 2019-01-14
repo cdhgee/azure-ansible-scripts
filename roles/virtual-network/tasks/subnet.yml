@@ -1,6 +1,6 @@
 - name: Prepare subnet template
   set_fact:
-    subnet_template: "{{ lookup('template', 'subnet.yml.j2') }}"
+    subnet_template: "{{ lookup('template', 'subnet.yml.j2') | from_yaml }}"
 
 - name: Print subnet template
   debug:

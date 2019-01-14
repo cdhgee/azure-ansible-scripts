@@ -3,7 +3,7 @@ subnet_deployment:
   resource_group: {{ vnet.resource_group }}
   location: {{ vnet.location }}
   resources:
-    {% for subnet in vnet.subnets %}
+  {% for subnet in vnet.subnets %}
     - type: Microsoft.Network/virtualNetworks/subnets
       name: {{ vnet.name }}/{{ subnet.name }} 
       apiVersion: 2018-08-01
@@ -22,8 +22,8 @@ subnet_deployment:
       properties:
         securityRules: []
     {% endif %}
-    {% endfor %}
+  {% endfor %}
   outputs: 
     subnet0:
       type: object
-      value: [reference({{ vnet.subnets[0].name }})]
+      value: [reference('{{ vnet.name }}/{{ vnet.subnets[0].name }}')]
