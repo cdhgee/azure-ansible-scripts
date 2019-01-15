@@ -2,6 +2,10 @@
 - name: vnet
   resource_group: {{ vnet.resource_group }}
   location: {{ vnet.location }}
+  outputs:
+    route:
+      type: object
+      value: "[reference('{{ subnet.name }}-route', '2018-08-01', 'Full')]"
   resources:
     - type: Microsoft.Network/virtualNetworks
       name: {{ vnet.name }}
@@ -33,8 +37,9 @@
                 id: "[reference('{{ subnet.name }}-nsg', '2018-08-01', 'Full').resourceId]"
               {% endif %}{# if subnet.nsg #}
               {% if subnet.route_table is defined %}{# if subnet.route_table #}
-              routeTable:
+              {# routeTable:
                 id: "[reference('{{ subnet.name }}-route', '2018-08-01', 'Full').resourceId]"
+              #}
               {% endif %}{# if subnet.route_table #}
           {% endfor %}{# for subnet #}
         {% else %}{# if vnet.subnets #}
