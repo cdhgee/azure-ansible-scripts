@@ -38,7 +38,7 @@
               {% endif %}{# if subnet.nsg #}
               {% if subnet.route_table is defined %}{# if subnet.route_table #}
               routeTable:
-                id: "[concat('/subscriptions/{{ smiths_config_subscriptions[smiths_subscription].subscription_id }}/providers/', reference('{{ subnet.name }}-route', '2018-08-01', 'Full').resourceId)]"
+                id: "[concat('/subscriptions/{{ smiths_config_subscriptions[smiths_subscription].subscription_id }}/resourceGroups/{{ vnet.resource_group }}/providers/', reference('{{ subnet.name }}-route', '2018-08-01', 'Full').resourceId)]"
               {% endif %}{# if subnet.route_table #}
           {% endfor %}{# for subnet #}
         {% else %}{# if vnet.subnets #}
