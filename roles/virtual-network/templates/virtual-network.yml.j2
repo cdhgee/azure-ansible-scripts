@@ -30,7 +30,7 @@
               addressPrefix: {{ subnet.address_prefix }}
               {% if subnet.nsg is defined %}{# if subnet.nsg #}
               networkSecurityGroup:
-                id: "[reference('{{ subnet.name }}-nsg', '2018-08-01', 'Full').resourceId]"
+                id: "[concat('/subscriptions/{{ smiths_config_subscriptions[smiths_subscription].subscription_id }}/resourceGroups/{{ vnet.resource_group }}/providers/', reference('{{ subnet.name }}-nsg', '2018-08-01', 'Full').resourceId)]"
               {% endif %}{# if subnet.nsg #}
               {% if subnet.route_table is defined %}{# if subnet.route_table #}
               routeTable:
