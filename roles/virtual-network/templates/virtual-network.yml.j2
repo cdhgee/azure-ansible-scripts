@@ -28,14 +28,14 @@
           - name: {{ subnet.name }}
             properties:
               addressPrefix: {{ subnet.address_prefix }}
-            {% if subnet.nsg is defined %}{# if subnet.nsg #}
-            networkSecurityGroup:
-              id: "[reference('{{ subnet.name }}-nsg', '2018-08-01', 'Full').resourceId]"
-            {% endif %}{# if subnet.nsg #}
-            {% if subnet.route_table is defined %}{# if subnet.route_table #}
-            routeTable:
-              id: "[reference('{{ subnet.name }}-route', '2018-08-01', 'Full').resourceId]"
-            {% endif %}{# if subnet.route_table #}
+              {% if subnet.nsg is defined %}{# if subnet.nsg #}
+              networkSecurityGroup:
+                id: "[reference('{{ subnet.name }}-nsg', '2018-08-01', 'Full').resourceId]"
+              {% endif %}{# if subnet.nsg #}
+              {% if subnet.route_table is defined %}{# if subnet.route_table #}
+              routeTable:
+                id: "[reference('{{ subnet.name }}-route', '2018-08-01', 'Full').resourceId]"
+              {% endif %}{# if subnet.route_table #}
           {% endfor %}{# for subnet #}
         {% else %}{# if vnet.subnets #}
         subnets: []
