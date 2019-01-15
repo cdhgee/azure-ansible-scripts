@@ -30,8 +30,12 @@
               addressPrefix: {{ subnet.address_prefix }}
             {% if subnet.nsg is defined %}{# if subnet.nsg #}
             networkSecurityGroup:
-              id: [reference('{{ subnet.name }}-nsg', '2018-08-01', 'Full').resourceId]
+              id: "[reference('{{ subnet.name }}-nsg', '2018-08-01', 'Full').resourceId]"
             {% endif %}{# if subnet.nsg #}
+            {% if subnet.route_table is defined %}{# if subnet.route_table #}
+            routeTable:
+              id: "[reference('{{ subnet.name }}-route', '2018-08-01', 'Full').resourceId]"
+            {% endif %}{# if subnet.route_table #}
           {% endfor %}{# for subnet #}
         {% else %}{# if vnet.subnets #}
         subnets: []
@@ -55,9 +59,33 @@
       name: {{ subnet.name }}-nsg
       apiVersion: "2018-08-01"
       location: {{ vnet.location }}
+      tags: 
+      {% for tag in (vnet_tags | dict2items) %}{# for tag #}
+        {{ tag.key }}: "{{ tag.value }}"
+      {% endfor %}{# for tag #}
       properties:
         securityRules: []
     {% endif %}{# if subnet.nsg #}
+    {% if subnet.route_table is defined %}{# if subnet.route_table #}
+    - type: Microsoft.Network/routeTable
+      name: {{ subnet.name }}-route
+      apiVersion: "2018-08-01"
+      location: {{ vnet.location }}
+      tags: 
+      {% for tag in (vnet_tags | dict2items) %}{# for tag #}
+        {{ tag.key }}: "{{ tag.value }}"
+      {% endfor %}{# for tag #}
+      properties:
+        disableBgpRoutePropagation: {{ not subnet.route_table.bgp_propagation }}
+        routes:
+        {% for route in subnet.route_table.routes %}{# for route #}
+          - name: {{ route.name }}
+            properties: 
+              addressPrefix: {{ route.address_prefix }}
+              nextHopType: {{ route.next_hop_type }}
+              nextHopIpAddress: {{ route.next_hop_ip }}
+        {% endfor %}{# for route #}
+    {% endif %}{# if subnet.route_table #}
     {% endfor %}{# for subnet #}
 {% if vnet.peerings is defined and (vnet.peerings | length) > 0 %}{# if vnet.peerings #}
 {% for vnetpeering in vnet.peerings %}{# for vnet.peerings #}
