@@ -67,7 +67,7 @@
         securityRules: []
     {% endif %}{# if subnet.nsg #}
     {% if subnet.route_table is defined %}{# if subnet.route_table #}
-    - type: Microsoft.Network/routeTable
+    - type: Microsoft.Network/routeTables
       name: {{ subnet.name }}-route
       apiVersion: "2018-08-01"
       location: {{ vnet.location }}
