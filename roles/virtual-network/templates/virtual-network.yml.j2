@@ -9,7 +9,7 @@
       location: {{ vnet.location }}
       tags:
       {% for tag in (vnet_tags | dict2items) %}{# for tag #}
-        {{ tag.key }}: {{ tag.value }}
+        {{ tag.key }}: "{{ tag.value }}"
       {% endfor %}{# for tag #}
       properties:
         addressSpace:
