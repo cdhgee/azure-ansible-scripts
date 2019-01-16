@@ -1,12 +1,12 @@
 #jinja2:trim_blocks: "true", lstrip_blocks: "true"
 - name: vnet
-  resource_group: {{ template.config.resource_group }}
-  location: {{ template.config.location }}
+  resource_group: {{ template_config.resource_group }}
+  location: {{ template_config.location }}
   resources:
     - type: Microsoft.Network/virtualNetworks
-      name: {{ template.config.name }}
+      name: {{ template_config.name }}
       apiVersion: "2018-08-01"
-      location: {{ template.config.location }}
+      location: {{ template_config.location }}
       tags:
       {% for tag in (template_tags | dict2items) %}{# for tag #}
         {{ tag.key }}: "{{ tag.value }}"
@@ -14,35 +14,35 @@
       properties:
         addressSpace:
           addressPrefixes:
-          {% for address_prefix in template.config.address_prefixes %}{# for address_prefix #}
+          {% for address_prefix in template_config.address_prefixes %}{# for address_prefix #}
             - {{ address_prefix }}
           {% endfor %}{# for address_prefix #}
         dhcpOptions:
           dnsServers:
-          {% for dns_server in template.config.dns_servers %}{# for dns_server #}
+          {% for dns_server in template_config.dns_servers %}{# for dns_server #}
             - {{ dns_server }}
           {% endfor %}{# for dns_server #}
-        {% if template.config.subnets is defined and (template.config.subnets | length) > 0 %}{# if template.config.subnets #}
+        {% if template_config.subnets is defined and (template_config.subnets | length) > 0 %}{# if template_config.subnets #}
         subnets:
-          {% for subnet in template.config.subnets %}{# for subnet #}
+          {% for subnet in template_config.subnets %}{# for subnet #}
           - name: {{ subnet.name }}
             properties:
               addressPrefix: {{ subnet.address_prefix }}
               {% if subnet.nsg is defined %}{# if subnet.nsg #}
               networkSecurityGroup:
-                id: "[concat('/subscriptions/{{ smiths_config_subscriptions[smiths_subscription].subscription_id }}/resourceGroups/{{ template.config.resource_group }}/providers/', reference('{{ subnet.name }}-nsg', '2018-08-01', 'Full').resourceId)]"
+                id: "[concat('/subscriptions/{{ smiths_config_subscriptions[smiths_subscription].subscription_id }}/resourceGroups/{{ template_config.resource_group }}/providers/', reference('{{ subnet.name }}-nsg', '2018-08-01', 'Full').resourceId)]"
               {% endif %}{# if subnet.nsg #}
               {% if subnet.route_table is defined %}{# if subnet.route_table #}
               routeTable:
-                id: "[concat('/subscriptions/{{ smiths_config_subscriptions[smiths_subscription].subscription_id }}/resourceGroups/{{ template.config.resource_group }}/providers/', reference('{{ subnet.name }}-route', '2018-08-01', 'Full').resourceId)]"
+                id: "[concat('/subscriptions/{{ smiths_config_subscriptions[smiths_subscription].subscription_id }}/resourceGroups/{{ template_config.resource_group }}/providers/', reference('{{ subnet.name }}-route', '2018-08-01', 'Full').resourceId)]"
               {% endif %}{# if subnet.route_table #}
           {% endfor %}{# for subnet #}
-        {% else %}{# if template.config.subnets #}
+        {% else %}{# if template_config.subnets #}
         subnets: []
-        {% endif %}{# if template.config.subnets #}
-        {% if template.config.peerings is defined and (template.config.peerings | length) > 0 %}{# if template.config.peerings #}
+        {% endif %}{# if template_config.subnets #}
+        {% if template_config.peerings is defined and (template_config.peerings | length) > 0 %}{# if template_config.peerings #}
         virtualNetworkPeerings:
-          {% for vnetpeering in template.config.peerings %}
+          {% for vnetpeering in template_config.peerings %}
           - name: {{ vnetpeering.remote.vnet_name }}-vnetpeer
             properties:
               allowVirtualNetworkAccess: {{ vnetpeering.local.allow_vnet_access }}
@@ -52,13 +52,13 @@
               remoteVirtualNetwork:
                 id: "[resourceId('{{ smiths_config_subscriptions[vnetpeering.remote.subscription].subscription_id }}', '{{ smiths_config_networking[vnetpeering.remote.subscription].virtual_network[vnetpeering.remote.vnet_name].resource_group }}', 'Microsoft.Network/virtualNetworks', '{{ vnetpeering.remote.vnet_name }}')]"
           {% endfor %}{# for vnetpeering #}
-        {% endif %}{# if template.config.peerings #}
-    {% for subnet in template.config.subnets %}{# for subnet #}
+        {% endif %}{# if template_config.peerings #}
+    {% for subnet in template_config.subnets %}{# for subnet #}
     {% if subnet.nsg is defined %}
     - type: Microsoft.Network/networkSecurityGroups
       name: {{ subnet.name }}-nsg
       apiVersion: "2018-08-01"
-      location: {{ template.config.location }}
+      location: {{ template_config.location }}
       tags:
       {% for tag in (template_tags | dict2items) %}{# for tag #}
         {{ tag.key }}: "{{ tag.value }}"
@@ -70,7 +70,7 @@
     - type: Microsoft.Network/routeTables
       name: {{ subnet.name }}-route
       apiVersion: "2018-08-01"
-      location: {{ template.config.location }}
+      location: {{ template_config.location }}
       tags:
       {% for tag in (template_tags | dict2items) %}{# for tag #}
         {{ tag.key }}: "{{ tag.value }}"
@@ -87,15 +87,15 @@
         {% endfor %}{# for route #}
     {% endif %}{# if subnet.route_table #}
     {% endfor %}{# for subnet #}
-{% if template.config.peerings is defined and (template.config.peerings | length) > 0 %}{# if template.config.peerings #}
-{% for vnetpeering in template.config.peerings %}{# for template.config.peerings #}
+{% if template_config.peerings is defined and (template_config.peerings | length) > 0 %}{# if template_config.peerings #}
+{% for vnetpeering in template_config.peerings %}{# for template_config.peerings #}
 - name: vnet-peering
   resource_group: {{ smiths_config_networking[vnetpeering.remote.subscription].virtual_network[vnetpeering.remote.vnet_name].resource_group }}
   location: {{ smiths_config_networking[vnetpeering.remote.subscription].virtual_network[vnetpeering.remote.vnet_name].location }}
   subscription_id: {{ smiths_config_subscriptions[vnetpeering.remote.subscription].subscription_id }}
   resources:
     - type: Microsoft.Network/virtualNetworks/virtualNetworkPeerings
-      name: {{ vnetpeering.remote.vnet_name }}/{{ template.config.name }}-vnetpeer
+      name: {{ vnetpeering.remote.vnet_name }}/{{ template_config.name }}-vnetpeer
       apiVersion: "2018-08-01"
       location: {{ smiths_config_networking[vnetpeering.remote.subscription].virtual_network[vnetpeering.remote.vnet_name].location }}
       properties:
@@ -104,6 +104,6 @@
         allowGatewayTransit: {{ vnetpeering.remote.allow_gateway_transit }}
         useRemoteGateways: {{ vnetpeering.remote.use_remote_gateways }}
         remoteVirtualNetwork:
-          id: "[resourceId('{{ smiths_config_subscriptions[smiths_subscription].subscription_id }}', '{{ template.config.resource_group }}', 'Microsoft.Network/virtualNetworks', '{{ template.config.name }}')]"
-{% endfor %}{# for template.config.peerings #}
-{% endif %}{# if template.config.peerings #}
+          id: "[resourceId('{{ smiths_config_subscriptions[smiths_subscription].subscription_id }}', '{{ template_config.resource_group }}', 'Microsoft.Network/virtualNetworks', '{{ template_config.name }}')]"
+{% endfor %}{# for template_config.peerings #}
+{% endif %}{# if template_config.peerings #}
