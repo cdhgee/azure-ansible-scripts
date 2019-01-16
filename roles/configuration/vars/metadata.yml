@@ -14,6 +14,13 @@ smiths_config_metadata:
       code: interconnect
     Smiths Medical:
       code: medical
+  environments:
+    Production:
+      code: prd
+    Shared:
+      code: shr
+    Development:
+      code: dev
   locations:
     North Central US:
       code: zna1
@@ -33,7 +40,7 @@ smiths_config_metadata:
     Central US:
       code: zna6
       type: DR
-    West Europe: 
+    West Europe:
       code: zeu1
       type: Primary
     North Europe:

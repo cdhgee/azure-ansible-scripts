@@ -18,6 +18,7 @@
 - name: Print virtual network tags
   debug:
     var: vnet_tags
+    verbosity: 4
 
 - name: Execute virtual network templates
   include_role:

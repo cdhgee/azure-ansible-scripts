@@ -59,7 +59,7 @@
       name: {{ subnet.name }}-nsg
       apiVersion: "2018-08-01"
       location: {{ vnet.location }}
-      tags: 
+      tags:
       {% for tag in (vnet_tags | dict2items) %}{# for tag #}
         {{ tag.key }}: "{{ tag.value }}"
       {% endfor %}{# for tag #}
@@ -71,7 +71,7 @@
       name: {{ subnet.name }}-route
       apiVersion: "2018-08-01"
       location: {{ vnet.location }}
-      tags: 
+      tags:
       {% for tag in (vnet_tags | dict2items) %}{# for tag #}
         {{ tag.key }}: "{{ tag.value }}"
       {% endfor %}{# for tag #}
@@ -80,7 +80,7 @@
         routes:
         {% for route in subnet.route_table.routes %}{# for route #}
           - name: {{ route.name }}
-            properties: 
+            properties:
               addressPrefix: {{ route.address_prefix }}
               nextHopType: {{ route.next_hop_type }}
               nextHopIpAddress: {{ route.next_hop_ip }}
