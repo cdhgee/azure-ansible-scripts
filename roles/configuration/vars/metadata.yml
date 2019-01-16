@@ -1,0 +1,41 @@
+smiths_config_metadata:
+  divisions:
+    BIS:
+      code: bis
+    Flex-Tek:
+      code: flextek
+    John Crane:
+      code: johncrane
+    Smiths Detection:
+      code: detection
+    Smiths Group:
+      code: group
+    Smiths Interconnect:
+      code: interconnect
+    Smiths Medical:
+      code: medical
+  locations:
+    North Central US:
+      code: zna1
+      type: Primary
+    South Central US:
+      code: zna2
+      type: DR
+    East US:
+      code: zna3
+      type: Primary
+    West US:
+      code: zna4
+      type: DR
+    East US 2:
+      code: zna5
+      type: Primary
+    Central US:
+      code: zna6
+      type: DR
+    West Europe: 
+      code: zeu1
+      type: Primary
+    North Europe:
+      code: zeu2
+      type: DR
