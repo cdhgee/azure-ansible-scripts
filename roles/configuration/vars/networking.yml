@@ -1,13 +1,24 @@
 smiths_config_networking:
+  metadata: 
+    Service: Infrastructure
+    Application: Networking
+    Data Classification: Internal
+    PII: "No"
+    Owner Phone: +1 240-361-8382
+    Schedule: 24 x 7
+    SME E-mail: BIS Security Team
+    Owner E-mail: mike.barker@smiths.com
+    Department: IT
+    PCI DSS: "No"
+    Maintenance Windows: Cloud Native
   BIS Enterprise IT Primary:
+    metadata:
+      Environment: Production
+      Division: BIS
     virtual_networks:
       zna1-bis-shr-vnet01:
         metadata:
-          preset: networking
-          additional_tags:
-            Environment: Production
-            Division: BIS
-            Timezone: "-0600"
+          Timezone: "-0600"
         resource_group: zna1-bis-shr-vnet-rg
         location: North Central US
         address_prefixes:
@@ -21,6 +32,9 @@ smiths_config_networking:
           - name: GatewaySubnet
             address_prefix: 10.216.19.0/27
   Smiths Detection Enterprise R&D:
+    metadata:
+      Environment: Development 
+      Division: Smiths Detection
     network_watcher:
       - name: zna1-detection-dev-nw01
         location: North Central US
@@ -28,11 +42,7 @@ smiths_config_networking:
     virtual_networks:
       zna1-detection-dev-vnet01:
         metadata:
-          preset: networking
-          additional_tags:
-            Environment: Development
-            Division: Smiths Detection
-            Timezone: "-0600"
+          Timezone: "-0600"
         resource_group: zna1-detection-dev-vnet-rg
         location: North Central US
         dns_servers:
