@@ -1,0 +1,25 @@
+smiths_config_regions:
+  North Central US:
+    code: zna1
+    type: Primary
+  South Central US:
+    code: zna2
+    type: DR
+  East US:
+    code: zna3
+    type: Primary
+  West US:
+    code: zna4
+    type: DR
+  East US 2:
+    code: zna5
+    type: Primary
+  Central US:
+    code: zna6
+    type: DR
+  West Europe: 
+    code: zeu1
+    type: Primary
+  North Europe:
+    code: zeu2
+    type: DR
