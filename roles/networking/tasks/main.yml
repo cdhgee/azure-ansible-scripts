@@ -1,0 +1,30 @@
+- name: Load configuration
+  set_fact:
+    template_config: "{{ smiths_config_networking[config.subscription][config.type][config.name] | combine({'name': config.name}) }}"
+
+- name: Prepare tags
+  set_fact:
+    template_tags: "{{ smiths_config_networking.metadata | combine(smiths_config_networking[config.subscription].metadata) | combine(template_config.metadata) }}"
+
+- name: Prepare deployments
+  set_fact:
+    deployments: "{{ lookup('template', config.template) | from_yaml }}"
+
+- name: Print template configuration
+  debug:
+    var: template_config
+    verbosity: 4
+
+- name: Print tags
+  debug:
+    var: template_tags
+    verbosity: 4
+
+- name: Execute deployments
+  include_role:
+    name: deploy
+  vars:
+    deployment: "{{ deployment }}"
+  loop: "{{ deployments }}"
+  loop_control:
+    loop_var: deployment

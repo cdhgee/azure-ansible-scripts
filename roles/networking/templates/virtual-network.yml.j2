@@ -50,7 +50,7 @@
               allowGatewayTransit: {{ vnetpeering.local.allow_gateway_transit }}
               useRemoteGateways: {{ vnetpeering.local.use_remote_gateways }}
               remoteVirtualNetwork:
-                id: "[resourceId('{{ smiths_config_subscriptions[vnetpeering.remote.subscription].subscription_id }}', '{{ smiths_config_networking[vnetpeering.remote.subscription].virtual_networks[vnetpeering.remote.vnet_name].resource_group }}', 'Microsoft.Network/virtualNetworks', '{{ vnetpeering.remote.vnet_name }}')]"
+                id: "[resourceId('{{ smiths_config_subscriptions[vnetpeering.remote.subscription].subscription_id }}', '{{ smiths_config_networking[vnetpeering.remote.subscription].virtual_network[vnetpeering.remote.vnet_name].resource_group }}', 'Microsoft.Network/virtualNetworks', '{{ vnetpeering.remote.vnet_name }}')]"
           {% endfor %}{# for vnetpeering #}
         {% endif %}{# if vnet.peerings #}
     {% for subnet in vnet.subnets %}{# for subnet #}
@@ -90,14 +90,14 @@
 {% if vnet.peerings is defined and (vnet.peerings | length) > 0 %}{# if vnet.peerings #}
 {% for vnetpeering in vnet.peerings %}{# for vnet.peerings #}
 - name: vnet-peering
-  resource_group: {{ smiths_config_networking[vnetpeering.remote.subscription].virtual_networks[vnetpeering.remote.vnet_name].resource_group }}
-  location: {{ smiths_config_networking[vnetpeering.remote.subscription].virtual_networks[vnetpeering.remote.vnet_name].location }}
+  resource_group: {{ smiths_config_networking[vnetpeering.remote.subscription].virtual_network[vnetpeering.remote.vnet_name].resource_group }}
+  location: {{ smiths_config_networking[vnetpeering.remote.subscription].virtual_network[vnetpeering.remote.vnet_name].location }}
   subscription_id: {{ smiths_config_subscriptions[vnetpeering.remote.subscription].subscription_id }}
   resources:
     - type: Microsoft.Network/virtualNetworks/virtualNetworkPeerings
       name: {{ vnetpeering.remote.vnet_name }}/{{ vnet.name }}-vnetpeer
       apiVersion: "2018-08-01"
-      location: {{ smiths_config_networking[vnetpeering.remote.subscription].virtual_networks[vnetpeering.remote.vnet_name].location }}
+      location: {{ smiths_config_networking[vnetpeering.remote.subscription].virtual_network[vnetpeering.remote.vnet_name].location }}
       properties:
         allowVirtualNetworkAccess: {{ vnetpeering.remote.allow_vnet_access }}
         allowForwardedTraffic: {{ vnetpeering.remote.allow_forwarded_traffic }}

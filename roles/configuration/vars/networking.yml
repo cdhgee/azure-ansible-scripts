@@ -1,5 +1,5 @@
 smiths_config_networking:
-  metadata: 
+  metadata:
     Service: Infrastructure
     Application: Networking
     Data Classification: Internal
@@ -15,7 +15,7 @@ smiths_config_networking:
     metadata:
       Environment: Production
       Division: BIS
-    virtual_networks:
+    virtual_network:
       zna1-bis-shr-vnet01:
         metadata:
           Timezone: "-0600"
@@ -33,13 +33,13 @@ smiths_config_networking:
             address_prefix: 10.216.19.0/27
   Smiths Detection Enterprise R&D:
     metadata:
-      Environment: Development 
+      Environment: Development
       Division: Smiths Detection
     network_watcher:
       - name: zna1-detection-dev-nw01
         location: North Central US
         resource_group: zna1-detection-dev-nw-rg
-    virtual_networks:
+    virtual_network:
       zna1-detection-dev-vnet01:
         metadata:
           Timezone: "-0600"
