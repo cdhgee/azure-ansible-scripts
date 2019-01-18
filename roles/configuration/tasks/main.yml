@@ -6,10 +6,6 @@
   include_vars:
     file: networking.yml
 
-- name: Load tag presets
-  include_vars:
-    file: tag-presets.yml
-
 - name: Load regions
   include_vars:
     file: regions.yml
