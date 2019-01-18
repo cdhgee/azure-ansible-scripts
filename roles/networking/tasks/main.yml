@@ -29,11 +29,10 @@
 #   loop_control:
 #     loop_var: azure_deployment
 
-- name: Set subscription
-  set_fact:
-    subscription: "{{ smiths_config_subscriptions[subscription_name] }}"
-    location: "{{ smiths_config_subscriptions[subscription_name].locations[location_name] }}"
-
 - name: Prep template config
   set_fact:
-    subscription_config: "{{ lookup('template', 'subscription.yml.j2') | from_yaml }}
+    deployments: "{{ lookup('template', 'subscription.yml.j2') | from_yaml }}"
+
+- name: Dump deployments
+  debug:
+    var: deployments
