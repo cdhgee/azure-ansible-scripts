@@ -28,14 +28,10 @@
           - name: {{ subnet.name }}
             properties:
               addressPrefix: {{ subnet.address_prefix }}
-              {% if subnet.nsg is defined %}{# if subnet.nsg #}
               networkSecurityGroup:
                 id: "[concat('/subscriptions/{{ smiths_config_subscriptions[smiths_subscription].subscription_id }}/resourceGroups/{{ template_config.resource_group }}/providers/', reference('{{ subnet.name }}-nsg', '2018-08-01', 'Full').resourceId)]"
-              {% endif %}{# if subnet.nsg #}
-              {% if subnet.route_table is defined %}{# if subnet.route_table #}
               routeTable:
                 id: "[concat('/subscriptions/{{ smiths_config_subscriptions[smiths_subscription].subscription_id }}/resourceGroups/{{ template_config.resource_group }}/providers/', reference('{{ subnet.name }}-route', '2018-08-01', 'Full').resourceId)]"
-              {% endif %}{# if subnet.route_table #}
           {% endfor %}{# for subnet #}
         {% else %}{# if template_config.subnets #}
         subnets: []
@@ -54,7 +50,6 @@
           {% endfor %}{# for vnetpeering #}
         {% endif %}{# if template_config.peerings #}
     {% for subnet in template_config.subnets %}{# for subnet #}
-    {% if subnet.nsg is defined %}
     - type: Microsoft.Network/networkSecurityGroups
       name: {{ subnet.name }}-nsg
       apiVersion: "2018-08-01"
@@ -65,8 +60,6 @@
       {% endfor %}{# for tag #}
       properties:
         securityRules: []
-    {% endif %}{# if subnet.nsg #}
-    {% if subnet.route_table is defined %}{# if subnet.route_table #}
     - type: Microsoft.Network/routeTables
       name: {{ subnet.name }}-route
       apiVersion: "2018-08-01"
@@ -85,7 +78,6 @@
               nextHopType: {{ route.next_hop_type }}
               nextHopIpAddress: {{ route.next_hop_ip }}
         {% endfor %}{# for route #}
-    {% endif %}{# if subnet.route_table #}
     {% endfor %}{# for subnet #}
 {% if template_config.peerings is defined and (template_config.peerings | length) > 0 %}{# if template_config.peerings #}
 {% for vnetpeering in template_config.peerings %}{# for template_config.peerings #}

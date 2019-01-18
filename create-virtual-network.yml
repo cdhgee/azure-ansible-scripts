@@ -4,12 +4,18 @@
   tasks:
   - import_role:
       name: configuration
+  # - include_role:
+  #     name: networking
+  #   vars:
+  #     smiths_subscription: Smiths Detection Enterprise R&D
+  #     config:
+  #       subscription: Smiths Detection Enterprise R&D
+  #       name: zna1-detection-dev-vnet01
+  #       type: virtual_network
+  #     template: virtual-network.yml.j2
   - include_role:
       name: networking
     vars:
-      smiths_subscription: Smiths Detection Enterprise R&D
-      config:
-        subscription: Smiths Detection Enterprise R&D
-        name: zna1-detection-dev-vnet01
-        type: virtual_network
-        template: virtual-network.yml.j2
+      subscription_name: Smiths Detection Enterprise R&D
+      location_name: North Central US
+

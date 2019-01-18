@@ -1,30 +1,39 @@
-- name: Load configuration
+# - name: Load configuration
+#   set_fact:
+#     template_config: "{{ smiths_config_networking[config.subscription][config.type][config.name] | combine({'name': config.name}) }}"
+
+# - name: Prepare tags
+#   set_fact:
+#     template_tags: "{{ smiths_config_networking.metadata | combine(smiths_config_networking[config.subscription].metadata) | combine(template_config.metadata) }}"
+
+# - name: Prepare deployments
+#   set_fact:
+#     deployments: "{{ lookup('template', config.template) | from_yaml }}"
+
+# - name: Print template configuration
+#   debug:
+#     var: template_config
+#     verbosity: 4
+
+# - name: Print tags
+#   debug:
+#     var: template_tags
+#     verbosity: 4
+
+# - name: Execute deployments
+#   include_role:
+#     name: deploy
+#   vars:
+#     deployment: "{{ azure_deployment }}"
+#   loop: "{{ deployments }}"
+#   loop_control:
+#     loop_var: azure_deployment
+
+- name: Set subscription
   set_fact:
-    template_config: "{{ smiths_config_networking[config.subscription][config.type][config.name] | combine({'name': config.name}) }}"
+    subscription: "{{ smiths_config_subscriptions[subscription_name] }}"
+    location: "{{ smiths_config_subscriptions[subscription_name].locations[location_name] }}"
 
-- name: Prepare tags
+- name: Prep template config
   set_fact:
-    template_tags: "{{ smiths_config_networking.metadata | combine(smiths_config_networking[config.subscription].metadata) | combine(template_config.metadata) }}"
-
-- name: Prepare deployments
-  set_fact:
-    deployments: "{{ lookup('template', config.template) | from_yaml }}"
-
-- name: Print template configuration
-  debug:
-    var: template_config
-    verbosity: 4
-
-- name: Print tags
-  debug:
-    var: template_tags
-    verbosity: 4
-
-- name: Execute deployments
-  include_role:
-    name: deploy
-  vars:
-    deployment: "{{ azure_deployment }}"
-  loop: "{{ deployments }}"
-  loop_control:
-    loop_var: azure_deployment
+    subscription_config: "{{ lookup('template', 'subscription.yml.j2') | from_yaml }}
