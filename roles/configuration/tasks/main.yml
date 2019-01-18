@@ -1,4 +1,4 @@
-- name: Load subscription configuration 
+- name: Load subscription configuration
   include_vars:
     file: subscriptions.yml
 
@@ -13,3 +13,7 @@
 - name: Load regions
   include_vars:
     file: regions.yml
+
+- name: Load metadata
+  include_vars:
+    file: metadata.yml
