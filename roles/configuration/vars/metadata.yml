@@ -46,3 +46,6 @@ smiths_config_metadata:
     North Europe:
       code: zeu2
       type: DR
+  purposes:
+    R&D:
+      code: rd
