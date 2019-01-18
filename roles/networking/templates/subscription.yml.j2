@@ -1,14 +1,15 @@
-#jinja2:trim_blocks: "true", lstrip_blocks: "true"
+#jinja2:trim_bl/cks: "true", lstrip_blocks: "true"
 {% set subscription = smiths_config_subscriptions[subscription_name] %}
 {% set location = subscription.locations[location_name] %}
+{% set template_tags = subscription.tags | combine(networking_tags | default({})) | combine(location.tags | default({})) %}
 {% set location_code = smiths_config_metadata.locations[location_name] %}
-{% set division_code = smiths_config_metadata.divisions[tags.Division].code %}
-{% set environment_code = smiths_config_metadata.environments[tags.Environment].code %}
+{% set division_code = smiths_config_metadata.divisions[template_tags.Division].code %}
+{% set environment_code = smiths_config_metadata.environments[template_tags.Environment].code %}
 {% for vnet in location.virtual_networks %}{# for vnet #}
-{% set tags = subscription.tags | combine(networking_tags | default({})) | combine(location.tags | default({})) | combine(vnet.tags) %}
 {% set vnet_base = location_code ~ "-" ~ division_code ~ "-" ~ environment_code %}
 {% set vnet_name = vnet_base ~ "-vnet" %}
 {% set vnet_rg = vnet_base ~ "-vnet-rg" %}
+{% set vnet_tags = template_tags | combine(vnet.tags | default({})) %}
 - name: vnet
   resource_group: {{ vnet_rg }}
   location: {{ location_name }}
@@ -18,8 +19,8 @@
       apiVersion: "2018-08-01"
       location: {{ location_name }}
       tags:
-      {% for tag in (tags | dict2items) %}{# for tag #}
-        {{ tag.key }}: "{{ tag.value }}"
+      {% for vnet_tag in (vnet_tags | dict2items) %}{# for tag #}
+        {{ vnet_tag.key }}: "{{ vnet_tag.value }}"
       {% endfor %}{# endfor tag #}
       properties:
         addressSpace:
@@ -46,21 +47,22 @@
                 id: "{{ routeTableRef }}"
         {% endfor %}{# endfor subnet #}
     {% for subnet in vnet.subnets %}{# for subnet #}
+    {% set subnet_name = vnet_base ~ "-" ~ subnet.name ~ "-subnet01" %}
     - type: Microsoft.Network/networkSecurityGroups
-      name: {{ subnet.name }}-nsg
+      name: {{ subnet_name }}-nsg
       apiVersion: "2018-08-01"
       location: {{ location_name }}
       tags:
-      {% for tag in (tags | dict2items) %}{# for tag #}
-        {{ tag.key }}: "{{ tag.value }}"
+      {% for vnet_tag in (vnet_tags | dict2items) %}{# for tag #}
+        {{ vnet_tag.key }}: "{{ vnet_tag.value }}"
       {% endfor %}{# endfor tag #}
     - type: Microsoft.network/routeTables
-      name: {{ subnet.name }}-route
+      name: {{ subnet_name }}-route
       apiVersion: "2018-08-01"
       location: {{ location_name }}
       tags:
-      {% for tag in (tags | dict2items) %}{# for tag #}
-        {{ tag.key }}: "{{ tag.value }}"
-      {% endfor tag %}
+      {% for vnet_tag in (vnet_tags | dict2items) %}{# for tag #}
+        {{ vnet_tag.key }}: "{{ vnet_tag.value }}"
+      {% endfor %}{# endfor tag #}
     {% endfor %}{# endfor subnet #}
 {% endfor %}{# endfor vnet #}

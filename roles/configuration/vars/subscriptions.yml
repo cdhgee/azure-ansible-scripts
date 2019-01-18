@@ -19,17 +19,17 @@ smiths_config_subscriptions:
               - 10.216.16.0/22
             subnets:
               Shared:
-                address_range: 10.216.16.0/23
+                address_prefix: 10.216.16.0/23
               VPN:
-                address_range: 10.216.19.0/27
+                address_prefix: 10.216.19.0/27
               Firewall External:
-                address_range: 10.216.19.32/28
+                address_prefix: 10.216.19.32/28
               Firewall Internal:
-                address_range: 10.216.19.48/28
+                address_prefix: 10.216.19.48/28
               Firewall Management:
-                address_range: 10.216.19.64/28
+                address_prefix: 10.216.19.64/28
               Firewall Diagnostic:
-                address_range: 10.216.19.80/28
+                address_prefix: 10.216.19.80/28
           - type: BIS DMZ
             dns_servers:
               - 8.8.8.8
@@ -38,7 +38,7 @@ smiths_config_subscriptions:
               - 10.216.20.0/23
             subnets:
               DMZ:
-                address_range: 10.216.20.0/24
+                address_prefix: 10.216.20.0/24
           - type: BIS Production
             dns_servers:
               - 10.216.16.4
@@ -80,7 +80,7 @@ smiths_config_subscriptions:
               - 10.216.65.0/24
             subnets:
               - name: R&D
-                address_range: 10.216.65.0/24
+                address_prefix: 10.216.65.0/24
   "Smiths Group Digital Forge Enterprise R&D":
     name: Smiths Group Digital Forge Enterprise R&D
     subscription_id: "83002777-55e5-4667-8a75-0eb7a35d40b8"
