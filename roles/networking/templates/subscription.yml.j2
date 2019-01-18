@@ -34,7 +34,7 @@
           {% endfor %}{# endfor dns_server #}
         subnets:
         {% for subnet in vnet.subnets %}{# for subnet #}
-        {% set subnet_name = vnet_base ~ "-" subnet.name ~ "-subnet01" %}
+        {% set subnet_name = vnet_base ~ "-" ~ subnet.name ~ "-subnet01" %}
         {% set nsgRef = "[concat('/subscriptions/" ~ subscription.subscription_id ~ "/resourceGroups/" ~ vnet_rg ~ "/providers/', " ~ subnet_name ~ "-nsg', '2018-08-01', Full').resourceId %)]" %}
         {% set routeTableRef = "[concat('/subscriptions/" ~ subscription.subscription_id ~ "/resourceGroups/" ~ vnet_rg ~ "/providers/', " ~ subnet_name ~ "-route', '2018-08-01', Full').resourceId %)]" %}
           - name: {{ subnet_name }}
