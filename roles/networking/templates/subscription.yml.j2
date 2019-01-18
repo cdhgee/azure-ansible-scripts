@@ -1,0 +1,66 @@
+#jinja2:trim_blocks: "true", lstrip_blocks: "true"
+{% set subscription = smiths_config_subscriptions[subscription_name] %}
+{% set location = subscription.locations[location_name] %}
+{% set location_code = smiths_config_metadata.locations[location_name] %}
+{% set division_code = smiths_config_metadata.divisions[tags.Division].code %}
+{% set environment_code = smiths_config_metadata.environments[tags.Environment].code %}
+{% for vnet in location.virtual_networks %}{# for vnet #}
+{% set tags = subscription.tags | combine(networking_tags | default({})) | combine(location.tags | default({})) | combine(vnet.tags) %}
+{% set vnet_base = location_code ~ "-" ~ division_code ~ "-" ~ environment_code %}
+{% set vnet_name = vnet_base ~ "-vnet" %}
+{% set vnet_rg = vnet_base ~ "-vnet-rg" %}
+- name: vnet
+  resource_group: {{ vnet_rg }}
+  location: {{ location_name }}
+  resources:
+    - type: Microsoft.Network/virtualNetworks
+      name: {{ vnet_name }}
+      apiVersion: "2018-08-01"
+      location: {{ location_name }}
+      tags:
+      {% for tag in (tags | dict2items) %}{# for tag #}
+        {{ tag.key }}: "{{ tag.value }}"
+      {% endfor %}{# endfor tag #}
+      properties:
+        addressSpace:
+          addressPrefixes:
+          {% for address_prefix in vnet.address_space %}{# for address_prefix #}
+            - {{ address_prefix }}
+          {% endfor %}{# endfor address_prefix #}
+        dhcpOptions:
+          dnsServers:
+          {% for dns_server in vnet.dns_servers %}{# for dns_server #}
+            - {{ dns_server }}
+          {% endfor %}{# endfor dns_server #}
+        subnets:
+        {% for subnet in vnet.subnets %}{# for subnet #}
+        {% set subnet_name = vnet_base ~ "-" subnet.name ~ "-subnet01" %}
+        {% set nsgRef = "[concat('/subscriptions/" ~ subscription.subscription_id ~ "/resourceGroups/" ~ vnet_rg ~ "/providers/', " ~ subnet_name ~ "-nsg', '2018-08-01', Full').resourceId %)]" %}
+        {% set routeTableRef = "[concat('/subscriptions/" ~ subscription.subscription_id ~ "/resourceGroups/" ~ vnet_rg ~ "/providers/', " ~ subnet_name ~ "-route', '2018-08-01', Full').resourceId %)]" %}
+          - name: {{ subnet_name }}
+            properties:
+              addressPrefix: {{ subnet.address_prefix }}
+              networkSecurityGroup:
+                id: "{{ nsgRef }}"
+              routeTable:
+                id: "{{ routeTableRef }}"
+        {% endfor %}{# endfor subnet #}
+    {% for subnet in vnet.subnets %}{# for subnet #}
+    - type: Microsoft.Network/networkSecurityGroups
+      name: {{ subnet.name }}-nsg
+      apiVersion: "2018-08-01"
+      location: {{ location_name }}
+      tags:
+      {% for tag in (tags | dict2items) %}{# for tag #}
+        {{ tag.key }}: "{{ tag.value }}"
+      {% endfor %}{# endfor tag #}
+    - type: Microsoft.network/routeTables
+      name: {{ subnet.name }}-route
+      apiVersion: "2018-08-01"
+      location: {{ location_name }}
+      tags:
+      {% for tag in (tags | dict2items) %}{# for tag #}
+        {{ tag.key }}: "{{ tag.value }}"
+      {% endfor tag %}
+    {% endfor %}{# endfor subnet #}
+{% endfor %}{# endfor vnet #}
