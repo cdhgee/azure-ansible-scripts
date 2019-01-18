@@ -53,16 +53,16 @@
       apiVersion: "2018-08-01"
       location: {{ location_name }}
       tags:
-      {% for vnet_tag in (vnet_tags | dict2items) %}{# for tag #}
+      {% for vnet_tag in (vnet_tags | dict2items) %}{# for vnet_tag #}
         {{ vnet_tag.key }}: "{{ vnet_tag.value }}"
-      {% endfor %}{# endfor tag #}
+      {% endfor %}{# endfor vnet_tag #}
     - type: Microsoft.network/routeTables
       name: {{ subnet_name }}-route
       apiVersion: "2018-08-01"
       location: {{ location_name }}
       tags:
-      {% for vnet_tag in (vnet_tags | dict2items) %}{# for tag #}
+      {% for vnet_tag in (vnet_tags | dict2items) %}{# for vnet_tag #}
         {{ vnet_tag.key }}: "{{ vnet_tag.value }}"
-      {% endfor %}{# endfor tag #}
+      {% endfor %}{# endfor vnet_tag #}
     {% endfor %}{# endfor subnet #}
-{% endfor %}{# endfor vnet #}
+{% endfor %}{# endfor vnet #
