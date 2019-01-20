@@ -50,9 +50,9 @@
     properties:
       addressPrefix: {{ subnet.address_prefix }}
       networkSecurityGroup:
-        id: "[resourceId('{{ nsg_name }}')]"
+        id: "[resourceId('Microsoft.Network/networkSecurityGroups', '{{ nsg_name }}')]"
       routeTable:
-        id: "[resourceId('{{ route_table_name }}')]"
+        id: "[resourceId('Microsoft.Network/routeTables', '{{ route_table_name }}')]"
   - type: Microsoft.Network/networkSecurityGroups
     name: {{ nsg_name }}
     apiVersion: "2018-08-01"
