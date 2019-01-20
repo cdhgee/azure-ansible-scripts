@@ -6,6 +6,24 @@
 {% set division_code = smiths_config_metadata.divisions[template_tags.Division].code %}
 {% set environment_code = smiths_config_metadata.environments[template_tags.Environment].code %}
 {% set template_base = location_code ~ "-" ~ division_code ~ "-" ~ environment_code %}
+# Deploy network watcher
+{% set nw_rg = template_base ~ "-nw-rg" %}
+{% set nw_name = template_base ~ "-nw01" %}
+{% set nw_tags = template_tags | combine(location.network_watcher.tags | default({})) %}
+- name: network-watcher
+  resource_group: {{ nw_rg }}
+  location: {{ location_name }}
+  resources:
+  - type: Microsoft.Network/networkWatchers
+    name: {{ nw_name }}
+    apiVersion: "2018-08-01"
+    location: {{ location_name }}
+    tags:
+    {% for nw_tag in (nw_tags | dict2items) %}{# for nw_tag #}
+      {{ nw_tag.key }}: "{{ nw_tag.value }}"
+    {% endfor%}{# endfor nw_tag #}
+
+# Deploy virtual networks
 {% for vnet in location.virtual_networks %}{# for vnet #}
 {% set vnet_name = template_base ~ "-vnet01" %}
 {% set vnet_rg = template_base ~ "-vnet-rg" %}
@@ -90,20 +108,3 @@
     {% endfor %}{# endfor vnet_tag #}
   {% endfor %}{# endfor subnet #}
 {% endfor %}{# endfor vnet #}
-
-# Deploy network watcher
-{% set nw_rg = template_base ~ "-nw-rg" %}
-{% set nw_name = template_base ~ "-nw01" %}
-{% set nw_tags = template_tags | combine(location.network_watcher.tags | default({})) %}
-- name: network-watcher
-  resource_group: {{ nw_rg }}
-  location: {{ location_name }}
-  resources:
-  - type: Microsoft.Network/networkWatchers
-    name: {{ nw_name }}
-    apiVersion: "2018-08-01"
-    location: {{ location_name }}
-    tags:
-    {% for nw_tag in (nw_tags | dict2items) %}{# for nw_tag #}
-      {{ nw_tag.key }}: "{{ nw_tag.value }}"
-    {% endfor%}{# endfor nw_tag #}
