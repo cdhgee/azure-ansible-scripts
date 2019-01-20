@@ -7,7 +7,7 @@
 {% set environment_code = smiths_config_metadata.environments[template_tags.Environment].code %}
 {% for vnet in location.virtual_networks %}{# for vnet #}
 {% set vnet_base = location_code ~ "-" ~ division_code ~ "-" ~ environment_code %}
-{% set vnet_name = vnet_base ~ "-vnet" %}
+{% set vnet_name = vnet_base ~ "-vnet01" %}
 {% set vnet_rg = vnet_base ~ "-vnet-rg" %}
 {% set vnet_tags = template_tags | combine(vnet.tags | default({})) %}
 - name: vnet
@@ -33,24 +33,24 @@
         {% for dns_server in vnet.dns_servers %}{# for dns_server #}
         - {{ dns_server }}
         {% endfor %}{# endfor dns_server #}
-      subnets:
-      {% for subnet in vnet.subnets %}{# for subnet #}
-      {% set subnet_name = vnet_base ~ "-" ~ smiths_config_metadata.purposes[subnet.name].code ~ "-subnet01" %}
-      {% set nsg_name = subnet_name ~ "-nsg" %}
-      {% set nsgRef = "[concat('/subscriptions/" ~ subscription.subscription_id ~ "/resourceGroups/" ~ vnet_rg ~ "/providers/', reference('" ~ nsg_name ~ "', '2018-08-01', 'Full').resourceId)]" %}
-      {% set routeTableRef = "[concat('/subscriptions/" ~ subscription.subscription_id ~ "/resourceGroups/" ~ vnet_rg ~ "/providers/', reference('" ~ subnet_name ~ "-route', '2018-08-01', 'Full').resourceId)]" %}
-      - name: {{ subnet_name }}
-        properties:
-          addressPrefix: {{ subnet.address_prefix }}
-          networkSecurityGroup:
-            id: "{{ nsgRef }}"
-          routeTable:
-            id: "{{ routeTableRef }}"
-      {% endfor %}{# endfor subnet #}
   {% for subnet in vnet.subnets %}{# for subnet #}
   {% set subnet_name = vnet_base ~ "-" ~ smiths_config_metadata.purposes[subnet.name].code ~ "-subnet01" %}
   {% set nsg_name = subnet_name ~ "-nsg" %}
   {% set route_table_name = subnet_name ~ "-route" %}
+  {% set nsgRef = "[concat('/subscriptions/" ~ subscription.subscription_id ~ "/resourceGroups/" ~ vnet_rg ~ "/providers/', reference('" ~ nsg_name ~ "', '2018-08-01', 'Full').resourceId)]" %}
+  {% set routeTableRef = "[concat('/subscriptions/" ~ subscription.subscription_id ~ "/resourceGroups/" ~ vnet_rg ~ "/providers/', reference('" ~ route_table_name ~ "', '2018-08-01', 'Full').resourceId)]" %}
+  - type: Microsoft.Network/virtualNetworks/subnets
+    name: {{ vnet_name }}/{{ subnet_name }}
+    apiVersion: "2018-08-01"
+    location: {{ location_name }}
+    dependsOn:
+    - {{ vnet_name }}
+    properties:
+      addressPrefix: {{ subnet.address_prefix }}
+      networkSecurityGroup:
+        id: "{{ nsgRef }}"
+      routeTable:
+        id: "{{ routeTableRef }}"
   - type: Microsoft.Network/networkSecurityGroups
     name: {{ nsg_name }}
     apiVersion: "2018-08-01"
@@ -60,7 +60,7 @@
       {{ vnet_tag.key }}: "{{ vnet_tag.value }}"
     {% endfor %}{# endfor vnet_tag #}
   - type: Microsoft.Network/networkSecurityGroups/providers/diagnosticsSettings
-    name: {{ nsg_name }}/microsoft.insights/{{nsg_name}}-diag01
+    name: {{ nsg_name }}/microsoft.insights/{{ nsg_name }}-diag01
     apiVersion: "2017-05-01-preview"
     dependsOn:
     - {{ nsg_name }}
