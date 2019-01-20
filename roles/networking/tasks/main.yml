@@ -20,15 +20,6 @@
 #     var: template_tags
 #     verbosity: 4
 
-# - name: Execute deployments
-#   include_role:
-#     name: deploy
-#   vars:
-#     deployment: "{{ azure_deployment }}"
-#   loop: "{{ deployments }}"
-#   loop_control:
-#     loop_var: azure_deployment
-
 - name: Prep template config
   set_fact:
     deployments: "{{ lookup('template', 'subscription.yml.j2') | from_yaml }}"
@@ -36,3 +27,12 @@
 - name: Dump deployments
   debug:
     var: deployments
+
+- name: Execute deployments
+  include_role:
+    name: deploy
+  vars:
+    deployment: "{{ azure_deployment }}"
+  loop: "{{ deployments }}"
+  loop_control:
+    loop_var: azure_deployment
