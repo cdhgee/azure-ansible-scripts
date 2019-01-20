@@ -5,10 +5,10 @@
 {% set location_code = smiths_config_metadata.locations[location_name].code %}
 {% set division_code = smiths_config_metadata.divisions[template_tags.Division].code %}
 {% set environment_code = smiths_config_metadata.environments[template_tags.Environment].code %}
+{% set template_base = location_code ~ "-" ~ division_code ~ "-" ~ environment_code %}
 {% for vnet in location.virtual_networks %}{# for vnet #}
-{% set vnet_base = location_code ~ "-" ~ division_code ~ "-" ~ environment_code %}
-{% set vnet_name = vnet_base ~ "-vnet01" %}
-{% set vnet_rg = vnet_base ~ "-vnet-rg" %}
+{% set vnet_name = template_base ~ "-vnet01" %}
+{% set vnet_rg = template_base ~ "-vnet-rg" %}
 {% set vnet_tags = template_tags | combine(vnet.tags | default({})) %}
 - name: vnet
   resource_group: {{ vnet_rg }}
@@ -34,7 +34,7 @@
         - {{ dns_server }}
         {% endfor %}{# endfor dns_server #}
   {% for subnet in vnet.subnets %}{# for subnet #}
-  {% set subnet_name = vnet_base ~ "-" ~ smiths_config_metadata.purposes[subnet.name].code ~ "-subnet01" %}
+  {% set subnet_name = template_base ~ "-" ~ smiths_config_metadata.purposes[subnet.name].code ~ "-subnet01" %}
   {% set nsg_name = subnet_name ~ "-nsg" %}
   {% set route_table_name = subnet_name ~ "-route" %}
   {% set nsgRef = "[concat('/subscriptions/" ~ subscription.subscription_id ~ "/resourceGroups/" ~ vnet_rg ~ "/providers/', reference('" ~ nsg_name ~ "', '2018-08-01', 'Full').resourceId)]" %}
@@ -45,12 +45,14 @@
     location: {{ location_name }}
     dependsOn:
     - {{ vnet_name }}
+    - {{ nsg_name }}
+    - {{ route_table_name }}
     properties:
       addressPrefix: {{ subnet.address_prefix }}
       networkSecurityGroup:
-        id: "{{ nsgRef }}"
+        id: "[resourceId('{{ nsg_name }}')]"
       routeTable:
-        id: "{{ routeTableRef }}"
+        id: "[resourceId('{{ route_table_name }}')]"
   - type: Microsoft.Network/networkSecurityGroups
     name: {{ nsg_name }}
     apiVersion: "2018-08-01"
@@ -88,3 +90,19 @@
     {% endfor %}{# endfor vnet_tag #}
   {% endfor %}{# endfor subnet #}
 {% endfor %}{# endfor vnet #}
+
+# Deploy network watcher
+{% set nw_rg = template_base ~ "-nw-rg" %}
+{% set nw_name = tepmlate_base ~ "-nw01" %}
+{% set nw_tags = template_tags | combine(location.network_watcher.tags | default({})) %}
+- name: network-watcher
+  resource_group: {{ nw_rg }}
+  location: {{ location_name }}
+  resources:
+  - type: Microsoft.Network/networkWatchers
+    name: {{ nw_name }}
+    apiVersion: "2018-08-01"
+    location: {{ location_name }}
+    tags:
+    {% for nw_tag in (nw_tags | dict2items) %}{# for tag #}
+      {{ nw_tag.key }}: "{{ nw_tag.value }}"
