@@ -59,26 +59,23 @@
     {% for vnet_tag in (vnet_tags | dict2items) %}{# for vnet_tag #}
       {{ vnet_tag.key }}: "{{ vnet_tag.value }}"
     {% endfor %}{# endfor vnet_tag #}
-    resources:
-    - type: providers/diagnosticsSettings
-      name: microsoft.insights/{{nsg_name}}-diag01
-      apiVersion: "2018-08-01"
-      dependsOn:
-      - {{ nsg_name }}
-      properties:
-        logs:
-        - category: NetworkSecurityGroupEvent
+  - type: Microsoft.Network/networkSecurityGroups/providers/diagnosticsSettings
+    name: "[reference('{{ nsg_name }}')/microsoft.insights/{{nsg_name}}-diag01
+    apiVersion: "2017-05-01-preview"
+    properties:
+      logs:
+      - category: NetworkSecurityGroupEvent
+        enabled: true
+        retentionPolicy:
+          days: 90
           enabled: true
-          retentionPolicy:
-            days: 90
-            enabled: true
-        - category: NetworkSecurityGroupRuleCounter
+      - category: NetworkSecurityGroupRuleCounter
+        enabled: true
+        retentionPolicy:
+          days: 90
           enabled: true
-          retentionPolicy:
-            days: 90
-            enabled: true
-        metrics: []
-        workspaceId: /subscriptions/823c312b-c266-4f6b-a93e-4b71bf0af10e/resourcegroups/zna3-bis-prd-logging-rg/providers/microsoft.operationalinsights/workspaces/zna3-bis-prd-log01
+      metrics: []
+      workspaceId: /subscriptions/823c312b-c266-4f6b-a93e-4b71bf0af10e/resourcegroups/zna3-bis-prd-logging-rg/providers/microsoft.operationalinsights/workspaces/zna3-bis-prd-log01
   - type: Microsoft.network/routeTables
     name: {{ route_table_name }}
     apiVersion: "2018-08-01"
