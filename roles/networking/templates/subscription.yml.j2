@@ -50,7 +50,7 @@
   {% for subnet in vnet.subnets %}{# for subnet #}
   {% set subnet_name = vnet_base ~ "-" ~ smiths_config_metadata.purposes[subnet.name].code ~ "-subnet01" %}
   {% set nsg_name = subnet_name ~ "-nsg" %}
-  {% set route_table_name = subnet_name ~ "-" ~ "-route" %}
+  {% set route_table_name = subnet_name ~ "-route" %}
   - type: Microsoft.Network/networkSecurityGroups
     name: {{ nsg_name }}
     apiVersion: "2018-08-01"
