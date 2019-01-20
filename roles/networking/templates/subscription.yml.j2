@@ -93,7 +93,7 @@
 
 # Deploy network watcher
 {% set nw_rg = template_base ~ "-nw-rg" %}
-{% set nw_name = tepmlate_base ~ "-nw01" %}
+{% set nw_name = template_base ~ "-nw01" %}
 {% set nw_tags = template_tags | combine(location.network_watcher.tags | default({})) %}
 - name: network-watcher
   resource_group: {{ nw_rg }}
