@@ -1,86 +1,86 @@
-smiths_config_subscriptions:
-  "BIS Enterprise IT Primary":
-    name: BIS Enterprise IT Primary
-    subscription_id: "823c312b-c266-4f6b-a93e-4b71bf0af10e"
-    tags:
-      Division: BIS
-    locations:
-      North Central US:
-        tags:
-          Timezone: "-0600"
-        virtual_networks:
-          - type: BIS Shared
-            tags:
-              Environment: Shared
-            dns_servers:
-              - 8.8.8.8
-              - 8.8.4.4
-            address_space:
-              - 10.216.16.0/22
-            subnets:
-              Shared:
-                address_prefix: 10.216.16.0/23
-              VPN:
-                address_prefix: 10.216.19.0/27
-              Firewall External:
-                address_prefix: 10.216.19.32/28
-              Firewall Internal:
-                address_prefix: 10.216.19.48/28
-              Firewall Management:
-                address_prefix: 10.216.19.64/28
-              Firewall Diagnostic:
-                address_prefix: 10.216.19.80/28
-          - type: BIS DMZ
-            dns_servers:
-              - 8.8.8.8
-              - 8.8.4.4
-            address_space:
-              - 10.216.20.0/23
-            subnets:
-              DMZ:
-                address_prefix: 10.216.20.0/24
-          - type: BIS Production
-            dns_servers:
-              - 10.216.16.4
-              - 10.216.16.5
-            address_space:
-              - 10.216.0.0/21
-            subnets:
-              - name: App
-                address_space: 10.216.0.0/22
-              - name: Data
-                address_space: 10.216.4.0/22
-          - type: BIS Non-Production
-            dns_servers:
-              - 10.216.16.4
-              - 10.216.16.5
-            address_space:
-              - 10.216.8.0/21
-            subnets:
-              - name: App
-                address_space: 10.216.8.0/22
-              - name: Data
-                address_space: 10.216.12.0/22
-  "Smiths Detection Enterprise R&D":
-    name: Smiths Detection Enterprise R&D
-    subscription_id: "00703ce6-eb7c-48d0-88d2-12d25c123a7c"
-    tags:
-      Division: Smiths Detection
-      Environment: Development
-    locations:
-      North Central US:
-        tags:
-          Timezone: "-0600"
-        virtual_networks:
-          - type: Divisional R&D
-            dns_servers:
-              - 10.216.16.4
-              - 10.216.16.5
-            address_space:
-              - 10.216.65.0/24
-            subnets:
-              - name: R&D
-                address_prefix: 10.216.65.0/24
-  "Smiths Group Digital Forge Enterprise R&D":
-    name: Smiths Group Digital Forge Enterprise R&D
-    subscription_id: "83002777-55e5-4667-8a75-0eb7a35d40b8"
+  smiths_config_subscriptions:
+    "BIS Enterprise IT Primary":
+      name: BIS Enterprise IT Primary
+      subscription_id: "823c312b-c266-4f6b-a93e-4b71bf0af10e"
+      tags:
+        Division: BIS
+      locations:
+        North Central US:
+          tags:
+            Timezone: "-0600"
+          virtual_networks:
+            - type: BIS Shared
+              tags:
+                Environment: Shared
+              dns_servers:
+                - 8.8.8.8
+                - 8.8.4.4
+              address_space:
+                - 10.216.16.0/22
+              subnets:
+                Shared:
+                  address_prefix: 10.216.16.0/23
+                VPN:
+                  address_prefix: 10.216.19.0/27
+                Firewall External:
+                  address_prefix: 10.216.19.32/28
+                Firewall Internal:
+                  address_prefix: 10.216.19.48/28
+                Firewall Management:
+                  address_prefix: 10.216.19.64/28
+                Firewall Diagnostic:
+                  address_prefix: 10.216.19.80/28
+            - type: BIS DMZ
+              dns_servers:
+                - 8.8.8.8
+                - 8.8.4.4
+              address_space:
+                - 10.216.20.0/23
+              subnets:
+                DMZ:
+                  address_prefix: 10.216.20.0/24
+            - type: BIS Production
+              dns_servers:
+                - 10.216.16.4
+                - 10.216.16.5
+              address_space:
+                - 10.216.0.0/21
+              subnets:
+                - name: App
+                  address_space: 10.216.0.0/22
+                - name: Data
+                  address_space: 10.216.4.0/22
+            - type: BIS Non-Production
+              dns_servers:
+                - 10.216.16.4
+                - 10.216.16.5
+              address_space:
+                - 10.216.8.0/21
+              subnets:
+                - name: App
+                  address_space: 10.216.8.0/22
+                - name: Data
+                  address_space: 10.216.12.0/22
+    "Smiths Detection Enterprise R&D":
+      name: Smiths Detection Enterprise R&D
+      subscription_id: "00703ce6-eb7c-48d0-88d2-12d25c123a7c"
+      tags:
+        Division: Smiths Detection
+        Environment: Development
+      locations:
+        North Central US:
+          tags:
+            Timezone: "-0600"
+          virtual_networks:
+            - type: Divisional R&D
+              dns_servers:
+                - 10.216.16.4
+                - 10.216.16.5
+              address_space:
+                - 10.216.65.0/24
+              subnets:
+                - name: R&D
+                  address_prefix: 10.216.65.0/24
+    "Smiths Group Digital Forge Enterprise R&D":
+      name: Smiths Group Digital Forge Enterprise R&D
+      subscription_id: "83002777-55e5-4667-8a75-0eb7a35d40b8"
