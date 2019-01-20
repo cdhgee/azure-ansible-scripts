@@ -59,7 +59,7 @@
     {% for vnet_tag in (vnet_tags | dict2items) %}{# for vnet_tag #}
       {{ vnet_tag.key }}: "{{ vnet_tag.value }}"
     {% endfor %}{# endfor vnet_tag #}
-  - type: Microsoft.Network/networkSecurityGroups/providers/diagnosticsSettings
+  - type: Microsoft.Network/networkSecurityGroups/providers/diagnosticSettings
     name: {{ nsg_name }}/microsoft.insights/{{ nsg_name }}-diag01
     apiVersion: "2017-05-01-preview"
     dependsOn:
