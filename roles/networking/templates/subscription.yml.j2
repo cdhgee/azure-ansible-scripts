@@ -62,9 +62,6 @@
     resources:
     - type: providers/diagnosticsSettings
       name: microsoft.insights/{{nsg_name}}-diag01
-      apiVersion: "2018-08-01"
-      dependsOn:
-      - {{ nsg_name }}
       properties:
         logs:
         - category: NetworkSecurityGroupEvent
