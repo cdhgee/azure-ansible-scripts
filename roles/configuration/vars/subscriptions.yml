@@ -81,6 +81,7 @@
               subnets:
                 - name: R&D
                   address_prefix: 10.216.65.0/24
+          network_watcher: {}
     "Smiths Group Digital Forge Enterprise R&D":
       name: Smiths Group Digital Forge Enterprise R&D
       subscription_id: "83002777-55e5-4667-8a75-0eb7a35d40b8"
