@@ -104,5 +104,6 @@
     apiVersion: "2018-08-01"
     location: {{ location_name }}
     tags:
-    {% for nw_tag in (nw_tags | dict2items) %}{# for tag #}
+    {% for nw_tag in (nw_tags | dict2items) %}{# for nw_tag #}
       {{ nw_tag.key }}: "{{ nw_tag.value }}"
+    {% endfor%}{# endfor nw_tag #}
