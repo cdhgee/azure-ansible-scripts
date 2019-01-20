@@ -60,8 +60,10 @@
       {{ vnet_tag.key }}: "{{ vnet_tag.value }}"
     {% endfor %}{# endfor vnet_tag #}
   - type: Microsoft.Network/networkSecurityGroups/providers/diagnosticsSettings
-    name: "[concat(reference('{{ nsg_name }}'), '/microsoft.insights/{{nsg_name}}-diag01')]"
+    name: {{ nsg_name }}/microsoft.insights/{{nsg_name}}-diag01
     apiVersion: "2017-05-01-preview"
+    dependsOn:
+    - {{ nsg_name }}
     properties:
       logs:
       - category: NetworkSecurityGroupEvent
