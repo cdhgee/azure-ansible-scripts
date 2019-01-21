@@ -1,110 +1,178 @@
-#jinja2:trim_bl/cks: "true", lstrip_blocks: "true"
-{% set subscription = smiths_config_subscriptions[subscription_name] %}
-{% set location = subscription.locations[location_name] %}
-{% set template_tags = subscription.tags | combine(networking_tags | default({})) | combine(location.tags | default({})) %}
-{% set location_code = smiths_config_metadata.locations[location_name].code %}
-{% set division_code = smiths_config_metadata.divisions[template_tags.Division].code %}
-{% set environment_code = smiths_config_metadata.environments[template_tags.Environment].code %}
-{% set template_base = location_code ~ "-" ~ division_code ~ "-" ~ environment_code %}
+#jinja2:trim_blocks: "true", lstrip_blocks: "true"
+{% macro apiVersion(provider) -%}
+"{{ smiths_config_metadata.api_versions[provider] }}"
+{%- endmacro %}
+{% macro subscriptionId(sub) -%}
+{{ smiths_config_subscriptions[sub].subscription_id }}
+{%- endmacro %}
+{% macro vnetResourceId(sub, loc, env) -%}
+{{ resourceId(sub, vnetResourceGroup(sub, loc, env), 'Microsoft.Network/virtualNetworks', vnetName(sub, loc, env)) }}
+{%- endmacro %}
+{% macro resourceId(sub, rg, type, name) -%}
+"[resourceId('{{ subscriptionId(sub) }}', '{{ rg }}', '{{ type }}', '{{ name }}')]"
+{%- endmacro %}
+{% macro dnsServers(loc) -%}
+{% set shared_subnet = smiths_config_subscriptions.bis_primary.locations[loc].networking.virtual_networks.shr.subnets.shared.address_space %}
+[ {{ shared_subnet | ipsubnet(32, 4) | ipaddr('address') }}, {{ shared_subnet | ipsubnet(32, 5) | ipaddr('address') }} ]
+{%- endmacro %}
+{% macro subscriptionDivision(sub) -%}
+{{ smiths_config_subscriptions[sub].metadata.division }}
+{%- endmacro %}
+{% macro vnetName(sub, loc, env) -%}
+{{ loc }}-{{ subscriptionDivision(sub) }}-{{ env }}-vnet01
+{%- endmacro %}
+{% macro subnetName(sub, loc, env, purp) -%}
+{{ loc }}-{{ subscriptionDivision(sub) }}-{{ env }}-{{ purp }}-subnet01
+{%- endmacro %}
+{% macro vnetResourceGroup(sub, loc, env) -%}
+{{ loc }}-{{ subscriptionDivision(sub)}}-{{ env }}-vnet-rg
+{%- endmacro %}
+# DO NOT ALTER THE INDENTING
+{% macro networkingTags(env) -%}
+{% set ntags = smiths_config_metadata.tags.networking | combine({'Division': smiths_config_metadata.divisions[subscription.metadata.division].name, 'Timezone': smiths_config_metadata.locations[location_code].timezone, 'Environment': smiths_config_metadata.environments[env].name }) %}
+tags:
+      {% for ntag in (ntags | dict2items) %}{# for tag #}
+        {{ ntag.key }}: "{{ ntag.value }}"
+      {% endfor %}{# endfor tag #}
+{%- endmacro %}
+{% set subscription = smiths_config_subscriptions[subscription_code] %}
+{% set location = subscription.locations[location_code] %}
+{% set networking_tags = smiths_config_metadata.tags.networking | default({}) %}
+{% set template_tags = subscription.tags | combine(networking_tags) %}
+{% set location_name = smiths_config_metadata.locations[location_code].name %}
+
 # Deploy network watcher
-{% set nw_rg = template_base ~ "-nw-rg" %}
-{% set nw_name = template_base ~ "-nw01" %}
-{% set nw_tags = template_tags | combine(location.network_watcher.tags | default({})) %}
+{% set nw_rg = location_code ~ "-" ~ subscription.metadata.division ~ "-" ~ subscription.metadata.environment ~ "-nw-rg" %}
+{% set nw_name = location_code ~ "-" ~ subscription.metadata.division ~ "-" ~ subscription.metadata.environment ~ "-nw-rg" %}
 - name: network-watcher
   resource_group: {{ nw_rg }}
   location: {{ location_name }}
   resources:
-  - type: Microsoft.Network/networkWatchers
-    name: {{ nw_name }}
-    apiVersion: "2018-08-01"
-    location: {{ location_name }}
-    tags:
-    {% for nw_tag in (nw_tags | dict2items) %}{# for nw_tag #}
-      {{ nw_tag.key }}: "{{ nw_tag.value }}"
-    {% endfor%}{# endfor nw_tag #}
+    - type: Microsoft.Network/networkWatchers
+      name: {{ nw_name }}
+      apiVersion: {{ apiVersion("networking") }}
+      location: {{ location_name }}
+      {{ networkingTags(subscription.metadata.environment) }}
 
 # Deploy virtual networks
-{% for vnet in location.virtual_networks %}{# for vnet #}
-{% set vnet_name = template_base ~ "-vnet01" %}
-{% set vnet_rg = template_base ~ "-vnet-rg" %}
-{% set vnet_tags = template_tags | combine(vnet.tags | default({})) %}
+{% for vnet_kv in location.networking.virtual_networks | dict2items %}{# for vnet_kv #}
+{% set vnet = vnet_kv.value %}
+{% set vnet_name = vnetName(subscription_code, location_code, vnet_kv.key) %}
+{% set vnet_metadata = vnet.metadata | default({}) %}
 - name: vnet
-  resource_group: {{ vnet_rg }}
+  resource_group: {{ vnetResourceGroup(subscription_code, location_code, vnet_kv.key) }}
   location: {{ location_name }}
   resources:
-  - type: Microsoft.Network/virtualNetworks
-    name: {{ vnet_name }}
-    apiVersion: "2018-08-01"
-    location: {{ location_name }}
-    tags:
-    {% for vnet_tag in (vnet_tags | dict2items) %}{# for tag #}
-      {{ vnet_tag.key }}: "{{ vnet_tag.value }}"
-    {% endfor %}{# endfor tag #}
-    properties:
-      addressSpace:
-        addressPrefixes:
-        {% for address_prefix in vnet.address_space %}{# for address_prefix #}
-        - {{ address_prefix }}
-        {% endfor %}{# endfor address_prefix #}
-      dhcpOptions:
-        dnsServers:
-        {% for dns_server in vnet.dns_servers %}{# for dns_server #}
-        - {{ dns_server }}
-        {% endfor %}{# endfor dns_server #}
-  {% for subnet in vnet.subnets %}{# for subnet #}
-  {% set subnet_name = template_base ~ "-" ~ smiths_config_metadata.purposes[subnet.name].code ~ "-subnet01" %}
-  {% set nsg_name = subnet_name ~ "-nsg" %}
-  {% set route_table_name = subnet_name ~ "-route" %}
-  {% set nsgRef = "[concat('/subscriptions/" ~ subscription.subscription_id ~ "/resourceGroups/" ~ vnet_rg ~ "/providers/', reference('" ~ nsg_name ~ "', '2018-08-01', 'Full').resourceId)]" %}
-  {% set routeTableRef = "[concat('/subscriptions/" ~ subscription.subscription_id ~ "/resourceGroups/" ~ vnet_rg ~ "/providers/', reference('" ~ route_table_name ~ "', '2018-08-01', 'Full').resourceId)]" %}
-  - type: Microsoft.Network/virtualNetworks/subnets
-    name: {{ vnet_name }}/{{ subnet_name }}
-    apiVersion: "2018-08-01"
-    location: {{ location_name }}
-    dependsOn:
-    - {{ vnet_name }}
-    - {{ nsg_name }}
-    - {{ route_table_name }}
-    properties:
-      addressPrefix: {{ subnet.address_prefix }}
-      networkSecurityGroup:
-        id: "[resourceId('Microsoft.Network/networkSecurityGroups', '{{ nsg_name }}')]"
-      routeTable:
-        id: "[resourceId('Microsoft.Network/routeTables', '{{ route_table_name }}')]"
-  - type: Microsoft.Network/networkSecurityGroups
-    name: {{ nsg_name }}
-    apiVersion: "2018-08-01"
-    location: {{ location_name }}
-    tags:
-    {% for vnet_tag in (vnet_tags | dict2items) %}{# for vnet_tag #}
-      {{ vnet_tag.key }}: "{{ vnet_tag.value }}"
-    {% endfor %}{# endfor vnet_tag #}
-  - type: Microsoft.Network/networkSecurityGroups/providers/diagnosticSettings
-    name: {{ nsg_name }}/microsoft.insights/{{ nsg_name }}-diag01
-    apiVersion: "2017-05-01-preview"
-    dependsOn:
-    - {{ nsg_name }}
-    properties:
-      logs:
-      - category: NetworkSecurityGroupEvent
-        enabled: true
-        retentionPolicy:
-          days: 90
-          enabled: true
-      - category: NetworkSecurityGroupRuleCounter
-        enabled: true
-        retentionPolicy:
-          days: 90
-          enabled: true
-      metrics: []
-      workspaceId: /subscriptions/823c312b-c266-4f6b-a93e-4b71bf0af10e/resourcegroups/zna3-bis-prd-logging-rg/providers/microsoft.operationalinsights/workspaces/zna3-bis-prd-log01
-  - type: Microsoft.network/routeTables
-    name: {{ route_table_name }}
-    apiVersion: "2018-08-01"
-    location: {{ location_name }}
-    tags:
-    {% for vnet_tag in (vnet_tags | dict2items) %}{# for vnet_tag #}
-      {{ vnet_tag.key }}: "{{ vnet_tag.value }}"
-    {% endfor %}{# endfor vnet_tag #}
-  {% endfor %}{# endfor subnet #}
-{% endfor %}{# endfor vnet #}
+    - type: Microsoft.Network/virtualNetworks
+      name: {{ vnet_name }}
+      apiVersion: {{ apiVersion("networking") }}
+      location: {{ location_name }}
+      {{ networkingTags(vnet_metadata.environment | default(subscription.metadata.environment)) }}
+      properties:
+        addressSpace:
+          addressPrefixes:
+          {% for address_prefix in vnet.address_space %}{# for address_prefix #}
+            - {{ address_prefix }}
+          {% endfor %}{# endfor address_prefix #}
+        dhcpOptions:
+          dnsServers: {{ dnsServers(location_code) }}
+
+    - type: Microsoft.Network/virtualNetworks/virtualNetworkPeerings
+      name: {{ vnet_name }}/{{ vnetName("bis_primary", location_code, "shr") }}-vnetpeer
+      apiVersion: {{ apiVersion("networking") }}
+      location: {{ location_name }}
+      dependsOn:
+        - {{ vnet_name }}
+      properties:
+        allowVirtualNetworkAccess: true
+        allowForwardedTraffic: true
+        allowGatewayTransit: false
+        useRemoteGateways: false
+        remoteVirtualNetwork:
+          id: {{ vnetResourceId("bis_primary", location_code, "shr") }}
+
+    {% for subnet_kv in vnet.subnets | dict2items %}{# for subnet_kv #}
+    {% set subnet = subnet_kv.value %}
+    {% set subnet_name = subnetName(subscription_code, location_code, vnet_kv.key, subnet_kv.key) %}
+    {% set nsg_name = subnet_name ~ "-nsg" %}
+    {% set route_table_name = subnet_name ~ "-route" %}
+
+    - type: Microsoft.Network/virtualNetworks/subnets
+      name: {{ vnet_name }}/{{ subnet_name }}
+      apiVersion: {{ apiVersion("networking") }}
+      location: {{ location_name }}
+      dependsOn:
+        - {{ vnet_name }}
+        - {{ nsg_name }}
+        - {{ route_table_name }}
+      properties:
+        addressPrefix: {{ subnet.address_space }}
+        networkSecurityGroup:
+          id: "[resourceId('Microsoft.Network/networkSecurityGroups', '{{ nsg_name }}')]"
+        routeTable:
+          id: "[resourceId('Microsoft.Network/routeTables', '{{ route_table_name }}')]"
+
+    - type: Microsoft.Network/networkSecurityGroups
+      name: {{ nsg_name }}
+      apiVersion: {{ apiVersion("networking") }}
+      location: {{ location_name }}
+      tags:
+      {% for template_tag in (template_tags | dict2items) %}{# for template_tag #}
+        {{ template_tag.key }}: "{{ template_tag.value }}"
+      {% endfor %}{# endfor template_tag #}
+
+    - type: Microsoft.Network/networkSecurityGroups/providers/diagnosticSettings
+      name: {{ nsg_name }}/microsoft.insights/{{ nsg_name }}-diag01
+      apiVersion: {{ smiths_config_metadata.api_versions.insights }}
+      dependsOn:
+      - {{ nsg_name }}
+      properties:
+        logs:
+          - category: NetworkSecurityGroupEvent
+            enabled: true
+            retentionPolicy:
+              days: 90
+              enabled: true
+          - category: NetworkSecurityGroupRuleCounter
+            enabled: true
+            retentionPolicy:
+              days: 90
+              enabled: true
+        metrics: []
+        workspaceId: {{ resourceId("bis_primary", "zna3-bis-prd-logging-rg", "Microsoft.OperationalInsights/workspaces", "zna3-bis-prd-log01") }}
+
+    - type: Microsoft.Network/routeTables
+      name: {{ route_table_name }}
+      apiVersion: {{ apiVersion("networking") }}
+      location: {{ location_name }}
+      tags:
+      {% for template_tag in (template_tags | dict2items) %}{# for template_tag #}
+        {{ template_tag.key }}: "{{ template_tag.value }}"
+      {% endfor %}{# endfor template_tag #}
+    {% endfor %}{# endfor subnet #}
+  {% endfor %}{# endfor vnet #}
+
+- name: vnet-peering
+  resource_group: {{ vnetResourceGroup("bis_primary", location_code, "shr") }}
+  location: {{ location_name }}
+  subscription_id: {{ subscriptionId("bis_primary") }}
+  resources:
+    {% for vnet_kv in location.networking.virtual_networks | dict2items %}{# for vnet_kv #}
+    {% set vnet = vnet_kv.value %}
+    {% set vnet_name = vnetName(subscription_code, location_code, vnet_kv.key) %}
+    {% set remote_vnet_name = vnetName("bis_primary", location_code, "shr") %}
+    - type: Microsoft.Network/virtualNetworks/virtualNetworkPeerings
+      name: {{ remote_vnet_name }}/{{ vnet_name }}-vnetpeer
+      subscription_id: {{ subscriptionId("bis_primary") }}
+      apiVersion: {{ apiVersion("networking") }}
+      location: {{ location_name }}
+      dependsOn:
+        - {{ remote_vnet_name }}
+      properties:
+        allowVirtualNetworkAccess: true
+        allowForwardedTraffic: true
+        allowGatewayTransit: false
+        useRemoteGateways: false
+        remoteVirtualNetwork:
+          id: {{ vnetResourceId(subscription_code, location_code, vnet_kv.key) }}
+    {% endfor %}{# endfor vnet_kv #}

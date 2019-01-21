@@ -16,6 +16,6 @@
   - include_role:
       name: networking
     vars:
-      subscription_name: Smiths Detection Enterprise R&D
-      location_name: North Central US
+      subscription_code: detection_rd
+      location_code: zna1
 
