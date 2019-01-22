@@ -42,7 +42,7 @@ tags:
 {% set location_name = smiths_config_metadata.locations[location_code].name %}
 
 # Deploy network watcher
-{% set nw_rg = location_code ~ "-" ~ subscription.metadata.division ~ "-" ~ subscription.metadata.environment ~ "-nw-rg" %}
+{% set nw_rg = location_code ~ "-" ~ subscription.metadata.division ~ "-" ~ subscription.metadata.environment ~ "-nw01" %}
 {% set nw_name = location_code ~ "-" ~ subscription.metadata.division ~ "-" ~ subscription.metadata.environment ~ "-nw-rg" %}
 - name: network-watcher
   resource_group: {{ nw_rg }}
