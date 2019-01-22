@@ -43,7 +43,7 @@ tags:
 
 # Deploy network watcher
 {% set nw_rg = location_code ~ "-" ~ subscription.metadata.division ~ "-" ~ subscription.metadata.environment ~ "-nw-rg" %}
-{% set nw_name = location_code ~ "-" ~ subscription.metadata.division ~ "-" ~ subscription.metadata.environment ~ "-nw-01" %}
+{% set nw_name = location_code ~ "-" ~ subscription.metadata.division ~ "-" ~ subscription.metadata.environment ~ "-nw01" %}
 - name: network-watcher
   resource_group: {{ nw_rg }}
   location: {{ location_name }}

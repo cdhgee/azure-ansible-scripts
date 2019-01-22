@@ -1,4 +1,4 @@
-- name: Deploy Azure resources  
+- name: Deploy Azure resources
   azure_rm_deployment:
     deployment_name: "{{ deployment.name }}-{{ '%Y%m%dT%H%M%S' | strftime }}"
     resource_group_name: "{{ deployment.resource_group }}"
@@ -12,5 +12,5 @@
       contentVersion: 1.0.0.0
       parameters: "{{ deployment.parameters | default({}) }}"
       variables: "{{ deployment.variables| default({}) }}"
-      resources: "{{ deployment.resources | default([]) }}" 
+      resources: "{{ deployment.resources | default([]) }}"
       outputs: "{{ deployment.outputs | default({}) }}"
