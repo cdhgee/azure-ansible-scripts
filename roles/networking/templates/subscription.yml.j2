@@ -53,6 +53,7 @@ tags:
       apiVersion: {{ apiVersion("networking") }}
       location: {{ location_name }}
       {{ networkingTags(subscription.metadata.environment) }}
+      properties: {}
 
 # Deploy virtual networks
 {% for vnet_kv in location.networking.virtual_networks | dict2items %}{# for vnet_kv #}
