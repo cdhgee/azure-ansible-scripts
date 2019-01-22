@@ -164,7 +164,6 @@ tags:
     {% set remote_vnet_name = vnetName("bis_primary", location_code, "shr") %}
     - type: Microsoft.Network/virtualNetworks/virtualNetworkPeerings
       name: {{ remote_vnet_name }}/{{ vnet_name }}-vnetpeer
-      subscription_id: {{ subscriptionId("bis_primary") }}
       apiVersion: {{ apiVersion("networking") }}
       location: {{ location_name }}
       dependsOn:
