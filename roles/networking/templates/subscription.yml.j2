@@ -25,7 +25,10 @@
 {{ loc }}-{{ subscriptionDivision(sub) }}-{{ env }}-{{ purp }}-subnet01
 {%- endmacro %}
 {% macro vnetResourceGroup(sub, loc, env) -%}
-{{ loc }}-{{ subscriptionDivision(sub)}}-{{ env }}-vnet-rg
+{{ loc }}-{{ subscriptionDivision(sub) }}-{{ env }}-vnet-rg
+{%- endmacro %}
+{% macro nsgLogsResourceGroup(sub, loc, env) -%}
+{{ loc }}-{{ subscriptionDivision(sub) }}-{{ env }}-diag-rg
 {%- endmacro %}
 # DO NOT ALTER THE INDENTING
 {% macro networkingTags(env) -%}
@@ -60,6 +63,36 @@ tags:
 {% set vnet = vnet_kv.value %}
 {% set vnet_name = vnetName(subscription_code, location_code, vnet_kv.key) %}
 {% set vnet_metadata = vnet.metadata | default({}) %}
+
+# Storage account for NSG flow logs
+- name: vnet-diagnostics
+  resource_group: {{ nsgLogsResourceGroup(subscription_code, location_code, (vnet_metadata.environment | default(subscription.metadata.environment))) }}
+  location: {{ location_name }}
+  subscription_id: {{ subscriptionId("bis_primary") }}
+  {% set nsg_logs_storage_name = location_code ~ "lrsnsglogst01" %}
+  resources:
+    - type: Microsoft.Storage/storageAccounts
+      name: {{ nsg_logs_storage_name }}
+      apiVersion: {{ apiVersion("storage") }}
+      location: {{ location_name }}
+      tags:
+      {{ networkingTags(vnet_metadata.environment | default(subscription.metadata.environment)) }}
+      properties:
+        accessTier: Hot
+        supportsHttpsTrafficOnly: true
+        encryption:
+          services:
+            file:
+              enabled: true
+            blob:
+              enabled: true
+          keySource: Microsoft.Storage
+      sku:
+        name: Standard_LRS
+        tier: Standard
+      kind: StorageV2
+
+# Virtual network, subnets, NSGs, custom routes, NSG diagnostics
 - name: vnet
   resource_group: {{ vnetResourceGroup(subscription_code, location_code, vnet_kv.key) }}
   location: {{ location_name }}
@@ -118,9 +151,7 @@ tags:
       apiVersion: {{ apiVersion("networking") }}
       location: {{ location_name }}
       tags:
-      {% for template_tag in (template_tags | dict2items) %}{# for template_tag #}
-        {{ template_tag.key }}: "{{ template_tag.value }}"
-      {% endfor %}{# endfor template_tag #}
+      {{ networkingTags(vnet_metadata.environment | default(subscription.metadata.environment)) }}
 
     - type: Microsoft.Network/networkSecurityGroups/providers/diagnosticSettings
       name: {{ nsg_name }}/microsoft.insights/{{ nsg_name }}-diag01
@@ -147,10 +178,9 @@ tags:
       apiVersion: {{ apiVersion("networking") }}
       location: {{ location_name }}
       tags:
-      {% for template_tag in (template_tags | dict2items) %}{# for template_tag #}
-        {{ template_tag.key }}: "{{ template_tag.value }}"
-      {% endfor %}{# endfor template_tag #}
+      {{ networkingTags(vnet_metadata.environment | default(subscription.metadata.environment)) }}
     {% endfor %}{# endfor subnet #}
+
   {% endfor %}{# endfor vnet #}
 
 - name: vnet-peering

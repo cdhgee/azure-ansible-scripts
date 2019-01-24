@@ -75,3 +75,4 @@ smiths_config_metadata:
   api_versions:
     networking: "2018-08-01"
     insights: "2017-05-01-preview"
+    storage: "2018-07-01"
