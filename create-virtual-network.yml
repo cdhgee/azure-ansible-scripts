@@ -15,3 +15,7 @@
   #     template: virtual-network.yml.j2
   - include_role:
       name: networking
+    vars:
+      subscription_code: {{ smiths_config_metadata.subscriptions | dict2items | json_query("[?value.name==`" ~ _input_subscription ~ "`].key")[0] }}
+      location_code: {{ smiths_config_subscriptions | dict2items | json_query("[?value.name==`" ~ _input_region ~ "`].key")[0] }}
+
