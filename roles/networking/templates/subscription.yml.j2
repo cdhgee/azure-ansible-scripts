@@ -176,7 +176,7 @@ tags:
       dependsOn:
         - {{ route_table_name }}
       properties:
-        addressPrefix: {{ smiths_config_subscriptions.bis_primary.locations[location_code].networking.virtual_networks.shr.address_space
+        addressPrefix: {{ smiths_config_subscriptions.bis_primary.locations[location_code].networking.virtual_networks.shr.address_space }}
         nextHopType: VirtualAppliance
         nextHopIpAddress: {{ nextHop(location_code) }}
     {% endfor %}{# endfor subnet #}
