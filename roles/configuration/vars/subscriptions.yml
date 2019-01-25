@@ -51,6 +51,135 @@ smiths_config_subscriptions:
                   address_space: 10.216.19.64/28
                 fwdiag:
                   address_space: 10.216.19.80/28
+      zna2:
+        networking:
+          address_space:
+            - 10.216.128.0/17
+          virtual_networks:
+            prd:
+              metadata:
+                environment: prd
+              address_space:
+                - 10.216.128.0/21
+              subnets:
+                app:
+                  address_space: 10.216.128.0/22
+                data:
+                  address_space: 10.216.132.0/22
+            npd:
+              metadata:
+                environment: npd
+              address_space:
+                - 10.216.136.0/21
+              subnets:
+                app:
+                  address_space: 10.216.136.0/22
+                data:
+                  address_space: 10.216.140.0/22
+            shr:
+              metadata:
+                environment: shr
+              address_space:
+                - 10.216.144.0/22
+              subnets:
+                shared:
+                  address_space: 10.216.144.0/23
+                gateway:
+                  address_space: 10.216.147.0/27
+                fwext:
+                  address_space: 10.216.147.32/28
+                fwint:
+                  address_space: 10.216.147.48/28
+                fwman:
+                  address_space: 10.216.147.64/28
+                fwdiag:
+                  address_space: 10.216.147.80/28
+      zeu1:
+        networking:
+          address_space:
+            - 10.217.0.0/17
+          virtual_networks:
+            prd:
+              metadata:
+                environment: prd
+              address_space:
+                - 10.217.0.0/21
+              subnets:
+                app:
+                  address_space: 10.217.0.0/22
+                data:
+                  address_space: 10.217.4.0/22
+            npd:
+              metadata:
+                environment: npd
+              address_space:
+                - 10.217.8.0/21
+              subnets:
+                app:
+                  address_space: 10.217.8.0/22
+                data:
+                  address_space: 10.217.12.0/22
+            shr:
+              metadata:
+                environment: shr
+              address_space:
+                - 10.217.16.0/22
+              subnets:
+                shared:
+                  address_space: 10.217.16.0/23
+                gateway:
+                  address_space: 10.217.19.0/27
+                fwext:
+                  address_space: 10.217.19.32/28
+                fwint:
+                  address_space: 10.217.19.48/28
+                fwman:
+                  address_space: 10.217.19.64/28
+                fwdiag:
+                  address_space: 10.217.19.80/28
+      zeu2:
+        networking:
+          address_space:
+            - 10.217.128.0/17
+          virtual_networks:
+            prd:
+              metadata:
+                environment: prd
+              address_space:
+                - 10.217.128.0/21
+              subnets:
+                app:
+                  address_space: 10.217.128.0/22
+                data:
+                  address_space: 10.217.132.0/22
+            npd:
+              metadata:
+                environment: npd
+              address_space:
+                - 10.217.136.0/21
+              subnets:
+                app:
+                  address_space: 10.217.136.0/22
+                data:
+                  address_space: 10.217.140.0/22
+            shr:
+              metadata:
+                environment: shr
+              address_space:
+                - 10.217.144.0/22
+              subnets:
+                shared:
+                  address_space: 10.217.144.0/23
+                gateway:
+                  address_space: 10.217.147.0/27
+                fwext:
+                  address_space: 10.217.147.32/28
+                fwint:
+                  address_space: 10.217.147.48/28
+                fwman:
+                  address_space: 10.217.147.64/28
+                fwdiag:
+                  address_space: 10.217.147.80/28
   detection_rd:
     name: Smiths Detection Enterprise R&D
     subscription_id: 00703ce6-eb7c-48d0-88d2-12d25c123a7c
