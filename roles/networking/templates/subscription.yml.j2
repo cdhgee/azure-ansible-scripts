@@ -194,6 +194,11 @@ tags:
     {% set vnet = vnet_kv.value %}
     {% set vnet_name = vnetName(subscription_code, location_code, vnet_kv.key) %}
     {% set remote_vnet_name = vnetName("bis_primary", location_code, "shr") %}
+    - type: Microsoft.Network/virtualNetworks
+      name: {{ remote_vnet_name }}
+      apiVersion: {{ apiVersion("networking") }}
+      location: {{ location_name }}
+
     - type: Microsoft.Network/virtualNetworks/virtualNetworkPeerings
       name: {{ remote_vnet_name }}/{{ vnet_name }}-vnetpeer
       apiVersion: {{ apiVersion("networking") }}
