@@ -32,7 +32,7 @@
   include_role:
     name: deploy
   vars:
-    deployment: "{{ azure_deployment }}"
+    azure_deployment: "{{ _deployment }}"
   loop: "{{ deployments }}"
   loop_control:
-    loop_var: azure_deployment
+    loop_var: _deployment

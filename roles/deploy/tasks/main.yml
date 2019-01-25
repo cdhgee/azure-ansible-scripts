@@ -1,16 +1,38 @@
+- name: Initialize deployment
+  set_fact:
+    _azure_rm_deployment:
+      deployment_name: "{{ azure_deployment.name }}-{{ '%Y%m%dT%H%M%S' | strftime }}"
+      resource_group_name: "{{ azure_deployment.resource_group }}"
+      location: "{{ azure_deployment.location }}"
+      subscription_id: "{{ azure_deployment.subscription_id | default(ansible_env.AZURE_SUBSCRIPTION_ID) }}"
+      tenant: "{{ azure_deployment.tenant | default(ansible_env.AZURE_TENANT) }}"
+      secret: "{{ azure_deployment.secret | default(ansible_env.AZURE_SECRET) }}"
+      client_id: "{{ azure_deployment.client_id | default(ansible_env.AZURE_CLIENT_ID) }}"
+      template:
+        $schema: https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#
+        contentVersion: 1.0.0.0
+        parameters: "{{ azure_deployment.parameters | default({}) }}"
+        variables: "{{ azure_deployment.variables| default({}) }}"
+        resources: "{{ azure_deployment.resources | default([]) }}"
+        outputs: "{{ azure_deployment.outputs | default({}) }}"
+
+- name: Dump deployment
+  debug:
+    var: _azure_rm_deployment
+
 - name: Deploy Azure resources
   azure_rm_deployment:
-    deployment_name: "{{ deployment.name }}-{{ '%Y%m%dT%H%M%S' | strftime }}"
-    resource_group_name: "{{ deployment.resource_group }}"
-    location: "{{ deployment.location }}"
-    subscription_id: "{{ deployment.subscription_id | default(ansible_env.AZURE_SUBSCRIPTION_ID) }}"
-    tenant: "{{ deployment.tenant | default(ansible_env.AZURE_TENANT) }}"
-    secret: "{{ deployment.secret | default(ansible_env.AZURE_SECRET) }}"
-    client_id: "{{ deployment.client_id | default(ansible_env.AZURE_CLIENT_ID) }}"
+    deployment_name: "{{ azure_deployment.name }}-{{ '%Y%m%dT%H%M%S' | strftime }}"
+    resource_group_name: "{{ azure_deployment.resource_group }}"
+    location: "{{ azure_deployment.location }}"
+    subscription_id: "{{ azure_deployment.subscription_id | default(ansible_env.AZURE_SUBSCRIPTION_ID) }}"
+    tenant: "{{ azure_deployment.tenant | default(ansible_env.AZURE_TENANT) }}"
+    secret: "{{ azure_deployment.secret | default(ansible_env.AZURE_SECRET) }}"
+    client_id: "{{ azure_deployment.client_id | default(ansible_env.AZURE_CLIENT_ID) }}"
     template:
       $schema: https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#
       contentVersion: 1.0.0.0
-      parameters: "{{ deployment.parameters | default({}) }}"
-      variables: "{{ deployment.variables| default({}) }}"
-      resources: "{{ deployment.resources | default([]) }}"
-      outputs: "{{ deployment.outputs | default({}) }}"
+      parameters: "{{ azure_deployment.parameters | default({}) }}"
+      variables: "{{ azure_deployment.variables| default({}) }}"
+      resources: "{{ azure_deployment.resources | default([]) }}"
+      outputs: "{{ azure_deployment.outputs | default({}) }}"
