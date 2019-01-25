@@ -169,6 +169,7 @@ tags:
         nextHopType: VirtualAppliance
         nextHopIpAddress: {{ nextHop(location_code) }}
 
+    {% for address_range in smiths_config_subscriptions.bis_primary.locations[location_code].networking.virtual_networks.shr.address_space %}{# for address_range #}
     - type: Microsoft.Network/routeTables/routes
       name: {{ route_table_name }}/BIS-Shared
       apiVersion: {{ apiVersion("networking") }}
@@ -176,9 +177,10 @@ tags:
       dependsOn:
         - {{ route_table_name }}
       properties:
-        addressPrefix: {{ smiths_config_subscriptions.bis_primary.locations[location_code].networking.virtual_networks.shr.address_space }}
+        addressPrefix: {{ address_range }}
         nextHopType: VirtualAppliance
         nextHopIpAddress: {{ nextHop(location_code) }}
+    {% endfor %}{# endfor address_range #}
     {% endfor %}{# endfor subnet #}
 
   {% endfor %}{# endfor vnet #}
