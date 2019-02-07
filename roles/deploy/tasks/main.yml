@@ -1,7 +1,7 @@
 - name: Initialize deployment
   set_fact:
-    _azure_rm_deployment:
-      deployment_name: "{{ azure_deployment.name }}-{{ '%Y%m%dT%H%M%S' | strftime }}"
+    arm_deployment:
+      name: "{{ azure_deployment.name }}-{{ '%Y%m%dT%H%M%S' | strftime }}"
       resource_group_name: "{{ azure_deployment.resource_group }}"
       location: "{{ azure_deployment.location }}"
       subscription_id: "{{ azure_deployment.subscription_id | default(ansible_env.AZURE_SUBSCRIPTION_ID) }}"
@@ -21,4 +21,12 @@
     var: _azure_rm_deployment
 
 - name: Deploy Azure resources
-  azure_rm_deployment: "{{ _azure_rm_deployment }}"
+  azure_rm_deployment:
+    deployment_name: "{{ arm_deployment.name }}"
+    resource_group_name: "{{ arm_deployment.resource_group_name }}"
+    location: "{{ arm_deployment.location }}"
+    subscription_id: "{{ arm_deployment.subscription_id }}"
+    tenant: "{{ arm_deployment.tenant }}"
+    secret: "{{ arm_deployment.secret }}"
+    client_id: "{{ arm_deployment.client_id }}"
+    template: "{{ arm_deployment.template }}"
