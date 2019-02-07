@@ -128,7 +128,7 @@ tags:
           enabled: true
           storageUri: https://zna1lrsvmdiagst01.blob.core.windows.net
   - type: Microsoft.Resources/deployments
-    name: "{{ vm_name }}-BackupIntent
+    name: {{ vm_name }}-BackupIntent
     resourceGroup: {{ backupVaultResourceGroup(location_code) }}
     properties:
       mode: Incremental
