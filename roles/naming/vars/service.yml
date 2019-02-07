@@ -1,2 +1,0 @@
-smiths_service_name: "{{ smiths_service | default('Unknown') }}"
-smiths_application_name: "{{ smiths_application | default('Unknown') }}"

@@ -1,8 +1,0 @@
-smiths_azure_tags:
-  "Environment": "{{ smiths_environment_name | default('') }}"
-  "Division": "{{ smiths_division_name | default('') }}"
-  "Department": "{{ smiths_department_name | default('') }}"
-  "Cost Center": "{{ smiths_costcenter_value | default('') }}"
-  "Project Code": "{{ smiths_projectcode_value | default('') }}"
-  "Service": "{{ smiths_service_name | default('') }}"
-  "Application": "{{ smiths_application_name | default('') }}"

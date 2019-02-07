@@ -1,3 +1,0 @@
-- name: Dump tags
-  debug:
-    var: smiths_azure_tags
