@@ -1,20 +1,11 @@
-- name: Create a vnet
+- name: Create a virtual machine
   hosts: localhost
   connection: local
   tasks:
   - import_role:
       name: configuration
-  # - include_role:
-  #     name: networking
-  #   vars:
-  #     smiths_subscription: Smiths Detection Enterprise R&D
-  #     config:
-  #       subscription: Smiths Detection Enterprise R&D
-  #       name: zna1-detection-dev-vnet01
-  #       type: virtual_network
-  #     template: virtual-network.yml.j2
   - include_role:
-      name: networking
+      name: vm
     vars:
       subscription_code: "{{ (smiths_config_subscriptions | dict2items | json_query('[?value.name==`' ~ _input_subscription ~ '`].key'))[0] }}"
       location_code: "{{ (smiths_config_metadata.locations | dict2items | json_query('[?value.name==`' ~ _input_region ~ '`].key'))[0] }}"
