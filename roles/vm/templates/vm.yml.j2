@@ -1,0 +1,119 @@
+#jinja2:trim_blocks: "true", lstrip_blocks: "true"
+{% macro apiVersion(provider) -%}
+"{{ smiths_config_metadata.api_versions[provider] }}"
+{%- endmacro %}
+{% macro subscriptionId(sub) -%}
+{{ smiths_config_subscriptions[sub].subscription_id }}
+{%- endmacro %}
+{% macro vnetResourceId(sub, loc, env) -%}
+{{ resourceId(sub, vnetResourceGroup(sub, loc, env), 'Microsoft.Network/virtualNetworks', vnetName(sub, loc, env)) }}
+{%- endmacro %}
+{% macro subnetResourceId(sub, loc, env, subnetName) -%}
+{{ resourceId(sub, vnetResourceGroup(sub, loc, env), 'Microsoft.Network/virtualNetworks/subnets', vnetName(sub, loc, env), subnetName) }}
+{%- endmacro %}
+{% macro resourceId(sub, rg, type, name) -%}
+"[resourceId('{{ subscriptionId(sub) }}', '{{ rg }}', '{{ type }}', '{{ name }}')]"
+{%- endmacro %}
+{% macro findIpAddressFromSubnet(sub, loc, vnet, subnet, index) -%}
+{% set subnet = smiths_config_subscriptions[sub].locations[loc].networking.virtual_networks[vnet].subnets[subnet].address_space %}
+{{ subnet | ipsubnet(32, index) | ipaddr('address') }}
+{%- endmacro %}
+{% macro dnsServers(loc) -%}
+[ {{ findIpAddressFromSubnet("bis_primary", loc, "shr", "shared", 4) }}, {{ findIpAddressFromSubnet("bis_primary", loc, "shr", "shared", 5) }} ]
+{%- endmacro %}
+{% macro nextHop(loc) -%}
+{{ findIpAddressFromSubnet("bis_primary", loc, "shr", "fwint", 4) }}
+{%- endmacro %}
+{% macro subscriptionDivision(sub) -%}
+{{ smiths_config_subscriptions[sub].metadata.division }}
+{%- endmacro %}
+{% macro vnetName(sub, loc, env) -%}
+{{ loc }}-{{ subscriptionDivision(sub) }}-{{ env }}-vnet01
+{%- endmacro %}
+{% macro subnetName(sub, loc, env, purp) -%}
+{{ loc }}-{{ subscriptionDivision(sub) }}-{{ env }}-{{ purp }}-subnet01
+{%- endmacro %}
+{% macro vnetResourceGroup(sub, loc, env) -%}
+{{ loc }}-{{ subscriptionDivision(sub) }}-{{ env }}-vnet-rg
+{%- endmacro %}
+{% macro nsgLogsResourceGroup(sub, loc, env) -%}
+{{ loc }}-{{ subscriptionDivision(sub) }}-{{ env }}-diag-rg
+{%- endmacro %}
+# DO NOT ALTER THE INDENTING
+{% macro vmTags(env) -%}
+{% set ntags = smiths_config_metadata.tags.ad | combine({'Division': smiths_config_metadata.divisions[subscription.metadata.division].name, 'Timezone': smiths_config_metadata.locations[location_code].timezone, 'Environment': smiths_config_metadata.environments[env].name }) %}
+tags:
+    {% for ntag in (ntags | dict2items) %}{# for tag #}
+      {{ ntag.key }}: "{{ ntag.value }}"
+    {% endfor %}{# endfor tag #}
+{%- endmacro %}
+{% set subscription = smiths_config_subscriptions[subscription_code] %}
+{% set location = subscription.locations[location_code] %}
+{% set networking_tags = smiths_config_metadata.tags.networking | default({}) %}
+{% set template_tags = subscription.tags | combine(networking_tags) %}
+{% set location_name = smiths_config_metadata.locations[location_code].name %}
+
+{% set base_name = location_code ~ "-" ~ subscription.metadata.division ~ "-" ~ vnet_code ~ _input_context %}
+{% set vm_rg = base_name ~ "-rg" %}}
+{% set vm_name = location_code ~ "s" ~ "p" ~ "ap001" %}
+{% set as_name = base_name ~ "-" ~ _input_context ~ "-as" %}
+- name: virtual-machine
+  resource_group: {{ vm_rg }}
+  location: {{ location_name }}
+  resources:
+  - type: Microsoft.Network/networkInterfaces
+    name: {{ vm_name ~ "-nic0" }}
+    apiVersion: {{ apiVersion("networking") }}
+    location: {{ location_name }}
+    {{ vmTags(vnet_code) }}
+    properties:
+      ipConfigurations:
+      - name: ipconfig1
+        properties:
+          subnet:
+            id: {{ subnetResourceId(subscription_code, location_code, vnet_code, subnet_code) }}
+          privateIPAllocationMethod: Dynamic
+  - type: Microsoft.Compute/availabilitySets
+    name: {{ as_name }}
+    apiVersion: {{ apiVersion("compute") }}
+    location: {{ location_name }}
+    {{ vmTags(vnet_code) }}
+    properties:
+      platformFaultDomainCount: 2
+      platformUpdateDomainCount: 2
+    sku:
+      name: Aligned
+  - type: Microsoft.Compute/virtualMachines
+    name: {{ vm_name }}
+    apiVersion: {{ apiVersion("compute") }}
+    location: {{ location_name }}
+    {{ vmTags(vnet_code) }}
+    dependsOn:
+      "[resourceId('Microsoft.Compute/availabilitySets', '{{ as_name }}')]"
+      "[resourceId('Microsoft.Network/networkInterfaces', '{{ vm_name }}-nic0')]"
+    properties:
+      hardwareProfile:
+        vmSize: Standard_D2s_v3
+        availabilitySet:
+          id: "[resourceId('Microsoft.Compute/availabilitySets', '{{ as_name }}')]"
+        osProfile:
+          computerName: {{ vm_name }}
+          adminUsername: localadmin
+          adminPassword: {{ _input_password }}
+        storageProfile:
+          imageReference:
+            publisher: MicrosoftWindowsServer
+            offer: WindowsServer
+            sku: 2016-Datacenter
+            version: latest
+          createOption: FromImage
+          managedDisk:
+            storageAccountType: Premium_LRS
+          caching: ReadWrite
+        networkProfile:
+          networkInterfaces:
+            id: "[resourceId('Microsoft.Network/networkInterfaces', '{{ vm_name }}-nic0')]"
+        diagnosticsProfile:
+          bootDiagnostics:
+            enabled: true
+            storageUri: https://zna1lrsvmdiagst01.blob.core.windows.net

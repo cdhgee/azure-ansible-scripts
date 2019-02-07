@@ -1,0 +1,16 @@
+- name: Prep template config
+  set_fact:
+    deployments: "{{ lookup('template', 'vm.yml.j2') | from_yaml }}"
+
+- name: Dump deployments
+  debug:
+    var: deployments
+
+- name: Execute deployments
+  include_role:
+    name: deploy
+  vars:
+    azure_deployment: "{{ _deployment }}"
+  loop: "{{ deployments }}"
+  loop_control:
+    loop_var: _deployment
