@@ -114,7 +114,9 @@ tags:
           caching: ReadWrite
       networkProfile:
         networkInterfaces:
-          id: "[resourceId('Microsoft.Network/networkInterfaces', '{{ vm_name }}-nic0')]"
+        - id: "[resourceId('Microsoft.Network/networkInterfaces', '{{ vm_name }}-nic0')]"
+          properties:
+            primary: true
       diagnosticsProfile:
         bootDiagnostics:
           enabled: true
