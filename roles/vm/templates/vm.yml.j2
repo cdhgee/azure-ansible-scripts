@@ -8,8 +8,8 @@
 {% macro vnetResourceId(sub, loc, env) -%}
 {{ resourceId(sub, vnetResourceGroup(sub, loc, env), 'Microsoft.Network/virtualNetworks', vnetName(sub, loc, env)) }}
 {%- endmacro %}
-{% macro subnetResourceId(sub, loc, env, subnetName) -%}
-{{ resourceId(sub, vnetResourceGroup(sub, loc, env), 'Microsoft.Network/virtualNetworks/subnets', vnetName(sub, loc, env), subnetName) }}
+{% macro subnetResourceId(sub, loc, env, purp) -%}
+"[resourceId('{{ subscriptionId(sub) }}', '{{ vnetResourceGroup(sub, loc, env) }}', 'Microsoft.Network/virtualNetworks/subnets', '{{ vnetName(sub, loc, env) }}', '{{ subnetName(sub, loc, env, purp) }}')]"
 {%- endmacro %}
 {% macro resourceId(sub, rg, type, name) -%}
 "[resourceId('{{ subscriptionId(sub) }}', '{{ rg }}', '{{ type }}', '{{ name }}')]"
@@ -53,10 +53,10 @@ tags:
 {% set template_tags = subscription.tags | combine(networking_tags) %}
 {% set location_name = smiths_config_metadata.locations[location_code].name %}
 
-{% set base_name = location_code ~ "-" ~ subscription.metadata.division ~ "-" ~ vnet_code ~ _input_context %}
-{% set vm_rg = base_name ~ "-rg" %}}
+{% set base_name = location_code ~ "-" ~ subscription.metadata.division ~ "-" ~ vnet_code ~ "-" ~ input_context %}
+{% set vm_rg = base_name ~ "-rg" %}
 {% set vm_name = location_code ~ "s" ~ "p" ~ "ap001" %}
-{% set as_name = base_name ~ "-" ~ _input_context ~ "-as" %}
+{% set as_name = base_name ~ "-" ~ input_context ~ "-as" %}
 - name: virtual-machine
   resource_group: {{ vm_rg }}
   location: {{ location_name }}
@@ -99,17 +99,19 @@ tags:
         osProfile:
           computerName: {{ vm_name }}
           adminUsername: localadmin
-          adminPassword: {{ _input_password }}
+          adminPassword: {{ input_password }}
         storageProfile:
           imageReference:
             publisher: MicrosoftWindowsServer
             offer: WindowsServer
             sku: 2016-Datacenter
             version: latest
-          createOption: FromImage
-          managedDisk:
-            storageAccountType: Premium_LRS
-          caching: ReadWrite
+          osDisk:
+            name: {{ vm_name }}-os
+            createOption: FromImage
+            managedDisk:
+              storageAccountType: Premium_LRS
+            caching: ReadWrite
         networkProfile:
           networkInterfaces:
             id: "[resourceId('Microsoft.Network/networkInterfaces', '{{ vm_name }}-nic0')]"
