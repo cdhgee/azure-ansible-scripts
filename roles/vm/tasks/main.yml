@@ -6,11 +6,11 @@
   debug:
     var: deployments
 
-# - name: Execute deployments
-#   include_role:
-#     name: deploy
-#   vars:
-#     azure_deployment: "{{ _deployment }}"
-#   loop: "{{ deployments }}"
-#   loop_control:
-#     loop_var: _deployment
+- name: Execute deployments
+  include_role:
+    name: deploy
+  vars:
+    azure_deployment: "{{ _deployment }}"
+  loop: "{{ deployments }}"
+  loop_control:
+    loop_var: _deployment
