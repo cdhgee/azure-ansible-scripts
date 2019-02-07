@@ -53,10 +53,10 @@ tags:
 {% set template_tags = subscription.tags | combine(networking_tags) %}
 {% set location_name = smiths_config_metadata.locations[location_code].name %}
 
-{% set base_name = location_code ~ "-" ~ subscription.metadata.division ~ "-" ~ vnet_code ~ "-" ~ input_context %}
+{% set base_name = location_code ~ "-" ~ subscription.metadata.division ~ "-" ~ vnet_code ~ "-" ~ _input_context %}
 {% set vm_rg = base_name ~ "-rg" %}
 {% set vm_name = location_code ~ "s" ~ "p" ~ "ap001" %}
-{% set as_name = base_name ~ "-" ~ input_context ~ "-as" %}
+{% set as_name = base_name ~ "-" ~ _input_context ~ "-as" %}
 - name: virtual-machine
   resource_group: {{ vm_rg }}
   location: {{ location_name }}
@@ -99,7 +99,7 @@ tags:
         osProfile:
           computerName: {{ vm_name }}
           adminUsername: localadmin
-          adminPassword: {{ input_password }}
+          adminPassword: {{ _input_password }}
         storageProfile:
           imageReference:
             publisher: MicrosoftWindowsServer
