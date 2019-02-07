@@ -72,7 +72,20 @@ smiths_config_metadata:
       Department: IT
       PCI DSS: "No"
       Maintenance Windows: Cloud Native
+    ad:
+      Service: Infrastructure
+      Application: Active Directory
+      Data Classification: Smiths Confidential
+      PII: "No"
+      Owner Phone: +1 651-402-9368
+      Schedule: 24 x 7
+      SME E-mail: BIS AD Team
+      Owner E-mail: john.rowan@smiths.com
+      Department: IT
+      PCI DSS: "No"
+      Maintenance Windows: Standard
   api_versions:
     networking: "2018-08-01"
     insights: "2017-05-01-preview"
     storage: "2018-07-01"
+    compute: "2018-10-01"
