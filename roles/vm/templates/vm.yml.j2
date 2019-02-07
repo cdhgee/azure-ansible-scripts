@@ -101,11 +101,7 @@ tags:
         adminUsername: localadmin
         adminPassword: {{ _input_password }}
       storageProfile:
-        imageReference:
-          publisher: MicrosoftWindowsServer
-          offer: WindowsServer
-          sku: 2016-Datacenter
-          version: latest
+        imageReference: {{ smiths_config_metadata.images[_input_image] }}
         osDisk:
           name: {{ vm_name }}-os
           createOption: FromImage
