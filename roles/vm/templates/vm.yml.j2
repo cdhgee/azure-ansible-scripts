@@ -41,7 +41,7 @@
 {%- endmacro %}
 # DO NOT ALTER THE INDENTING
 {% macro vmTags(env) -%}
-{% set ntags = smiths_config_metadata.tags.ad | combine({'Division': smiths_config_metadata.divisions[subscription.metadata.division].name, 'Timezone': smiths_config_metadata.locations[location_code].timezone, 'Environment': smiths_config_metadata.environments[env].name }) %}
+{% set ntags = smiths_config_metadata.tags.ad | combine({'Division': smiths_config_metadata.divisions[subscription.metadata.division].name, 'Timezone': smiths_config_metadata.locations[location_code].timezone, 'Environment': smiths_config_metadata.environments.prd.name }) %}
 tags:
     {% for ntag in (ntags | dict2items) %}{# for tag #}
       {{ ntag.key }}: "{{ ntag.value }}"
