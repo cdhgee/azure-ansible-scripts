@@ -89,8 +89,8 @@ tags:
     location: {{ location_name }}
     {{ vmTags(vnet_code) }}
     dependsOn:
-      "[resourceId('Microsoft.Compute/availabilitySets', '{{ as_name }}')]"
-      "[resourceId('Microsoft.Network/networkInterfaces', '{{ vm_name }}-nic0')]"
+    - "[resourceId('Microsoft.Compute/availabilitySets', '{{ as_name }}')]"
+    - "[resourceId('Microsoft.Network/networkInterfaces', '{{ vm_name }}-nic0')]"
     properties:
       hardwareProfile:
         vmSize: Standard_D2s_v3

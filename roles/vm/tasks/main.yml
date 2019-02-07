@@ -1,6 +1,6 @@
 - name: Prep template config
   set_fact:
-    deployments: "{{ lookup('template', 'vm.yml.j2') }}"
+    deployments: "{{ lookup('template', 'vm.yml.j2') from_yaml }}"
 
 - name: Dump deployments
   debug:
