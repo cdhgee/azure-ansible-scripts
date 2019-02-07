@@ -39,6 +39,12 @@
 {% macro nsgLogsResourceGroup(sub, loc, env) -%}
 {{ loc }}-{{ subscriptionDivision(sub) }}-{{ env }}-diag-rg
 {%- endmacro %}
+{% macro backupVaultName(loc) -%}
+{{ loc }}-prd-infra-backup01
+{%- endmacro %}
+{% macro backupVaultResourceGroup(loc) -%}
+{{ loc }}-bis-prd-backup-rg
+{%- endmacro %}
 # DO NOT ALTER THE INDENTING
 {% macro vmTags(env) -%}
 {% set ntags = smiths_config_metadata.tags.ad | combine({'Division': smiths_config_metadata.divisions[subscription.metadata.division].name, 'Timezone': smiths_config_metadata.locations[location_code].timezone, 'Environment': smiths_config_metadata.environments.prd.name }) %}
@@ -121,3 +127,22 @@ tags:
         bootDiagnostics:
           enabled: true
           storageUri: https://zna1lrsvmdiagst01.blob.core.windows.net
+  - type: Microsoft.Resources/deployments
+    name: "{{ vm_name }}-BackupIntent
+    resourceGroup: "{{ backupVaultResourceGroup(location_code) }}
+    properties:
+      mode: Incremental
+      template:
+        $schema: https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#
+        contentVersion: 1.0.0.0
+        resources:
+        - name: {{ backupVaultName(location_Code) }}/Azure/vm;iaasvmcontainerv2;{{ vm_rg }};{{ vm_name }}
+          apiVersion: {{ apiVersion("recoveryservices") }}
+          type: Microsoft.RecoveryServices/vaults/backupFabrics/backupProtectionIntent
+          properties:
+            friendlyName: {{ vm_name }}BackupIntent
+            protectionIntentItemType: AzureResourceItem
+            policyId: "[resourceId('{{ backupVaultResourceGroup(location_code) }}', 'Microsoft.RecoveryServices/vaults/backupPolicies', '{{ backupVaultName(location_code) }}', 'Smiths-Standard')]"
+            sourceResourceId: "[resourceId('{{ vm_rg }}', 'Microsoft.Compute/virtualMachines', '{{ vm_name }}')]"
+    dependsOn:
+    - "[resourceId('{{ vm_rg }}', 'Microsoft.Compute/virtualMachines', '{{ vm_name }}')]"

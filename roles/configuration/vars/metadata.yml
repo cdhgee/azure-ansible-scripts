@@ -89,6 +89,8 @@ smiths_config_metadata:
     insights: "2017-05-01-preview"
     storage: "2018-07-01"
     compute: "2018-10-01"
+    resources: "2018-11-01"
+    recoveryservices: "2018-07-10"
   images:
     Windows Server 2008 R2:
       publisher: MicrosoftWindowsServer
