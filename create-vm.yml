@@ -9,5 +9,5 @@
     vars:
       subscription_code: "{{ (smiths_config_subscriptions | dict2items | json_query('[?value.name==`' ~ _input_subscription ~ '`].key'))[0] }}"
       location_code: "{{ (smiths_config_metadata.locations | dict2items | json_query('[?value.name==`' ~ _input_region ~ '`].key'))[0] }}"
-      vnet_code: "{{ _input_networking.split('/')[0] }}"
-      subnet_code: "{{ _input_networking.split('/')[1] }}"
+      vnet_code: "{{ _input_network.split('/')[0] }}"
+      subnet_code: "{{ _input_network.split('/')[1] }}"
