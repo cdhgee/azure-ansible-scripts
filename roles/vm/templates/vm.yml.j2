@@ -94,28 +94,28 @@ tags:
     properties:
       hardwareProfile:
         vmSize: Standard_D2s_v3
-        availabilitySet:
-          id: "[resourceId('Microsoft.Compute/availabilitySets', '{{ as_name }}')]"
-        osProfile:
-          computerName: {{ vm_name }}
-          adminUsername: localadmin
-          adminPassword: {{ _input_password }}
-        storageProfile:
-          imageReference:
-            publisher: MicrosoftWindowsServer
-            offer: WindowsServer
-            sku: 2016-Datacenter
-            version: latest
-          osDisk:
-            name: {{ vm_name }}-os
-            createOption: FromImage
-            managedDisk:
-              storageAccountType: Premium_LRS
-            caching: ReadWrite
-        networkProfile:
-          networkInterfaces:
-            id: "[resourceId('Microsoft.Network/networkInterfaces', '{{ vm_name }}-nic0')]"
-        diagnosticsProfile:
-          bootDiagnostics:
-            enabled: true
-            storageUri: https://zna1lrsvmdiagst01.blob.core.windows.net
+      availabilitySet:
+        id: "[resourceId('Microsoft.Compute/availabilitySets', '{{ as_name }}')]"
+      osProfile:
+        computerName: {{ vm_name }}
+        adminUsername: localadmin
+        adminPassword: {{ _input_password }}
+      storageProfile:
+        imageReference:
+          publisher: MicrosoftWindowsServer
+          offer: WindowsServer
+          sku: 2016-Datacenter
+          version: latest
+        osDisk:
+          name: {{ vm_name }}-os
+          createOption: FromImage
+          managedDisk:
+            storageAccountType: Premium_LRS
+          caching: ReadWrite
+      networkProfile:
+        networkInterfaces:
+          id: "[resourceId('Microsoft.Network/networkInterfaces', '{{ vm_name }}-nic0')]"
+      diagnosticsProfile:
+        bootDiagnostics:
+          enabled: true
+          storageUri: https://zna1lrsvmdiagst01.blob.core.windows.net
