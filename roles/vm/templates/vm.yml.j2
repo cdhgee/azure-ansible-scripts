@@ -136,7 +136,7 @@ tags:
         $schema: https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#
         contentVersion: 1.0.0.0
         resources:
-        - name: {{ backupVaultName(location_Code) }}/Azure/vm;iaasvmcontainerv2;{{ vm_rg }};{{ vm_name }}
+        - name: {{ backupVaultName(location_code) }}/Azure/vm;iaasvmcontainerv2;{{ vm_rg }};{{ vm_name }}
           apiVersion: {{ apiVersion("recoveryservices") }}
           type: Microsoft.RecoveryServices/vaults/backupFabrics/backupProtectionIntent
           properties:
