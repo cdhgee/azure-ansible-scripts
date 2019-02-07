@@ -101,7 +101,11 @@ tags:
         adminUsername: localadmin
         adminPassword: {{ _input_password }}
       storageProfile:
-        imageReference: {{ smiths_config_metadata.images[_input_image] }}
+        imageReference:
+          publisher: {{ smiths_config_metadata.images[_input_image].publisher }}
+          offer: {{ smiths_config_metadata.images[_input_image].offer }}
+          sku: {{ smiths_config_metadata.images[_input_image].sku }}
+          version: latest
         osDisk:
           name: {{ vm_name }}-os
           createOption: FromImage
