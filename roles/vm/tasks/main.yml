@@ -2,10 +2,6 @@
   set_fact:
     deployments: "{{ lookup('template', 'vm.yml.j2') | from_yaml }}"
 
-- name: Dump deployments
-  debug:
-    var: deployments
-
 - name: Execute deployments
   include_role:
     name: deploy

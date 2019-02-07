@@ -16,10 +16,6 @@
         resources: "{{ azure_deployment.resources | default([]) }}"
         outputs: "{{ azure_deployment.outputs | default({}) }}"
 
-- name: Dump deployment
-  debug:
-    var: _azure_rm_deployment
-
 - name: Deploy Azure resources
   azure_rm_deployment:
     deployment_name: "{{ arm_deployment.name }}"
