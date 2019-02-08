@@ -57,7 +57,7 @@ tags:
 {{ loc }}lrsvmdiagst01
 {%- endmacro %}
 {% macro vmDiagStorageResourceId(loc) -%}
-{{ resourceId("bis_primary", loc ~ "-bis-prd-diag-rg", "Microsoft.Storage/storageAccounts", vmDiagName(loc)) }}
+{{ resourceId("bis_primary", loc ~ "-bis-prd-diag-rg", "Microsoft.Storage/storageAccounts", vmDiagStorageName(loc)) }}
 {%- endmacro %}
 {% set subscription = smiths_config_subscriptions[subscription_code] %}
 {% set location = subscription.locations[location_code] %}
