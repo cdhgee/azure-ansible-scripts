@@ -143,6 +143,7 @@ tags:
     name: {{ vm_name }}/Microsoft.Insights.VMDiagnosticsSettings
     apiVersion: {{ apiVersion("compute") }}
     location: {{ location_name }}
+    {{ vmTags(vnet_code) }}
     properties:
       publisher: Microsoft.Azure.Diagnostics
       type: IaaSDiagnostics
