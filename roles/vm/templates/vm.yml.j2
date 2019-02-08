@@ -1,6 +1,6 @@
 #jinja2:trim_blocks: "true", lstrip_blocks: "true"
-{% macro apiVersion(provider) -%}
-"{{ smiths_config_metadata.api_versions[provider] }}"
+{% macro apiVersion(provider, quote='"') -%}
+{{ quote ~ smiths_config_metadata.api_versions[provider] ~ quote }}
 {%- endmacro %}
 {% macro subscriptionId(sub) -%}
 {{ smiths_config_subscriptions[sub].subscription_id }}
@@ -12,7 +12,10 @@
 "[resourceId('{{ subscriptionId(sub) }}', '{{ vnetResourceGroup(sub, loc, env) }}', 'Microsoft.Network/virtualNetworks/subnets', '{{ vnetName(sub, loc, env) }}', '{{ subnetName(sub, loc, env, purp) }}')]"
 {%- endmacro %}
 {% macro resourceId(sub, rg, type, name) -%}
-"[resourceId('{{ subscriptionId(sub) }}', '{{ rg }}', '{{ type }}', '{{ name }}')]"
+"[{{ plainResourceId(sub, rg, type, name) }}]"
+{%- endmacro %}
+{% macro plainResourceId(sub, rg, type, name) -%}
+resourceId('{{ subscriptionId(sub) }}', '{{ rg }}', '{{ type }}', '{{ name }}')
 {%- endmacro %}
 {% macro findIpAddressFromSubnet(sub, loc, vnet, subnet, index) -%}
 {% set subnet = smiths_config_subscriptions[sub].locations[loc].networking.virtual_networks[vnet].subnets[subnet].address_space %}
@@ -56,8 +59,11 @@ tags:
 {% macro vmDiagStorageName(loc) -%}
 {{ loc }}lrsvmdiagst01
 {%- endmacro %}
+{% macro vmDiagStorageResourceGroup(loc) -%}
+{{ loc }}-bis-prd-diag-rg
+{%- endmacro %}
 {% macro vmDiagStorageResourceId(loc) -%}
-{{ resourceId("bis_primary", loc ~ "-bis-prd-diag-rg", "Microsoft.Storage/storageAccounts", vmDiagStorageName(loc)) }}
+{{ resourceId("bis_primary", vmDiagStorageResourceGroup(loc), "Microsoft.Storage/storageAccounts", vmDiagStorageName(loc)) }}
 {%- endmacro %}
 {% set subscription = smiths_config_subscriptions[subscription_code] %}
 {% set location = subscription.locations[location_code] %}
@@ -170,7 +176,7 @@ tags:
               - name: System!*[System[(Level = 1 or Level = 2 or Level = 3)]]
       protectedSettings:
         storageAccountName: {{ vmDiagStorageName(location_code) }}
-        storageAccountKey: "[listKeys('{{ vmDiagStorageResourceId(location_code) }}', '{{ apiVersion("storage") }}').key1]"
+        storageAccountKey: "[listKeys({{ plainResourceId(subscription_code, vmDiagStorageResourceGroup(location_code), "Microsoft.Storage/storageAccounts", vmDiagStorageName(location_code)) }}, '{{ apiVersion("storage", "") }}').key1]"
         storageAccountEndPoint: https://core.windows.net/
     dependsOn:
     - {{ resourceId(subscription_code, vm_rg, "Microsoft.Compute/virtualMachines", vm_name) }}

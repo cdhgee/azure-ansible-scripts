@@ -1,93 +1,93 @@
-  vm_performance_counters:
-  - name: \Processor Information(_Total)\% Processor Time
-    unit: Percent
-  - name: \Processor Information(_Total)\% Privileged Time
-    unit: Percent
-  - name: \Processor Information(_Total)\% User Time
-    unit: Percent
-  - name: \Processor Information(_Total)\Processor Frequency
-    unit: Count
-  - name: \System\Processes
-    unit: Count
-  - name: \Process(_Total)\Thread Count
-    unit: Count
-  - name: \Process(_Total)\Handle Count
-    unit: Count
-  - name: \System\System Up Time
-    unit: Count
-  - name: \System\Context Switches/sec
-    unit: CountPerSecond
-  - name: \System\Processor Queue Length
-    unit: Count
-  - name: \Memory\% Committed Bytes In Use
-    unit: Percent
-  - name: \Memory\Available Bytes
-    unit: Bytes
-  - name: \Memory\Committed Bytes
-    unit: Bytes
-  - name: \Memory\Cache Bytes
-    unit: Bytes
-  - name: \Memory\Pool Paged Bytes
-    unit: Bytes
-  - name: \Memory\Pool Nonpaged Bytes
-    unit: Bytes
-  - name: \Memory\Pages/sec
-    unit: CountPerSecond
-  - name: \Memory\Page Faults/sec
-    unit: CountPerSecond
-  - name: \Process(_Total)\Working Set
-    unit: Count
-  - name: \Process(_Total)\Working Set - Private
-    unit: Count
-  - name: \LogicalDisk(_Total)\% Disk Time
-    unit: Percent
-  - name: \LogicalDisk(_Total)\% Disk Read Time
-    unit: Percent
-  - name: \LogicalDisk(_Total)\% Disk Write Time
-    unit: Percent
-  - name: \LogicalDisk(_Total)\% Idle Time
-    unit: Percent
-  - name: \LogicalDisk(_Total)\Disk Bytes/sec
-    unit: BytesPerSecond
-  - name: \LogicalDisk(_Total)\Disk Read Bytes/sec
-    unit: BytesPerSecond
-  - name: \LogicalDisk(_Total)\Disk Write Bytes/sec
-    unit: BytesPerSecond
-  - name: \LogicalDisk(_Total)\Disk Transfers/sec
-    unit: BytesPerSecond
-  - name: \LogicalDisk(_Total)\Disk Reads/sec
-    unit: BytesPerSecond
-  - name: \LogicalDisk(_Total)\Disk Writes/sec
-    unit: BytesPerSecond
-  - name: \LogicalDisk(_Total)\Avg. Disk sec/Transfer
-    unit: Count
-  - name: \LogicalDisk(_Total)\Avg. Disk sec/Read
-    unit: Count
-  - name: \LogicalDisk(_Total)\Avg. Disk sec/Write
-    unit: Count
-  - name: \LogicalDisk(_Total)\Avg. Disk Queue Length
-    unit: Count
-  - name: \LogicalDisk(_Total)\Avg. Disk Read Queue Length
-    unit: Count
-  - name: \LogicalDisk(_Total)\Avg. Disk Write Queue Length
-    unit: Count
-  - name: \LogicalDisk(_Total)\% Free Space
-    unit: Percent
-  - name: \LogicalDisk(_Total)\Free Megabytes
-    unit: Count
-  - name: \Network Interface(*)\Bytes Total/sec
-    unit: BytesPerSecond
-  - name: \Network Interface(*)\Bytes Sent/sec
-    unit: BytesPerSecond
-  - name: \Network Interface(*)\Bytes Received/sec
-    unit: BytesPerSecond
-  - name: \Network Interface(*)\Packets/sec
-    unit: BytesPerSecond
-  - name: \Network Interface(*)\Packets Sent/sec
-    unit: BytesPerSecond
-  - name: \Network Interface(*)\Packets Received/sec
-    unit: BytesPerSecond
-  - name: \Network Interface(*)\Packets Outbound Errors
-    unit: Count
-  - name: \Network Interface(*)\Packets Received Errors
-    unit: Count
+vm_performance_counters:
+- name: \Processor Information(_Total)\% Processor Time
+  unit: Percent
+- name: \Processor Information(_Total)\% Privileged Time
+  unit: Percent
+- name: \Processor Information(_Total)\% User Time
+  unit: Percent
+- name: \Processor Information(_Total)\Processor Frequency
+  unit: Count
+- name: \System\Processes
+  unit: Count
+- name: \Process(_Total)\Thread Count
+  unit: Count
+- name: \Process(_Total)\Handle Count
+  unit: Count
+- name: \System\System Up Time
+  unit: Count
+- name: \System\Context Switches/sec
+  unit: CountPerSecond
+- name: \System\Processor Queue Length
+  unit: Count
+- name: \Memory\% Committed Bytes In Use
+  unit: Percent
+- name: \Memory\Available Bytes
+  unit: Bytes
+- name: \Memory\Committed Bytes
+  unit: Bytes
+- name: \Memory\Cache Bytes
+  unit: Bytes
+- name: \Memory\Pool Paged Bytes
+  unit: Bytes
+- name: \Memory\Pool Nonpaged Bytes
+  unit: Bytes
+- name: \Memory\Pages/sec
+  unit: CountPerSecond
+- name: \Memory\Page Faults/sec
+  unit: CountPerSecond
+- name: \Process(_Total)\Working Set
+  unit: Count
+- name: \Process(_Total)\Working Set - Private
+  unit: Count
+- name: \LogicalDisk(_Total)\% Disk Time
+  unit: Percent
+- name: \LogicalDisk(_Total)\% Disk Read Time
+  unit: Percent
+- name: \LogicalDisk(_Total)\% Disk Write Time
+  unit: Percent
+- name: \LogicalDisk(_Total)\% Idle Time
+  unit: Percent
+- name: \LogicalDisk(_Total)\Disk Bytes/sec
+  unit: BytesPerSecond
+- name: \LogicalDisk(_Total)\Disk Read Bytes/sec
+  unit: BytesPerSecond
+- name: \LogicalDisk(_Total)\Disk Write Bytes/sec
+  unit: BytesPerSecond
+- name: \LogicalDisk(_Total)\Disk Transfers/sec
+  unit: BytesPerSecond
+- name: \LogicalDisk(_Total)\Disk Reads/sec
+  unit: BytesPerSecond
+- name: \LogicalDisk(_Total)\Disk Writes/sec
+  unit: BytesPerSecond
+- name: \LogicalDisk(_Total)\Avg. Disk sec/Transfer
+  unit: Count
+- name: \LogicalDisk(_Total)\Avg. Disk sec/Read
+  unit: Count
+- name: \LogicalDisk(_Total)\Avg. Disk sec/Write
+  unit: Count
+- name: \LogicalDisk(_Total)\Avg. Disk Queue Length
+  unit: Count
+- name: \LogicalDisk(_Total)\Avg. Disk Read Queue Length
+  unit: Count
+- name: \LogicalDisk(_Total)\Avg. Disk Write Queue Length
+  unit: Count
+- name: \LogicalDisk(_Total)\% Free Space
+  unit: Percent
+- name: \LogicalDisk(_Total)\Free Megabytes
+  unit: Count
+- name: \Network Interface(*)\Bytes Total/sec
+  unit: BytesPerSecond
+- name: \Network Interface(*)\Bytes Sent/sec
+  unit: BytesPerSecond
+- name: \Network Interface(*)\Bytes Received/sec
+  unit: BytesPerSecond
+- name: \Network Interface(*)\Packets/sec
+  unit: BytesPerSecond
+- name: \Network Interface(*)\Packets Sent/sec
+  unit: BytesPerSecond
+- name: \Network Interface(*)\Packets Received/sec
+  unit: BytesPerSecond
+- name: \Network Interface(*)\Packets Outbound Errors
+  unit: Count
+- name: \Network Interface(*)\Packets Received Errors
+  unit: Count
