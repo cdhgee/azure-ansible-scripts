@@ -53,6 +53,12 @@ tags:
       {{ ntag.key }}: "{{ ntag.value }}"
     {% endfor %}{# endfor tag #}
 {%- endmacro %}
+{% macro vmDiagStorageName(loc) -%}
+{{ loc }}lrsvmdiagst01
+{%- endmacro %}
+{% macro vmDiagStorageResourceId(loc) -%}
+{{ resourceId("bis_primary", loc ~ "-bis-prd-diag-rg", "Microsoft.Storage/storageAccounts", vmDiagName(loc)) }}
+{%- endmacro %}
 {% set subscription = smiths_config_subscriptions[subscription_code] %}
 {% set location = subscription.locations[location_code] %}
 {% set networking_tags = smiths_config_metadata.tags.networking | default({}) %}
@@ -127,6 +133,47 @@ tags:
         bootDiagnostics:
           enabled: true
           storageUri: https://zna1lrsvmdiagst01.blob.core.windows.net
+  - type: Microsoft.Compute/virtualMachines/extensions
+    name: {{ vm_name }}/Microsoft.Insights.VMDiagnosticsSettings
+    apiVersion: {{ apiVersion("compute") }}
+    location: {{ location_name }}
+    properties:
+      publisher: Microsoft.Azure.Diagnostics
+      type: IaaSDiagnostics
+      typeHandlerVersion: "1.5"
+      autoUpgradeMinorVersion: true
+      settings:
+        StorageAccount: {{ vmDiagStorageName(location_code) }}
+        WadCfg:
+          DiagnosticMonitorConfiguration:
+            overallQuotaInMB: 5120
+            Metrics:
+              resourceId: {{ resourceId(subscription_code, vm_rg, "Microsoft.Compute/virtualMachines", vm_name) }}
+              MetricAggregation:
+              - scheduledTransferPeriod: PT1H
+              - scheduledTransferPeriod: PT1M
+            DiagnosticInfrastructureLogs:
+              scheduledTransferLogLevelFilter: Error
+            PerformanceCounters:
+              scheduledTransferPeriod: PT1M
+              PerformanceCounterConfiguration:
+              {% for counter in vm_performance_counters %}
+              - counterSpecifier: {{ counter.name }}
+                unit: {{ counter.unit }}
+                sampleRate: PT60S
+              {% endfor %}{# endfor counter #}
+            WindowsEventLog:
+              scheduledTransferPeriod: PT1M
+              DataSource:
+              - name: Application!*[System[(Level = 1 or Level = 2 or Level = 3)]]
+              - name: Security!*[System[band(Keywords,4503599627370496)]]
+              - name: System!*[System[(Level = 1 or Level = 2 or Level = 3)]]
+      protectedSettings:
+        storageAccountName: {{ vmDiagStorageName(location_code) }}
+        storageAccountKey: "[listKeys('{{ vmDiagStorageResourceId(location_code) }}', '{{ apiVersion("storage") }}').key1]"
+        storageAccountEndPoint: https://core.windows.net/
+    dependsOn:
+    - {{ resourceId(subscription_code, vm_rg, "Microsoft.Compute/virtualMachines", vm_name) }}
   - type: Microsoft.Resources/deployments
     name: {{ vm_name }}-BackupIntent
     apiVersion: {{ apiVersion("resources") }}
