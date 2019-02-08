@@ -177,7 +177,7 @@ tags:
               - name: System!*[System[(Level = 1 or Level = 2 or Level = 3)]]
       protectedSettings:
         storageAccountName: {{ vmDiagStorageName(location_code) }}
-        storageAccountKey: "[listKeys({{ plainResourceId(subscription_code, vmDiagStorageResourceGroup(location_code), "Microsoft.Storage/storageAccounts", vmDiagStorageName(location_code)) }}, '{{ apiVersion("storage", "") }}').keys.key1]"
+        storageAccountKey: "[listKeys({{ plainResourceId(subscription_code, vmDiagStorageResourceGroup(location_code), "Microsoft.Storage/storageAccounts", vmDiagStorageName(location_code)) }}, '{{ apiVersion("storage", "") }}').keys[0].value]"
         storageAccountEndPoint: https://core.windows.net/
     dependsOn:
     - {{ resourceId(subscription_code, vm_rg, "Microsoft.Compute/virtualMachines", vm_name) }}
